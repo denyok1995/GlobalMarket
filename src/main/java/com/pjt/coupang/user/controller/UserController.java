@@ -7,6 +7,7 @@ import com.pjt.coupang.user.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Optional;
@@ -43,6 +44,14 @@ public class UserController {
 
         HttpSession httpSession = request.getSession();
         httpSession.setAttribute(LOGIN_ID, user.get());
+    }
+
+    @PostMapping(path = "/sign-out")
+    public void logOut(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession httpSession = request.getSession(false);
+        if(httpSession != null) {
+            httpSession.invalidate();
+        }
     }
 
 }
