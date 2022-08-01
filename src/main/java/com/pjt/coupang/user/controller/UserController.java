@@ -4,6 +4,8 @@ import com.pjt.coupang.user.dto.UserDto;
 import com.pjt.coupang.user.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(path = "/user")
 public class UserController {
@@ -15,7 +17,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/sign-up")
-    public void signUp(@RequestBody UserDto userDto) {
+    public void signUp(@Valid @RequestBody UserDto userDto) {
         userService.saveUser(userDto.getEmail(), userDto.getPassword(), userDto.getName(), userDto.getPhone());
     }
 
