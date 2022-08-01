@@ -1,10 +1,12 @@
 package com.pjt.coupang.user.domain;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 @NoArgsConstructor
 @Table(name = "users")
 public class User {
