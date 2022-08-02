@@ -43,7 +43,7 @@ public class UserController {
         }
 
         HttpSession httpSession = request.getSession();
-        httpSession.setAttribute(LOGIN_ID, user.get());
+        httpSession.setAttribute(LOGIN_ID, user.get().getEmail());
     }
 
     @PostMapping(path = "/sign-out")
