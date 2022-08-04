@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -30,6 +31,6 @@ public class Product {
 
     private String rocketDelivery;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Category category;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Category> category;
 }
