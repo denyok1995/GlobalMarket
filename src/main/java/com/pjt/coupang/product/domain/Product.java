@@ -18,17 +18,17 @@ public class Product {
 
     private Long price;
 
-    private String main_img;
+    private String mainImg;
 
-    private String detail_img;
+    private String detailImg;
 
     private Long stock;
 
     private Long score;
 
-    private Long delivery_fee;
+    private Long deliveryFee;
 
-    private String rocket_delivery;
+    private String rocketDelivery;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
