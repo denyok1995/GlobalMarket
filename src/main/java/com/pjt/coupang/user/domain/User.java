@@ -1,13 +1,13 @@
 package com.pjt.coupang.user.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 @Table(name = "users")
 public class User {
 
@@ -22,12 +22,14 @@ public class User {
     private String salt;
     private String phone;
 
-    public User(String email, String password, String name, String phone, String salt) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.phone = phone;
-        this.salt = salt;
+    public User() {
+    }
+
+    public static UserBuilder builder(String email) {
+        if (email == null) {
+            throw new IllegalArgumentException("Email 필드 누락");
+        }
+        return new UserBuilder().email(email);
     }
 
 }

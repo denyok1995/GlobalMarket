@@ -16,7 +16,11 @@ public class UserService {
 
     public void saveUser(String email, String password, String name, String phone) {
         String salt = securityService.generateSalt();
-        User user = new User(email, securityService.hash(password, salt), name, phone, salt);
+        User user = User.builder(email)
+                .password(securityService.hash(password, salt))
+                .name(name)
+                .phone(phone)
+                .build();
         userRepository.save(user);
     }
 
@@ -36,8 +40,8 @@ public class UserService {
     }
 
     private boolean checkPassword(String password, Optional<User> userByEmail) {
-        String hash = securityService.hash(password, userByEmail.get().getSalt());
-        if(hash.equals(userByEmail.get().getPassword())) {
+        String hash = securityService.hash(password, userByEmail.orElse(new User()).getSalt());
+        if(hash.equals(userByEmail.orElse(new User()).getPassword())) {
             return true;
         }
         return false;
