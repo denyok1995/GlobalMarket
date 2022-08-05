@@ -21,10 +21,9 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public PageList<Product> allProducts(@RequestParam int page,
-                                         @RequestParam int size) {
+    public Page<Product> allProducts(@RequestParam int page,
+                                     @RequestParam int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Product> products = productService.getAllProducts(pageRequest);
-        return new PageList<Product>(products.getContent(), products.hasNext());
+        return productService.getAllProducts(pageRequest);
     }
 }
