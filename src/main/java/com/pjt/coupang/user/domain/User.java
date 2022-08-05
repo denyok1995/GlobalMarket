@@ -1,8 +1,10 @@
 package com.pjt.coupang.user.domain;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Getter
@@ -21,6 +23,8 @@ public class User {
     private String name;
     private String salt;
     private String phone;
+    @CreationTimestamp
+    Timestamp createdAt;
 
     public User() {
     }
