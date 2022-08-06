@@ -21,6 +21,11 @@ public class SecurityConfig {
     }
 
     @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/h2-console/**");
+    }
+
+    @Bean
     protected SecurityFilterChain config(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable();
         httpSecurity.authorizeRequests()
