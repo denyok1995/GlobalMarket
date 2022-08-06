@@ -29,9 +29,9 @@ public class User {
     public User() {
     }
 
-    public static UserBuilder builder(String email) {
-        if (email == null) {
-            throw new IllegalArgumentException("Email 필드 누락");
+    public static UserBuilder builder(String email, String password) {
+        if (email == null || password == null) {
+            throw new IllegalArgumentException("필수 항목 누락");
         }
         return new UserBuilder().email(email);
     }
