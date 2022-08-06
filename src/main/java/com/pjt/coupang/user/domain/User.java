@@ -33,7 +33,7 @@ public class User {
         if (email == null || password == null) {
             throw new IllegalArgumentException("필수 항목 누락");
         }
-        return new UserBuilder().email(email);
+        return new UserBuilder().email(email).password(password);
     }
 
 }
