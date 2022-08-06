@@ -14,8 +14,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public void saveUser(String email, String password, String name, String phone) {
-        User user = User.builder(email)
-                .password(password)
+        User user = User.builder(email, password)
                 .name(name)
                 .phone(phone)
                 .build();
