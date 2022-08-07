@@ -24,6 +24,16 @@ public class ProductController {
     public Page<Product> allProducts(@RequestParam int page,
                                      @RequestParam int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return productService.getAllProducts(pageRequest);
+        Page<Product> allProducts = productService.getAllProducts(pageRequest);
+        Page<ProductResponseDto> products = allProducts.map(product -> ProductResponseDto.builder()
+                .name(product.getName())
+                .price(product.getPrice())
+                .stock(product.getStock())
+                .score(product.getScore())
+                .deliveryFee(product.getDeliveryFee())
+                .rocketDelivery(product.getRocketDelivery())
+                .categories(product.getCategory())
+                .build());
+        return products;
     }
 }
