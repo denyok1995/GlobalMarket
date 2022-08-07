@@ -21,8 +21,8 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public Page<Product> allProducts(@RequestParam int page,
-                                     @RequestParam int size) {
+    public Page<ProductResponseDto> allProducts(@RequestParam int page,
+                                                @RequestParam int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Product> allProducts = productService.getAllProducts(pageRequest);
         Page<ProductResponseDto> products = allProducts.map(product -> ProductResponseDto.builder()
