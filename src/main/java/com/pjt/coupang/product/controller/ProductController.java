@@ -1,17 +1,13 @@
 package com.pjt.coupang.product.controller;
 
 import com.pjt.coupang.product.domain.Product;
-import com.pjt.coupang.product.dto.PageList;
+import com.pjt.coupang.product.dto.ProductRequestDto;
+import com.pjt.coupang.product.dto.ProductResponseDto;
 import com.pjt.coupang.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,5 +31,17 @@ public class ProductController {
                 .categories(product.getCategory())
                 .build());
         return products;
+    }
+
+    @PostMapping(path = "/manager/save")
+    public void saveProduct(@RequestBody ProductRequestDto dto) {
+        Product product = Product.builder(dto.getName(), dto.getPrice())
+                .stock(dto.getStock())
+                .score(dto.getScore())
+                .deliveryFee(dto.getDeliveryFee())
+                .rocketDelivery(dto.getRocketDelivery())
+                .category(dto.getCategories())
+                .build();
+        productService.saveProduct(product);
     }
 }

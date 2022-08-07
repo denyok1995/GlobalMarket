@@ -27,6 +27,7 @@ public class SecurityConfig {
         httpSecurity.csrf().disable();
         httpSecurity.authorizeRequests()
                 .antMatchers("/**/auth/**").authenticated()
+                .antMatchers("/**/manager/**").access("hasRole('ROLE_MANAGER')")
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
