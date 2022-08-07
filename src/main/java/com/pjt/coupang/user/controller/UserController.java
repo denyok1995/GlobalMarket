@@ -1,5 +1,6 @@
 package com.pjt.coupang.user.controller;
 
+import com.pjt.coupang.user.dto.LoginDto;
 import com.pjt.coupang.user.dto.UserDto;
 import com.pjt.coupang.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,16 @@ public class UserController {
 
     private final UserService userService;
     private final BCryptPasswordEncoder encoder;
+
+    @PostMapping(path = "/sign-in")
+    public void signIn(LoginDto loginDto) {
+
+    }
+
+    @GetMapping(path = "/sign-out")
+    public void signOut() {
+
+    }
 
 
     @PostMapping(path = "/sign-up")
