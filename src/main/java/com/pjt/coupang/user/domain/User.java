@@ -23,6 +23,7 @@ public class User {
     private String name;
     private String salt;
     private String phone;
+    @Builder.Default private String role = "ROLE_USER";
     @CreationTimestamp
     Timestamp createdAt;
 
