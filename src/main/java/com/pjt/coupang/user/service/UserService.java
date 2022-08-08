@@ -3,8 +3,11 @@ package com.pjt.coupang.user.service;
 import com.pjt.coupang.user.dao.UserRepository;
 import com.pjt.coupang.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 @Service
@@ -12,6 +15,17 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder;
+
+    @PostConstruct
+    public void init() {
+        User user = User.builder("manager@coupang.com", encoder.encode("password"))
+                .name("manager")
+                .role("ROLE_MANAGER")
+                .phone("010-1234-5678")
+                .build();
+        userRepository.save(user);
+    }
 
     public void saveUser(String email, String password, String name, String phone) {
         User user = User.builder(email, password)
