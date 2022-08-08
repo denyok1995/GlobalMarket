@@ -40,4 +40,8 @@ public class ProductService {
         });
         productRepository.save(product);
     }
+
+    public Page<Product> searchProductsByContent(String content, Pageable pageable) {
+        return productRepository.findAllByName(content, pageable);
+    }
 }
