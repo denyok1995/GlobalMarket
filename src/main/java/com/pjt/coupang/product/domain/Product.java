@@ -3,6 +3,7 @@ package com.pjt.coupang.product.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -35,7 +36,8 @@ public class Product {
     private String rocketDelivery;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Category> category;
+    @Builder.Default
+    private Set<Category> category = new HashSet<>();
 
     public static ProductBuilder builder(String name, Long price) {
         if(name == null || price == null){
