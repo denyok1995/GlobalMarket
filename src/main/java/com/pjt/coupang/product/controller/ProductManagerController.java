@@ -24,8 +24,7 @@ public class ProductManagerController {
                 .score(dto.getScore())
                 .deliveryFee(dto.getDeliveryFee())
                 .rocketDelivery(dto.getRocketDelivery())
-                .category(dto.getCategories())
                 .build();
-        productService.saveProduct(product);
+        productService.saveProduct(product, dto.getCategories());
     }
 }

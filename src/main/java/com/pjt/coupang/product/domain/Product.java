@@ -45,4 +45,8 @@ public class Product {
         }
         return new ProductBuilder().name(name).price(price);
     }
+
+    public void addCategory(Category category) {
+        this.category.add(category);
+    }
 }

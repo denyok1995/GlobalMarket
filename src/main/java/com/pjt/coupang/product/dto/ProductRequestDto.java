@@ -18,5 +18,5 @@ public class ProductRequestDto {
     private Long score;
     private Long deliveryFee;
     private String rocketDelivery;
-    private Set<Category> categories;
+    private Set<String> categories;
 }
