@@ -1,9 +1,12 @@
 package com.pjt.coupang.user.controller;
 
+import com.pjt.coupang.config.auth.UserAuthDetails;
 import com.pjt.coupang.user.dto.LoginDto;
 import com.pjt.coupang.user.dto.UserDto;
+import com.pjt.coupang.user.dto.UserUpdateDto;
 import com.pjt.coupang.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +30,6 @@ public class UserController {
 
     }
 
-
     @PostMapping(path = "/sign-up")
     public void signUp(@Valid @RequestBody UserDto userDto) {
         userService.saveUser(userDto.getEmail(), encoder.encode(userDto.getPassword()), userDto.getName(), userDto.getPhone());
@@ -36,5 +38,11 @@ public class UserController {
     @GetMapping(path = "/check/id")
     public boolean checkDuplicatedEmail(String email) {
         return userService.getUserByEmail(email);
+    }
+
+    @PostMapping(path = "/auth/update")
+    public void updateUser(@AuthenticationPrincipal UserAuthDetails loginUser, @Valid @RequestBody UserUpdateDto userUpdateDto) {
+        String email = loginUser.getUsername();
+        userService.updateUser(email, userUpdateDto.getPassword(), userUpdateDto.getName(), userUpdateDto.getPhone());
     }
 }

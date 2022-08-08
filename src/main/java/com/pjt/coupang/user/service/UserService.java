@@ -25,4 +25,16 @@ public class UserService {
         return userRepository.findUserByEmail(email).isPresent();
     }
 
+    @Transactional
+    public void updateUser(String email, String password, String name, String phone) {
+        Optional<User> user = userRepository.findUserByEmail(email);
+        if(user.isEmpty()) return;
+        if(!encoder.matches(password, user.get().getPassword())) {
+            //todo : 예외처리
+            return;
+        }
+        user.get().setName(name);
+        user.get().setPhone(phone);
+    }
+
 }
