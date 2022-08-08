@@ -20,8 +20,9 @@ public class User {
     private String email;
     @Column(nullable = false)
     private String password;
+    @Setter
     private String name;
-    private String salt;
+    @Setter
     private String phone;
     @Builder.Default private String role = "ROLE_USER";
     @CreationTimestamp
