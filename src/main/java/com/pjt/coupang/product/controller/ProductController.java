@@ -32,16 +32,4 @@ public class ProductController {
                 .build());
         return products;
     }
-
-    @PostMapping(path = "/manager/save")
-    public void saveProduct(@RequestBody ProductRequestDto dto) {
-        Product product = Product.builder(dto.getName(), dto.getPrice())
-                .stock(dto.getStock())
-                .score(dto.getScore())
-                .deliveryFee(dto.getDeliveryFee())
-                .rocketDelivery(dto.getRocketDelivery())
-                .category(dto.getCategories())
-                .build();
-        productService.saveProduct(product);
-    }
 }
