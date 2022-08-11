@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 
 @Entity
 @Getter
@@ -27,7 +28,8 @@ public class User {
     @Builder.Default private String role = "ROLE_USER";
     @CreationTimestamp
     private Timestamp createdAt;
-    private Timestamp deletedAt;
+
+    private ZonedDateTime deletedAt;
 
     public User() {
     }
