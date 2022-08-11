@@ -26,7 +26,8 @@ public class User {
     private String phone;
     @Builder.Default private String role = "ROLE_USER";
     @CreationTimestamp
-    Timestamp createdAt;
+    private Timestamp createdAt;
+    private Timestamp deletedAt;
 
     public User() {
     }
