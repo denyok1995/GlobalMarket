@@ -17,15 +17,22 @@ public class User {
     @Id
     @GeneratedValue
     private Long id;
+
     @Column(unique = true, nullable = false)
     private String email;
+
     @Column(nullable = false)
     private String password;
+
     @Setter
     private String name;
+
     @Setter
     private String phone;
-    @Builder.Default private String role = "ROLE_USER";
+
+    @Builder.Default
+    private String role = "ROLE_USER";
+
     @CreationTimestamp
     private Timestamp createdAt;
 
