@@ -3,16 +3,29 @@ package com.pjt.globalmarket.config.auth;
 import com.pjt.globalmarket.user.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
-public class UserAuthDetails implements UserDetails {
+public class UserAuthDetails implements UserDetails, OAuth2User {
 
     private User user;
+    private Map<String, Object> attributes;
 
     public UserAuthDetails(User user) {
         this.user = user;
+    }
+
+    public UserAuthDetails(User user, Map<String, Object> attributes) {
+        this.user = user;
+        this.attributes = attributes;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return this.attributes;
     }
 
     @Override
@@ -55,5 +68,10 @@ public class UserAuthDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return user.getName();
     }
 }
