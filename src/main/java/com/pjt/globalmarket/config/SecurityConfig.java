@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .antMatchers("/**/manager/**").access("hasRole('ROLE_MANAGER')")
                 .anyRequest().permitAll()
                 .and()
-                .formLogin()
+                .formLogin().loginPage("/loginForm")
                 .usernameParameter("email") // username을 앞으로 email로 사용한다.
                 .loginProcessingUrl("/user/sign-in").defaultSuccessUrl("/")
                 .and().logout().logoutUrl("/user/sign-out").logoutSuccessUrl("/")
