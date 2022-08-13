@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -31,6 +32,12 @@ public class User {
 
     @Builder.Default
     private String role = "ROLE_USER";
+
+    @Builder.Default
+    private String provider = "GM";
+
+    @Builder.Default
+    private String providerId = String.valueOf(UUID.randomUUID());
 
     @CreationTimestamp
     private ZonedDateTime createdAt;
