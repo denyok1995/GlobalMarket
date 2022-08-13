@@ -4,7 +4,6 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -34,7 +33,7 @@ public class User {
     private String role = "ROLE_USER";
 
     @CreationTimestamp
-    private Timestamp createdAt;
+    private ZonedDateTime createdAt;
 
     private ZonedDateTime deletedAt;
 
