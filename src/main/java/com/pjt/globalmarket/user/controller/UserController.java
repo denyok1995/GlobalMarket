@@ -45,4 +45,9 @@ public class UserController {
         String email = loginUser.getUsername();
         userService.updateUser(email, userUpdateDto.getPassword(), userUpdateDto.getName(), userUpdateDto.getPhone());
     }
+
+    @PostMapping(path = "/auth/withdrawal")
+    public void withdrawalUser(@AuthenticationPrincipal UserAuthDetails loginUser) {
+        userService.deleteUser(loginUser.getUsername(), loginUser.getPassword(), loginUser.getProvider());
+    }
 }

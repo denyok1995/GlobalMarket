@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 @Service
@@ -49,6 +50,15 @@ public class UserService {
         }
         user.get().setName(name);
         user.get().setPhone(phone);
+    }
+
+    @Transactional
+    public void deleteUser(String email, String password, String provider) {
+        Optional<User> user = getActiveUserByEmailAndProvider(email, provider);
+        if(user.isEmpty()) {
+            // todo : 적당한 에러 리턴
+        }
+        user.get().setDeletedAt(ZonedDateTime.now());
     }
 
 }
