@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/user")
@@ -37,7 +39,7 @@ public class UserController {
 
     @GetMapping(path = "/check/id")
     public boolean checkDuplicatedEmail(String email) {
-        return userService.getUserByEmail(email);
+        return userService.getActiveUserByEmailAndProvider(email, DEFAULT_PROVIDER).isPresent();
     }
 
     @PostMapping(path = "/auth/update")

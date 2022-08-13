@@ -56,6 +56,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
             System.out.println("이미 로그인을 진행한 유저입니다.");
             user = userOptional.get();
         }
-        return new UserAuthDetails(user, attributes);
+        return new UserAuthDetails(user, attributes, provider);
     }
 }

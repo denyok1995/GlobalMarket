@@ -45,6 +45,7 @@ public class User {
     @CreationTimestamp
     private ZonedDateTime createdAt;
 
+    @Setter
     private ZonedDateTime deletedAt;
 
     public User() {

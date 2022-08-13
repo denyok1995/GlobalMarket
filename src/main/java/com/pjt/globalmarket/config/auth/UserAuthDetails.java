@@ -9,18 +9,25 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
+
 public class UserAuthDetails implements UserDetails, OAuth2User {
 
     private User user;
     private Map<String, Object> attributes;
+    private String provider;
 
+    // 일반 사용자 로그인용 생성자
     public UserAuthDetails(User user) {
         this.user = user;
+        this.provider = DEFAULT_PROVIDER;
     }
 
-    public UserAuthDetails(User user, Map<String, Object> attributes) {
+    //OAuth 사용자 로그인용 생성자
+    public UserAuthDetails(User user, Map<String, Object> attributes, String provider) {
         this.user = user;
         this.attributes = attributes;
+        this.provider = provider;
     }
 
     @Override
@@ -73,5 +80,9 @@ public class UserAuthDetails implements UserDetails, OAuth2User {
     @Override
     public String getName() {
         return user.getName();
+    }
+
+    public String getProvider() {
+        return this.provider;
     }
 }

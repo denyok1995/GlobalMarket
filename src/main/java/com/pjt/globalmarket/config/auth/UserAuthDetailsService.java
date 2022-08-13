@@ -2,6 +2,7 @@ package com.pjt.globalmarket.config.auth;
 
 import com.pjt.globalmarket.user.dao.UserRepository;
 import com.pjt.globalmarket.user.domain.User;
+import com.pjt.globalmarket.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,11 +11,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
+
 @Service
 @RequiredArgsConstructor
 public class UserAuthDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
 
     /**
@@ -27,7 +30,7 @@ public class UserAuthDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         System.out.println("email : "+ email);
-        Optional<User> user = userRepository.findUserByEmail(email);
+        Optional<User> user = userService.getActiveUserByEmailAndProvider(email, DEFAULT_PROVIDER);
         if(user.isPresent()) {
             System.out.println("User : "+user.get());
             return new UserAuthDetails(user.get());

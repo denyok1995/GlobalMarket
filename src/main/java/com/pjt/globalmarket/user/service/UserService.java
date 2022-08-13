@@ -11,6 +11,8 @@ import javax.annotation.PostConstruct;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
+import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -36,13 +38,13 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public boolean getUserByEmail(String email) {
-        return userRepository.findUserByEmail(email).isPresent();
+    public Optional<User> getActiveUserByEmailAndProvider(String email, String provider) {
+        return userRepository.findUserByEmailAndProviderAndDeletedAt(email, provider, null);
     }
 
     @Transactional
     public void updateUser(String email, String password, String name, String phone) {
-        Optional<User> user = userRepository.findUserByEmail(email);
+        Optional<User> user = getActiveUserByEmailAndProvider(email, DEFAULT_PROVIDER);
         if(user.isEmpty()) return;
         if(!encoder.matches(password, user.get().getPassword())) {
             //todo : 예외처리
