@@ -18,6 +18,7 @@ public class User {
     @GeneratedValue
     private Long id;
 
+    @Builder.Default
     private String uuid = String.valueOf(UUID.randomUUID());
 
     @Column(nullable = false)
