@@ -18,7 +18,9 @@ public class User {
     @GeneratedValue
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    private String uuid = String.valueOf(UUID.randomUUID());
+
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
