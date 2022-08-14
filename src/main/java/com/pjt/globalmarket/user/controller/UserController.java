@@ -2,7 +2,7 @@ package com.pjt.globalmarket.user.controller;
 
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
 import com.pjt.globalmarket.user.dto.LoginDto;
-import com.pjt.globalmarket.user.dto.UserDto;
+import com.pjt.globalmarket.user.dto.SignUpDto;
 import com.pjt.globalmarket.user.dto.UserUpdateDto;
 import com.pjt.globalmarket.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +33,8 @@ public class UserController {
     }
 
     @PostMapping(path = "/sign-up")
-    public void signUp(@Valid @RequestBody UserDto userDto) {
-        userService.saveUser(userDto.getEmail(), encoder.encode(userDto.getPassword()), userDto.getName(), userDto.getPhone());
+    public void signUp(@Valid @RequestBody SignUpDto signUpDto) {
+        userService.saveUser(signUpDto.getEmail(), encoder.encode(signUpDto.getPassword()), signUpDto.getName(), signUpDto.getPhone());
     }
 
     @GetMapping(path = "/check/id")

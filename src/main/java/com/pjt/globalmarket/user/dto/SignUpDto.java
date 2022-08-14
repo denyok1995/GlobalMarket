@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
-public class UserDto {
+public class SignUpDto {
 
     @Email
     @NotBlank(message = "아이디는 필수 입력값입니다.")
