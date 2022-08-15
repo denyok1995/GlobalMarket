@@ -26,7 +26,7 @@ public class ProductController {
                                                 @RequestParam int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Product> allProducts = productService.getAllProducts(pageRequest);
-        Page<ProductResponseDto> products = allProducts.map(product -> ProductResponseDto.builder()
+        return allProducts.map(product -> ProductResponseDto.builder()
                 .name(product.getName())
                 .price(productService.getDiscountedPriceByUserGrade(loginUser, product.getPrice()))
                 .stock(product.getStock())
@@ -35,7 +35,6 @@ public class ProductController {
                 .rocketDelivery(product.getRocketDelivery())
                 .categories(product.getCategory())
                 .build());
-        return products;
     }
 
     @GetMapping(path = "/search")
