@@ -20,6 +20,22 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
+    private static final String IS_NOT_USER = "default";
+    Map<String, Double> discount = new HashMap<>();
+
+    @PostConstruct
+    public void init (){
+        this.discount.put(IS_NOT_USER, 1.0); //아직 로그인 하지 않은 회원
+        this.discount.put(UserGrade.BRONZE.getGrade(), 0.99 ); //1% 할인율
+        this.discount.put(UserGrade.SILVER.getGrade(), 0.97 ); //3% 할인율
+        this.discount.put(UserGrade.GOLD.getGrade(), 0.95 ); //5% 할인율
+        this.discount.put(UserGrade.DIAMOND.getGrade(), 0.9 ); //10% 할인율
+    }
+
+    public Double getDiscountedPriceByUserGrade(UserAuthDetails loginUser, Double price) {
+        return price * discount.get((loginUser == null) ? IS_NOT_USER : loginUser.getUserGrade().getGrade());
+    }
+
     public Page<Product> getAllProducts(Pageable pageable) {
         return productRepository.findAllBy(pageable);
     }
