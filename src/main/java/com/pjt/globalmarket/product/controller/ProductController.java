@@ -27,6 +27,7 @@ public class ProductController {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Product> allProducts = productService.getAllProducts(pageRequest);
         return allProducts.map(product -> ProductResponseDto.builder()
+                .id(product.getId())
                 .name(product.getName())
                 .price(productService.getDiscountedPriceByUserGrade(loginUser, product.getPrice()))
                 .stock(product.getStock())
@@ -44,6 +45,7 @@ public class ProductController {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Product> products = productService.searchProductsByContent(content, pageRequest);
         return products.map(product -> ProductResponseDto.builder()
+                .id(product.getId())
                 .name(product.getName())
                 .price(product.getPrice())
                 .stock(product.getStock())
