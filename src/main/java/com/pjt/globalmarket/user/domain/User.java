@@ -37,6 +37,9 @@ public class User {
     private String role = "ROLE_USER";
 
     @Builder.Default
+    private UserGrade grade = UserGrade.BRONZE;
+
+    @Builder.Default
     private String provider = "GM";
 
     @Builder.Default
