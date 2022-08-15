@@ -21,7 +21,7 @@ public class Product {
     private String name;
 
     @Column(nullable = false)
-    private Long price;
+    private Double price;
 
     private String mainImg;
 
@@ -39,7 +39,7 @@ public class Product {
     @Builder.Default
     private Set<Category> category = new HashSet<>();
 
-    public static ProductBuilder builder(String name, Long price) {
+    public static ProductBuilder builder(String name, Double price) {
         if(name == null || price == null){
             throw  new IllegalArgumentException("필수 항목 누락");
         }

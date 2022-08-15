@@ -10,7 +10,7 @@ import java.util.Set;
 @Builder
 public class ProductRequestDto {
     private String name;
-    private Long price;
+    private Double price;
     private String mainImg;
     private String detailImg;
     private Long stock;

@@ -12,7 +12,7 @@ import java.util.Set;
 public class ProductResponseDto {
 
     private String name;
-    private Long price;
+    private Double price;
     private Long stock;
     private Long score;
     private Long deliveryFee;
