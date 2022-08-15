@@ -1,15 +1,20 @@
 package com.pjt.globalmarket.product.service;
 
+import com.pjt.globalmarket.config.auth.UserAuthDetails;
 import com.pjt.globalmarket.product.dao.CategoryRepository;
 import com.pjt.globalmarket.product.dao.ProductRepository;
 import com.pjt.globalmarket.product.domain.Category;
 import com.pjt.globalmarket.product.domain.Product;
+import com.pjt.globalmarket.user.domain.UserGrade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -59,5 +64,9 @@ public class ProductService {
 
     public Page<Product> searchProductsByContent(String content, Pageable pageable) {
         return productRepository.findAllByName(content, pageable);
+    }
+
+    public Optional<Product> getProductById(Long productId) {
+        return productRepository.findById(productId);
     }
 }
