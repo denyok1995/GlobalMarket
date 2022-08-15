@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -68,5 +65,9 @@ public class ProductService {
 
     public Optional<Product> getProductById(Long productId) {
         return productRepository.findById(productId);
+    }
+
+    public List<Product> findProductsByIds(List<Long> productIds) {
+        return productRepository.findAllByIdIn(productIds);
     }
 }
