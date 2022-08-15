@@ -1,6 +1,7 @@
 package com.pjt.globalmarket.config.auth;
 
 import com.pjt.globalmarket.user.domain.User;
+import com.pjt.globalmarket.user.domain.UserGrade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -9,25 +10,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
-
 public class UserAuthDetails implements UserDetails, OAuth2User {
 
     private User user;
     private Map<String, Object> attributes;
-    private String provider;
 
     // 일반 사용자 로그인용 생성자
     public UserAuthDetails(User user) {
         this.user = user;
-        this.provider = DEFAULT_PROVIDER;
     }
 
     //OAuth 사용자 로그인용 생성자
-    public UserAuthDetails(User user, Map<String, Object> attributes, String provider) {
+    public UserAuthDetails(User user, Map<String, Object> attributes) {
         this.user = user;
         this.attributes = attributes;
-        this.provider = provider;
     }
 
     @Override
@@ -83,6 +79,10 @@ public class UserAuthDetails implements UserDetails, OAuth2User {
     }
 
     public String getProvider() {
-        return this.provider;
+        return this.user.getProvider();
+    }
+
+    public UserGrade getUserGrade() {
+        return this.user.getGrade();
     }
 }
