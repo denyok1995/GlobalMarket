@@ -3,7 +3,7 @@ package com.pjt.globalmarket.cart.controller;
 import com.pjt.globalmarket.cart.dto.CartDto;
 import com.pjt.globalmarket.cart.service.CartService;
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
-import com.pjt.globalmarket.product.dto.CartProductDto;
+import com.pjt.globalmarket.product.dto.SimpleProductInfo;
 import com.pjt.globalmarket.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,8 +22,8 @@ public class CartController {
 
     @PostMapping(path = "/auth")
     public void saveProductInCart(@AuthenticationPrincipal UserAuthDetails userAuthDetails,
-                                  @RequestBody CartProductDto cartProductDto) {
-        cartService.saveProductInUserCart(userAuthDetails.getUsername(), userAuthDetails.getProvider(), cartProductDto.getProductId(), cartProductDto.getProductNum());
+                                  @RequestBody SimpleProductInfo simpleProductInfo) {
+        cartService.saveProductInUserCart(userAuthDetails.getUsername(), userAuthDetails.getProvider(), simpleProductInfo.getProductId(), simpleProductInfo.getProductNum());
     }
 
     @GetMapping

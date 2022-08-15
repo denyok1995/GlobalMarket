@@ -6,7 +6,7 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @NoArgsConstructor
-public class CartProductDto {
+public class SimpleProductInfo {
 
     private Long productId;
 
