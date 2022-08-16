@@ -1,16 +1,12 @@
 package com.pjt.globalmarket.coupon.controller;
 
-import com.pjt.globalmarket.coupon.dao.CouponRepository;
-import com.pjt.globalmarket.coupon.domain.Coupon;
 import com.pjt.globalmarket.coupon.dto.CouponDto;
 import com.pjt.globalmarket.coupon.service.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

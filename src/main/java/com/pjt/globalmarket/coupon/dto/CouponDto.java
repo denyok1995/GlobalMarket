@@ -1,12 +1,10 @@
 package com.pjt.globalmarket.coupon.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Id;
 import java.time.ZonedDateTime;
 
 @Data
