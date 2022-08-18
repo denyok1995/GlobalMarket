@@ -31,6 +31,10 @@ public class UserService {
     }
 
     public void saveUser(String email, String password, String name, String phone) {
+        Optional<User> savedUser = getActiveUserByEmailAndProvider(email, DEFAULT_PROVIDER);
+        if(savedUser.isPresent()) {
+            return;
+        }
         User user = User.builder(email, password)
                 .name(name)
                 .phone(phone)
