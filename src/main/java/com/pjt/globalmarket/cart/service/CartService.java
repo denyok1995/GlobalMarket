@@ -64,6 +64,6 @@ public class CartService {
         if(productById.isEmpty()) {
             return true;
         }
-        return (productById.get().getStock() >= num) ? false : true;
+        return productById.get().getStock() < num;
     }
 }
