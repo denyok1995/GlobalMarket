@@ -33,7 +33,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
-        OAuth2UserInfo oAuth2UserInfo = null;
+        OAuth2UserInfo oAuth2UserInfo;
         if("google".equals(provider)) {
             oAuth2UserInfo = new GoogleUserInfo(attributes);
         } else {
@@ -42,7 +42,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
 
         Optional<User> userOptional =
                 userService.getActiveUserByEmailAndProvider(oAuth2UserInfo.getEmail(), oAuth2UserInfo.getProvider());
-        User user = null;
+        User user;
         if(userOptional.isEmpty()) {
             log.info("가입되지 않은 유저입니다.");
             user = User.builder(oAuth2UserInfo.getEmail(), encoder.encode(oAuth2UserInfo.getProviderId()))
