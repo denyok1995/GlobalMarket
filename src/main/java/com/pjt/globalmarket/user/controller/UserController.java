@@ -43,14 +43,15 @@ public class UserController {
         return userService.getActiveUserByEmailAndProvider(email, DEFAULT_PROVIDER).isPresent();
     }
 
-    @PostMapping(path = "/auth/update")
+    @NeedLogin
+    @PostMapping(path = "/update")
     public void updateUser(@AuthenticationPrincipal UserAuthDetails loginUser, @Valid @RequestBody UserUpdateDto userUpdateDto) {
         String email = loginUser.getUsername();
         userService.updateUser(email, userUpdateDto.getPassword(), userUpdateDto.getName(), userUpdateDto.getPhone());
     }
 
     @NeedLogin
-    @PostMapping(path = "/auth/withdrawal")
+    @PostMapping(path = "/withdrawal")
     public void withdrawalUser(@AuthenticationPrincipal UserAuthDetails loginUser) {
         userService.deleteUser(loginUser.getUsername(), loginUser.getPassword(), loginUser.getProvider());
     }
