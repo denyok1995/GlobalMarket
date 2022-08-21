@@ -5,6 +5,7 @@ import com.pjt.globalmarket.user.dao.UserRepository;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class OAuth2UserService extends DefaultOAuth2UserService {
 
@@ -28,10 +30,8 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         String provider = userRequest.getClientRegistration().getRegistrationId();
-        System.out.println("Provider : "+provider);
         OAuth2User oAuth2User = super.loadUser(userRequest);
         Map<String, Object> attributes = oAuth2User.getAttributes();
-        System.out.println("Attributes : "+attributes);
 
         OAuth2UserInfo oAuth2UserInfo = null;
         if("google".equals(provider)) {
@@ -44,7 +44,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                 userService.getActiveUserByEmailAndProvider(oAuth2UserInfo.getEmail(), oAuth2UserInfo.getProvider());
         User user = null;
         if(userOptional.isEmpty()) {
-            System.out.println("가입되지 않은 유저입니다.");
+            log.info("가입되지 않은 유저입니다.");
             user = User.builder(oAuth2UserInfo.getEmail(), encoder.encode(oAuth2UserInfo.getProviderId()))
                     .name(oAuth2UserInfo.getName())
                     .phone(DEFAULT_PHONE)
@@ -53,7 +53,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                     .build();
             userRepository.save(user);
         } else {
-            System.out.println("이미 로그인을 진행한 유저입니다.");
+            log.info("이미 로그인을 진행한 유저입니다.");
             user = userOptional.get();
         }
         return new UserAuthDetails(user, attributes);
