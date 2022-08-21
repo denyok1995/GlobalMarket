@@ -24,11 +24,7 @@ public class SecurityConfig {
     @Bean
     protected SecurityFilterChain config(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable();
-        httpSecurity.authorizeRequests()
-                .antMatchers("/**/auth/**").authenticated()
-                .antMatchers("/**/manager/**").access("hasRole('ROLE_MANAGER')")
-                .anyRequest().permitAll()
-                .and()
+        httpSecurity
                 .formLogin().loginPage("/loginForm")
                 .usernameParameter("email") // username을 앞으로 email로 사용한다.
                 .loginProcessingUrl("/user/sign-in").defaultSuccessUrl("/")
