@@ -2,6 +2,7 @@ package com.pjt.globalmarket.coupon.controller;
 
 import com.pjt.globalmarket.coupon.dto.CouponDto;
 import com.pjt.globalmarket.coupon.service.CouponService;
+import com.pjt.globalmarket.user.domain.NeedLogin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ public class CouponController {
 
     private final CouponService couponService;
 
+    @NeedLogin
     @GetMapping(path = "/auth/available")
     public List<CouponDto> getAvailableCoupons() {
         return couponService.getAllAvailableCoupons().stream().map(coupon -> {

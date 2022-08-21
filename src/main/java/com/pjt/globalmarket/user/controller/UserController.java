@@ -1,6 +1,7 @@
 package com.pjt.globalmarket.user.controller;
 
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
+import com.pjt.globalmarket.user.domain.NeedLogin;
 import com.pjt.globalmarket.user.dto.LoginDto;
 import com.pjt.globalmarket.user.dto.SignUpDto;
 import com.pjt.globalmarket.user.dto.UserUpdateDto;
@@ -48,6 +49,7 @@ public class UserController {
         userService.updateUser(email, userUpdateDto.getPassword(), userUpdateDto.getName(), userUpdateDto.getPhone());
     }
 
+    @NeedLogin
     @PostMapping(path = "/auth/withdrawal")
     public void withdrawalUser(@AuthenticationPrincipal UserAuthDetails loginUser) {
         userService.deleteUser(loginUser.getUsername(), loginUser.getPassword(), loginUser.getProvider());
