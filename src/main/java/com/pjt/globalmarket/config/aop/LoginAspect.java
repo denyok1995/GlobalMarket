@@ -26,5 +26,6 @@ public class LoginAspect {
                 return;
             }
         }
+        throw new AuthenticationCredentialsNotFoundException("로그인 해야 합니다.");
     }
 }
