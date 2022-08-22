@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExceptionController {
 
     @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
-    public ResponseEntity<String> authExceptionHandler() {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Need to Login!!");
+    public ResponseEntity<String> AuthExceptionHandler() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Need To Login!!");
     }
 }

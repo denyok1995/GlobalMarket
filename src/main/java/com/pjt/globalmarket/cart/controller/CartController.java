@@ -5,6 +5,7 @@ import com.pjt.globalmarket.cart.service.CartService;
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
 import com.pjt.globalmarket.product.dto.SimpleProductInfo;
 import com.pjt.globalmarket.product.service.ProductService;
+import com.pjt.globalmarket.user.domain.NeedLogin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,8 @@ public class CartController {
     private final CartService cartService;
     private final ProductService productService;
 
-    @PostMapping(path = "/auth")
+    @NeedLogin
+    @PostMapping
     public void saveProductInCart(@AuthenticationPrincipal UserAuthDetails userAuthDetails,
                                   @RequestBody SimpleProductInfo simpleProductInfo) {
         cartService.saveProductInUserCart(userAuthDetails.getUsername(), userAuthDetails.getProvider(), simpleProductInfo.getProductId(), simpleProductInfo.getProductNum());
