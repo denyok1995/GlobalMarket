@@ -1,10 +1,11 @@
 package com.pjt.globalmarket.review.dto;
 
-import lombok.Builder;
+import lombok.*;
 
 import java.time.ZonedDateTime;
 
 @Builder
+@Data
 public class ReviewInfo {
 
     private String email;
