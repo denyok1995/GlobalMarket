@@ -38,7 +38,7 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
-    public List<Review> getReivews(Long productId) {
+    public List<Review> getReviews(Long productId) {
         Product product = productService.getProductById(productId).orElseThrow();
         return reviewRepository.findReviewsByProduct(product);
     }

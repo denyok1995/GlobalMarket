@@ -29,7 +29,7 @@ public class ReviewController {
 
     @GetMapping
     public List<ReviewInfo> getReviews(@RequestParam Long productId) {
-        return reviewService.getReivews(productId).stream().map(review -> {
+        return reviewService.getReviews(productId).stream().map(review -> {
             return ReviewInfo.builder().email(review.getUser().getEmail())
                     .score(review.getScore())
                     .content(review.getContent())
