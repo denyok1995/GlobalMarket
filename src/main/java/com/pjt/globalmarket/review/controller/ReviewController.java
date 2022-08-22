@@ -1,6 +1,7 @@
 package com.pjt.globalmarket.review.controller;
 
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
+import com.pjt.globalmarket.review.dto.EvaluateReviewInfo;
 import com.pjt.globalmarket.review.dto.ReviewInfo;
 import com.pjt.globalmarket.review.dto.WriteReviewInfo;
 import com.pjt.globalmarket.review.service.ReviewService;
@@ -37,5 +38,12 @@ public class ReviewController {
                     .createdAt(review.getCreatedAt())
                     .build();
         }).collect(Collectors.toList());
+    }
+
+    @NeedLogin
+    @PostMapping(path = "/evaluate")
+    public void evaluateReview(@AuthenticationPrincipal UserAuthDetails loginUser,
+                               @RequestBody EvaluateReviewInfo evaluateReviewInfo) {
+        reviewService.saveEvaluationReview(loginUser.getUsername(), loginUser.getProvider(), evaluateReviewInfo);
     }
 }

@@ -31,9 +31,11 @@ public class Review {
     private String content;
 
     @Builder.Default
+    @Setter
     private Integer helpNum = 0;
 
     @Builder.Default
+    @Setter
     private Integer noHelpNum = 0;
 
     private Double score;
