@@ -16,7 +16,7 @@ import java.util.List;
 @Component
 public class LoginAspect {
 
-    @Before(value = "@annotation(com.pjt.globalmarket.user.domain.NeedLogin)")
+    //@Before(value = "@annotation(com.pjt.globalmarket.user.domain.NeedLogin)")
     public void checkLogin(JoinPoint joinPoint) {
         List<Object> args = Arrays.asList(joinPoint.getArgs());
         log.info("Login Check");

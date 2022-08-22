@@ -1,11 +1,9 @@
 package com.pjt.globalmarket.coupon.controller;
 
-import com.pjt.globalmarket.config.auth.UserAuthDetails;
 import com.pjt.globalmarket.coupon.dto.CouponDto;
 import com.pjt.globalmarket.coupon.service.CouponService;
 import com.pjt.globalmarket.user.domain.NeedLogin;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +20,7 @@ public class CouponController {
 
     @NeedLogin
     @GetMapping(path = "/available")
-    public List<CouponDto> getAvailableCoupons(@AuthenticationPrincipal UserAuthDetails loginUser) {
+    public List<CouponDto> getAvailableCoupons() {
         return couponService.getAllAvailableCoupons().stream().map(coupon -> {
             return CouponDto.builder().id(coupon.getId())
                     .name(coupon.getName())
