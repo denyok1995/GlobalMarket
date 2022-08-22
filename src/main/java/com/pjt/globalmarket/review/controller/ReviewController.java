@@ -1,15 +1,16 @@
 package com.pjt.globalmarket.review.controller;
 
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
+import com.pjt.globalmarket.review.dto.ReviewInfo;
 import com.pjt.globalmarket.review.dto.WriteReviewInfo;
 import com.pjt.globalmarket.review.service.ReviewService;
 import com.pjt.globalmarket.user.domain.NeedLogin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/review")
@@ -23,5 +24,18 @@ public class ReviewController {
     public void writeReview(@AuthenticationPrincipal UserAuthDetails loginUser,
                             @RequestBody WriteReviewInfo review) {
         reviewService.saveReview(loginUser.getUsername(), loginUser.getProvider(), review);
+    }
+
+    @GetMapping
+    public List<ReviewInfo> getReviews(@RequestParam Long productId) {
+        return reviewService.getReivews(productId).stream().map(review -> {
+            return ReviewInfo.builder().email(review.getUser().getEmail())
+                    .score(review.getScore())
+                    .content(review.getContent())
+                    .helpNum(review.getHelpNum())
+                    .noHelpNum(review.getNoHelpNum())
+                    .createdAt(review.getCreatedAt())
+                    .build();
+        }).collect(Collectors.toList());
     }
 }

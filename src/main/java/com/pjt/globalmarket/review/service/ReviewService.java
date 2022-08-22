@@ -1,6 +1,5 @@
 package com.pjt.globalmarket.review.service;
 
-import ch.qos.logback.classic.spi.IThrowableProxy;
 import com.pjt.globalmarket.product.domain.Product;
 import com.pjt.globalmarket.product.service.ProductService;
 import com.pjt.globalmarket.review.dao.ReviewRepository;
@@ -11,8 +10,7 @@ import com.pjt.globalmarket.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,5 +31,10 @@ public class ReviewService {
                 .build();
 
         reviewRepository.save(review);
+    }
+
+    public List<Review> getReivews(Long productId) {
+        Product product = productService.getProductById(productId).orElseThrow();
+        return reviewRepository.findReviewsByProduct(product);
     }
 }
