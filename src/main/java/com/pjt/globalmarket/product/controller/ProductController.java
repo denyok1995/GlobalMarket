@@ -29,7 +29,7 @@ public class ProductController {
         return allProducts.map(product -> ProductResponseDto.builder()
                 .id(product.getId())
                 .name(product.getName())
-                .price(productService.getDiscountedPriceByUserGrade(loginUser, product.getPrice()))
+                .price(productService.getDiscountedPriceByUserGrade(loginUser.getUserGrade(), product.getPrice()))
                 .stock(product.getStock())
                 .score(product.getScore())
                 .deliveryFee(product.getDeliveryFee())

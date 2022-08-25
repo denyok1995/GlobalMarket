@@ -41,7 +41,7 @@ public class CartController {
             return CartDto.builder().id(cart.getId())
                     .productName(cart.getProduct().getName())
                     .productNum(cart.getProductNum())
-                    .price(productService.getDiscountedPriceByUserGrade(userAuthDetails, cart.getProduct().getPrice()))
+                    .price(productService.getDiscountedPriceByUserGrade(userAuthDetails.getUserGrade(), cart.getProduct().getPrice()))
                     .deliveryFee(cart.getProduct().getDeliveryFee())
                     .rocketDelivery(cart.getProduct().getRocketDelivery())
                     .build();

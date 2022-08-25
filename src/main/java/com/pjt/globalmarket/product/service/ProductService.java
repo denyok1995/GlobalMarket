@@ -1,6 +1,5 @@
 package com.pjt.globalmarket.product.service;
 
-import com.pjt.globalmarket.config.auth.UserAuthDetails;
 import com.pjt.globalmarket.product.dao.CategoryRepository;
 import com.pjt.globalmarket.product.dao.ProductRepository;
 import com.pjt.globalmarket.product.domain.Category;
@@ -34,8 +33,8 @@ public class ProductService {
         this.discount.put(UserGrade.DIAMOND.getGrade(), 0.9 ); //10% 할인율
     }
 
-    public Double getDiscountedPriceByUserGrade(UserAuthDetails loginUser, Double price) {
-        return price * discount.get((loginUser == null) ? IS_NOT_USER : loginUser.getUserGrade().getGrade());
+    public Double getDiscountedPriceByUserGrade(UserGrade userGrade, Double price) {
+        return price * discount.get((userGrade == null) ? IS_NOT_USER : userGrade);
     }
 
     public Page<Product> getAllProducts(Pageable pageable) {
