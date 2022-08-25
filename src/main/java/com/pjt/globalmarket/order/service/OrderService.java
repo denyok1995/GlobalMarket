@@ -2,14 +2,12 @@ package com.pjt.globalmarket.order.service;
 
 import com.pjt.globalmarket.address.dao.AddressRepository;
 import com.pjt.globalmarket.address.domain.Address;
-import com.pjt.globalmarket.config.auth.UserAuthDetails;
 import com.pjt.globalmarket.order.dto.CheckInfo;
 import com.pjt.globalmarket.order.dto.OrderProductInfo;
 import com.pjt.globalmarket.product.domain.Product;
 import com.pjt.globalmarket.product.dto.SimpleProductInfo;
 import com.pjt.globalmarket.product.service.ProductService;
 import com.pjt.globalmarket.user.domain.User;
-import com.pjt.globalmarket.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +19,11 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private final AddressRepository addressRepository;
-    private final UserService userService;
     private final ProductService productService;
 
-    public Optional<CheckInfo> getOrderInfo(UserAuthDetails loginUser, List<SimpleProductInfo> productsInfo) {
-        Optional<User> user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider());
+    public Optional<CheckInfo> getOrderInfo(User user, List<SimpleProductInfo> productsInfo) {
 
-        Optional<Address> address = addressRepository.findAddressByUserAndMain(user.get(), true);
+        Optional<Address> address = addressRepository.findAddressByUserAndMain(user, true);
 
         Map<Long, Long> productMap = new HashMap<>();
         for(SimpleProductInfo info : productsInfo) {
@@ -42,7 +38,7 @@ public class OrderService {
         Double totalPrice = 0.0;
         Double totalDeliveryFee = 0.0;
         for(Product product : products) {
-            Double discountedPrice = productService.getDiscountedPriceByUserGrade(loginUser, product.getPrice());
+            Double discountedPrice = productService.getDiscountedPriceByUserGrade(user.getGrade(), product.getPrice());
             Long count = productMap.get(product.getId());
             totalPrice += discountedPrice * count;
             totalDeliveryFee += product.getDeliveryFee();
@@ -56,8 +52,8 @@ public class OrderService {
                     .build());
         }
 
-        return Optional.ofNullable(CheckInfo.builder().consumerName(user.get().getName())
-                .consumerPhone(user.get().getPhone())
+        return Optional.ofNullable(CheckInfo.builder().consumerName(user.getName())
+                .consumerPhone(user.getPhone())
                 .consumerAddress((address.isEmpty()) ? null : address.get().getContent())
                 .orderProducts(productInfos)
                 .totalDeliveryFee(totalDeliveryFee)
