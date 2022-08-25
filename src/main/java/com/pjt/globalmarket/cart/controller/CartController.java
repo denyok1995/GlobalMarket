@@ -27,21 +27,21 @@ public class CartController {
 
     @NeedLogin
     @PostMapping
-    public void saveProductInCart(@AuthenticationPrincipal UserAuthDetails userAuthDetails,
+    public void saveProductInCart(@AuthenticationPrincipal UserAuthDetails loginUser,
                                   @RequestBody SimpleProductInfo simpleProductInfo) {
         Product product = productService.getProductById(simpleProductInfo.getProductId()).orElseThrow();
-        User user = userService.getActiveUserByEmailAndProvider(userAuthDetails.getUsername(), userAuthDetails.getProvider()).orElseThrow();
+        User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         cartService.saveProductInUserCart(user, product, simpleProductInfo.getProductNum());
     }
 
     @GetMapping
-    public List<CartDto> getAllProductInMyCart(@AuthenticationPrincipal UserAuthDetails userAuthDetails) {
-        User user = userService.getActiveUserByEmailAndProvider(userAuthDetails.getUsername(), userAuthDetails.getProvider()).orElseThrow();
+    public List<CartDto> getAllProductInMyCart(@AuthenticationPrincipal UserAuthDetails loginUser) {
+        User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         return cartService.getAllProductsInCartByUser(user).stream().map(cart -> {
             return CartDto.builder().id(cart.getId())
                     .productName(cart.getProduct().getName())
                     .productNum(cart.getProductNum())
-                    .price(productService.getDiscountedPriceByUserGrade(userAuthDetails.getUserGrade(), cart.getProduct().getPrice()))
+                    .price(productService.getDiscountedPriceByUserGrade(loginUser.getUserGrade(), cart.getProduct().getPrice()))
                     .deliveryFee(cart.getProduct().getDeliveryFee())
                     .rocketDelivery(cart.getProduct().getRocketDelivery())
                     .build();
