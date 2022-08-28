@@ -39,7 +39,7 @@ public class CouponController {
 
     //쿠폰 발급
     @NeedLogin
-    @PostMapping
+    @PostMapping(path = "/issue")
     public void issueCoupon(@AuthenticationPrincipal UserAuthDetails loginUser,
                            @RequestBody Long couponId) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
