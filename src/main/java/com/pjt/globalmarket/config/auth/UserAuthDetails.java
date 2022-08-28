@@ -85,4 +85,8 @@ public class UserAuthDetails implements UserDetails, OAuth2User {
     public UserGrade getUserGrade() {
         return this.user.getGrade();
     }
+
+    public String getRole() {
+        return this.user.getRole();
+    }
 }
