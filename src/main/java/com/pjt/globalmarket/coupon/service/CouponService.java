@@ -30,7 +30,7 @@ public class CouponService {
 
     public void issueCoupon(User user, Coupon coupon) {
         Optional<UserCoupon> savedUserCoupon = userCouponRepository.findUserCouponByUserAndCoupon(user, coupon);
-        if(savedUserCoupon.isPresent() && isIssueCoupon(savedUserCoupon.get(), coupon)) {
+        if(savedUserCoupon.isPresent() && !isOverIssue(savedUserCoupon.get(), coupon)) {
             savedUserCoupon.get().setIssuedCount(savedUserCoupon.get().getIssuedCount() + 1);
         } else {
             UserCoupon userCoupon = UserCoupon.builder()
@@ -41,11 +41,11 @@ public class CouponService {
         }
     }
 
-    public Boolean isIssueCoupon(UserCoupon userCoupon, Coupon coupon) {
+    public Boolean isOverIssue(UserCoupon userCoupon, Coupon coupon) {
         if(userCoupon.getIssuedCount() >= coupon.getMaxCouponCount()) {
             throw new IllegalArgumentException("최대 발급 횟수를 초과하였습니다.");
         } else {
-            return true;
+            return false;
         }
     }
 
