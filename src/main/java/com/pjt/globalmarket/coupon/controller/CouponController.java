@@ -51,7 +51,8 @@ public class CouponController {
     //쿠폰 생성
     @OnlyManager
     @PostMapping(path = "/manager")
-    public void saveCoupon(@RequestBody CouponDto dto) {
+    public void saveCoupon(@AuthenticationPrincipal UserAuthDetails loginUser,
+                           @RequestBody CouponDto dto) {
         couponService.saveCoupon(dto);
     }
 }
