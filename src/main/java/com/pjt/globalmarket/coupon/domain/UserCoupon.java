@@ -32,5 +32,5 @@ public class UserCoupon {
     //발급된 쿠폰의 수
     @Setter
     @Builder.Default
-    private Long issuedCount = 0L;
+    private Long issuedCount = 1L;
 }
