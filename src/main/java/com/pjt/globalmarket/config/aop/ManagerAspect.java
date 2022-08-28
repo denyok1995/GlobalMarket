@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.pjt.globalmarket.user.domain.UserConstant.MANAGER;
+import static com.pjt.globalmarket.user.domain.UserConstant.ROLE_MANAGER;
 
 @Slf4j
 @Aspect
@@ -26,7 +26,7 @@ public class ManagerAspect {
         for(Object o : args) {
             if(o instanceof UserAuthDetails) {
                 UserAuthDetails user = (UserAuthDetails) o;
-                if(MANAGER.equals(user.getRole())) {
+                if(ROLE_MANAGER.equals(user.getRole())) {
                     return;
                 }
             }
