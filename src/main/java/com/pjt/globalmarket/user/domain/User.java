@@ -44,7 +44,7 @@ public class User implements Serializable {
     private UserGrade grade = UserGrade.BRONZE;
 
     @Builder.Default
-    private String provider = "GM";
+    private String provider = DEFAULT_PROVIDER;
 
     @Builder.Default
     private String providerId = String.valueOf(UUID.randomUUID());
