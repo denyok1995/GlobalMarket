@@ -8,6 +8,9 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
+import static com.pjt.globalmarket.user.domain.UserConstant.ROLE_USER;
+
 @Entity
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -35,13 +38,13 @@ public class User implements Serializable {
     private String phone;
 
     @Builder.Default
-    private String role = "ROLE_USER";
+    private String role = ROLE_USER;
 
     @Builder.Default
     private UserGrade grade = UserGrade.BRONZE;
 
     @Builder.Default
-    private String provider = "GM";
+    private String provider = DEFAULT_PROVIDER;
 
     @Builder.Default
     private String providerId = String.valueOf(UUID.randomUUID());

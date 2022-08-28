@@ -12,6 +12,7 @@ import java.time.ZonedDateTime;
 import java.util.Optional;
 
 import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
+import static com.pjt.globalmarket.user.domain.UserConstant.ROLE_MANAGER;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +25,7 @@ public class UserService {
     public void init() {
         User user = User.builder("manager@coupang.com", encoder.encode("password"))
                 .name("manager")
-                .role("ROLE_MANAGER")
+                .role(ROLE_MANAGER)
                 .phone("010-1234-5678")
                 .build();
         userRepository.save(user);

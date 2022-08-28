@@ -1,13 +1,11 @@
 package com.pjt.globalmarket.coupon.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.ZonedDateTime;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class CouponDto {
@@ -20,7 +18,7 @@ public class CouponDto {
 
     private Long discountPrice;
 
-    private Long productId;
+    //private Long productId;
 
     private Long maxCouponCount;
 
