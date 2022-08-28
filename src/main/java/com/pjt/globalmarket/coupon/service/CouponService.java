@@ -4,6 +4,7 @@ import com.pjt.globalmarket.coupon.dao.CouponRepository;
 import com.pjt.globalmarket.coupon.dao.UserCouponRepository;
 import com.pjt.globalmarket.coupon.domain.Coupon;
 import com.pjt.globalmarket.coupon.domain.UserCoupon;
+import com.pjt.globalmarket.coupon.dto.CouponDto;
 import com.pjt.globalmarket.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,17 @@ public class CouponService {
         } else {
             return true;
         }
+    }
+
+    public void saveCoupon(CouponDto dto) {
+        Coupon coupon = Coupon.builder()
+                .name(dto.getName())
+                .minPrice(dto.getMinPrice())
+                .discountPrice(dto.getDiscountPrice())
+                .maxCouponCount(dto.getMaxCouponCount())
+                .expirationTime(dto.getExpirationTime())
+                .build();
+
+        couponRepository.save(coupon);
     }
 }

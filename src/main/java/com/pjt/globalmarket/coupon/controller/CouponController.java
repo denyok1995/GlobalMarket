@@ -5,6 +5,7 @@ import com.pjt.globalmarket.coupon.domain.Coupon;
 import com.pjt.globalmarket.coupon.dto.CouponDto;
 import com.pjt.globalmarket.coupon.service.CouponService;
 import com.pjt.globalmarket.user.domain.NeedLogin;
+import com.pjt.globalmarket.user.domain.OnlyManager;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -45,5 +46,12 @@ public class CouponController {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         Coupon coupon = couponService.getCouponById(couponId).orElseThrow();
         couponService.issueCoupon(user, coupon);
+    }
+
+    //쿠폰 생성
+    @OnlyManager
+    @PostMapping(path = "/manager")
+    public void saveCoupon(@RequestBody CouponDto dto) {
+        couponService.saveCoupon(dto);
     }
 }
