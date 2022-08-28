@@ -28,7 +28,7 @@ public class Coupon {
     private Long discountPrice;
 
     //상품에 따라 사용할 수 있는 쿠폰이 다르다.
-    private Long productId;
+    //private Long productId;
 
     private Long maxCouponCount;
 

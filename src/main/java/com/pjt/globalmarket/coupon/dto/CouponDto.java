@@ -20,7 +20,7 @@ public class CouponDto {
 
     private Long discountPrice;
 
-    private Long productId;
+    //private Long productId;
 
     private Long maxCouponCount;
 

@@ -26,7 +26,7 @@ public class CouponController {
                     .name(coupon.getName())
                     .minPrice(coupon.getMinPrice())
                     .discountPrice(coupon.getDiscountPrice())
-                    .productId(coupon.getProductId())
+                    //.productId(coupon.getProductId())
                     .maxCouponCount(coupon.getMaxCouponCount())
                     .expirationTime(coupon.getExpirationTime())
                     .build();
