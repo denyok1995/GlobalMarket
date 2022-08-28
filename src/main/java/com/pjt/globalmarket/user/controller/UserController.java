@@ -2,6 +2,7 @@ package com.pjt.globalmarket.user.controller;
 
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
 import com.pjt.globalmarket.user.domain.NeedLogin;
+import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.dto.LoginDto;
 import com.pjt.globalmarket.user.dto.SignUpDto;
 import com.pjt.globalmarket.user.dto.UserUpdateDto;
@@ -46,13 +47,18 @@ public class UserController {
     @NeedLogin
     @PostMapping(path = "/update")
     public void updateUser(@AuthenticationPrincipal UserAuthDetails loginUser, @Valid @RequestBody UserUpdateDto userUpdateDto) {
-        String email = loginUser.getUsername();
-        userService.updateUser(email, userUpdateDto.getPassword(), userUpdateDto.getName(), userUpdateDto.getPhone());
+        User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
+        if(encoder.matches(userUpdateDto.getPassword(), user.getPassword())) {
+            userService.updateUser(user, userUpdateDto.getName(), userUpdateDto.getPhone());
+        } else {
+            throw new IllegalArgumentException("비밀번호를 잘못 입력했습니다.");
+        }
     }
 
     @NeedLogin
     @PostMapping(path = "/withdrawal")
     public void withdrawalUser(@AuthenticationPrincipal UserAuthDetails loginUser) {
-        userService.deleteUser(loginUser.getUsername(), loginUser.getPassword(), loginUser.getProvider());
+        User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
+        userService.deleteUser(user);
     }
 }

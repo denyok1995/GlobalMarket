@@ -47,25 +47,15 @@ public class UserService {
         return userRepository.findUserByEmailAndProviderAndDeletedAt(email, provider, null);
     }
 
-    @Transactional
-    public void updateUser(String email, String password, String name, String phone) {
-        Optional<User> user = getActiveUserByEmailAndProvider(email, DEFAULT_PROVIDER);
-        if(user.isEmpty()) return;
-        if(!encoder.matches(password, user.get().getPassword())) {
-            //todo : 예외처리
-            return;
-        }
-        user.get().setName(name);
-        user.get().setPhone(phone);
+    public void updateUser(User user, String name, String phone) {
+        user.setName(name);
+        user.setPhone(phone);
+        userRepository.save(user);
     }
 
-    @Transactional
-    public void deleteUser(String email, String password, String provider) {
-        Optional<User> user = getActiveUserByEmailAndProvider(email, provider);
-        if(user.isEmpty()) {
-            // todo : 적당한 에러 리턴
-        }
-        user.get().setDeletedAt(ZonedDateTime.now());
+    public void deleteUser(User user) {
+        user.setDeletedAt(ZonedDateTime.now());
+        userRepository.save(user);
     }
 
 }
