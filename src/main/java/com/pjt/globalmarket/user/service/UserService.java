@@ -12,6 +12,7 @@ import java.time.ZonedDateTime;
 import java.util.Optional;
 
 import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
+import static com.pjt.globalmarket.user.domain.UserConstant.ROLE_MANAGER;
 
 @Service
 @RequiredArgsConstructor
