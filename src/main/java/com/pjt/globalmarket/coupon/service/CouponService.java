@@ -8,6 +8,7 @@ import com.pjt.globalmarket.coupon.dto.CouponDto;
 import com.pjt.globalmarket.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -28,6 +29,7 @@ public class CouponService {
         return couponRepository.findCouponsByExpirationTimeIsGreaterThan(ZonedDateTime.now());
     }
 
+    @Transactional
     public void issueCoupon(User user, Coupon coupon) {
         Optional<UserCoupon> savedUserCoupon = userCouponRepository.findUserCouponByUserAndCoupon(user, coupon);
         if(savedUserCoupon.isPresent() && !isOverIssue(savedUserCoupon.get(), coupon)) {
