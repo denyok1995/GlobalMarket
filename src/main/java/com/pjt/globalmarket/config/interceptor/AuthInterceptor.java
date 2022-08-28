@@ -2,7 +2,6 @@ package com.pjt.globalmarket.config.interceptor;
 
 import com.pjt.globalmarket.user.domain.NeedLogin;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -18,8 +17,8 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("Pre Interceptor Request UserPrincipal: {}", request.getUserPrincipal());
-        NeedLogin method = ((HandlerMethod)handler).getMethod().getAnnotation(NeedLogin.class);
-        if(method == null) {
+        NeedLogin needLogin = ((HandlerMethod)handler).getMethod().getAnnotation(NeedLogin.class);
+        if(needLogin == null) {
             return true;
         }
         if(request.getUserPrincipal() == null) {
