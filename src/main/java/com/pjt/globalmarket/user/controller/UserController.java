@@ -24,6 +24,11 @@ public class UserController {
     private final UserService userService;
     private final BCryptPasswordEncoder encoder;
 
+    @GetMapping(path = "/test")
+    public void test() {
+
+    }
+
     @PostMapping(path = "/sign-in")
     public void signIn(LoginDto loginDto) {
 
