@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,5 +62,19 @@ public class CouponService {
                 .build();
 
         couponRepository.save(coupon);
+    }
+
+    public List<UserCoupon> getUserCoupon(User user) {
+        return userCouponRepository.findUserCouponsByUser(user).stream().filter(this::isActiveCoupon).collect(Collectors.toList());
+    }
+
+    public Boolean isActiveCoupon(UserCoupon userCoupon) {
+        if(userCoupon.getIssuedCount() <= userCoupon.getUseCount()) {
+            return false;
+        }
+        if(userCoupon.getCoupon().getExpirationTime().isBefore(ZonedDateTime.now())) {
+            return false;
+        }
+        return true;
     }
 }
