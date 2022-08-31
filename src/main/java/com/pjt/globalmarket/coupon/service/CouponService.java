@@ -77,4 +77,10 @@ public class CouponService {
         }
         return true;
     }
+
+    @Transactional
+    public void useCoupon(User user, Coupon coupon) {
+        Optional<UserCoupon> userCoupon = userCouponRepository.findUserCouponByUserAndCoupon(user, coupon);
+        userCoupon.ifPresent(value -> value.setUseCount(value.getUseCount() + 1));
+    }
 }
