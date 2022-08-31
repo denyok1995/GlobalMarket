@@ -27,6 +27,7 @@ public class Product {
 
     private String detailImg;
 
+    @Setter
     private Long stock;
 
     private Long score;
