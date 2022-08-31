@@ -6,6 +6,7 @@ import com.pjt.globalmarket.product.domain.Category;
 import com.pjt.globalmarket.product.domain.Product;
 import com.pjt.globalmarket.user.domain.UserGrade;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ProductService {
 
@@ -34,7 +36,7 @@ public class ProductService {
     }
 
     public Double getDiscountedPriceByUserGrade(UserGrade userGrade, Double price) {
-        return price * discount.get((userGrade == null) ? IS_NOT_USER : userGrade);
+        return price * discount.get((userGrade == null) ? IS_NOT_USER : userGrade.getGrade());
     }
 
     public Page<Product> getAllProducts(Pageable pageable) {
