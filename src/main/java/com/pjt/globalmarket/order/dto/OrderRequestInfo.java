@@ -1,12 +1,14 @@
 package com.pjt.globalmarket.order.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import com.pjt.globalmarket.payment.domain.PaymentType;
+import lombok.*;
 
 import java.util.List;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class OrderRequestInfo {
 
     private String consumerName;
@@ -23,7 +25,11 @@ public class OrderRequestInfo {
 
     private List<OrderProductInfo> orderProducts;
 
-    private long totalPrice;
+    private Long totalPrice;
 
-    private long totalDeliveryFee;
+    private Long totalDeliveryFee;
+
+    private Long couponId;
+
+    private PaymentType paymentType;
 }

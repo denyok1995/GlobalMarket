@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -48,5 +49,20 @@ public class CartService {
             return true;
         }
         return productById.get().getStock() < num;
+    }
+
+    @Transactional
+    public void buyProductsInCart(User user, Map<Long, Long> productMap) {
+        List<Cart> myCart = cartRepository.findCartsByUser(user);
+        for(Cart cart : myCart) {
+            Long orderMount = productMap.get(cart.getProduct().getId());
+            if(orderMount > 0) {
+                if(cart.getProductNum() > orderMount) {
+                    cart.setProductNum(cart.getProductNum() - orderMount);
+                } else {
+                    cartRepository.delete(cart);
+                }
+            }
+        }
     }
 }
