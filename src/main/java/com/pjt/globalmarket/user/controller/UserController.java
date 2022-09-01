@@ -44,8 +44,8 @@ public class UserController {
         userService.saveUser(signUpDto.getEmail(), encoder.encode(signUpDto.getPassword()), signUpDto.getName(), signUpDto.getPhone());
     }
 
-    @GetMapping(path = "/check/id")
-    public boolean checkDuplicatedEmail(String email) {
+    @GetMapping(path = "/{email}/id")
+    public boolean checkDuplicatedEmail(@PathVariable(name = "email") String email) {
         return userService.getActiveUserByEmailAndProvider(email, DEFAULT_PROVIDER).isPresent();
     }
 

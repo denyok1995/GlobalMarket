@@ -26,6 +26,7 @@ public class OrderController {
     private final UserService userService;
     private final CouponService couponService;
 
+    //Restful design
     @NeedLogin
     @PostMapping
     public CheckInfo getOrderInfo(@AuthenticationPrincipal UserAuthDetails loginUser,
