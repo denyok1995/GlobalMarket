@@ -8,6 +8,8 @@ import com.pjt.globalmarket.user.dto.SignUpDto;
 import com.pjt.globalmarket.user.dto.UserUpdateDto;
 import com.pjt.globalmarket.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -40,13 +42,13 @@ public class UserController {
         userService.saveUser(signUpDto.getEmail(), encoder.encode(signUpDto.getPassword()), signUpDto.getName(), signUpDto.getPhone());
     }
 
-    @GetMapping(path = "/check/id")
-    public boolean checkDuplicatedEmail(String email) {
+    @GetMapping(path = "/{email}/id")
+    public boolean checkDuplicatedEmail(@PathVariable(name = "email") String email) {
         return userService.getActiveUserByEmailAndProvider(email, DEFAULT_PROVIDER).isPresent();
     }
 
     @NeedLogin
-    @PostMapping(path = "/update")
+    @PostMapping(path = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void updateUser(@AuthenticationPrincipal UserAuthDetails loginUser, @Valid @RequestBody UserUpdateDto userUpdateDto) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         if(encoder.matches(userUpdateDto.getPassword(), user.getPassword())) {

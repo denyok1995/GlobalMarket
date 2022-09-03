@@ -3,6 +3,7 @@ package com.pjt.globalmarket.coupon.controller;
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
 import com.pjt.globalmarket.coupon.domain.Coupon;
 import com.pjt.globalmarket.coupon.dto.CouponDto;
+import com.pjt.globalmarket.coupon.dto.UserCouponInfo;
 import com.pjt.globalmarket.coupon.service.CouponService;
 import com.pjt.globalmarket.user.domain.NeedLogin;
 import com.pjt.globalmarket.user.domain.OnlyManager;
@@ -23,7 +24,7 @@ public class CouponController {
     private final CouponService couponService;
     private final UserService userService;
 
-    @NeedLogin
+
     @GetMapping(path = "/available")
     public List<CouponDto> getAvailableCoupons() {
         return couponService.getAllAvailableCoupons().stream().map(coupon -> {
@@ -34,6 +35,19 @@ public class CouponController {
                     //.productId(coupon.getProductId())
                     .maxCouponCount(coupon.getMaxCouponCount())
                     .expirationTime(coupon.getExpirationTime())
+                    .build();
+        }).collect(Collectors.toList());
+    }
+
+    @NeedLogin
+    @GetMapping
+    public List<UserCouponInfo> getUserCoupons(@AuthenticationPrincipal UserAuthDetails loginUser) {
+        User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
+        return couponService.getUserCoupon(user).stream().map(userCoupon -> {
+            return UserCouponInfo.builder().id(userCoupon.getId())
+                    .name(userCoupon.getCoupon().getName())
+                    .discountPrice(userCoupon.getCoupon().getDiscountPrice())
+                    .minPrice(userCoupon.getCoupon().getMinPrice())
                     .build();
         }).collect(Collectors.toList());
     }

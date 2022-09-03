@@ -1,7 +1,10 @@
 package com.pjt.globalmarket.order.controller;
 
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
+import com.pjt.globalmarket.coupon.domain.Coupon;
+import com.pjt.globalmarket.coupon.service.CouponService;
 import com.pjt.globalmarket.order.dto.CheckInfo;
+import com.pjt.globalmarket.order.dto.OrderRequestInfo;
 import com.pjt.globalmarket.order.service.OrderService;
 import com.pjt.globalmarket.product.dto.SimpleProductInfo;
 import com.pjt.globalmarket.user.domain.NeedLogin;
@@ -21,7 +24,9 @@ public class OrderController {
 
     private final OrderService orderService;
     private final UserService userService;
+    private final CouponService couponService;
 
+    //Restful design
     @NeedLogin
     @PostMapping
     public CheckInfo getOrderInfo(@AuthenticationPrincipal UserAuthDetails loginUser,
@@ -29,5 +34,14 @@ public class OrderController {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         Optional<CheckInfo> orderInfo = orderService.getOrderInfo(user, productsInfo);
         return (orderInfo.isEmpty()) ? CheckInfo.builder().build() : orderInfo.get();
+    }
+
+    @NeedLogin
+    @PostMapping(path = "/pay")
+    public void doOrder(@AuthenticationPrincipal UserAuthDetails loginUser,
+                        @RequestBody OrderRequestInfo orderRequestInfo) {
+        User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
+        Coupon coupon = couponService.getCouponById(orderRequestInfo.getCouponId()).orElse(null);
+        orderService.payOrder(user, orderRequestInfo, coupon);
     }
 }

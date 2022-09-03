@@ -50,7 +50,7 @@ public class ReviewController {
     }
 
     @NeedLogin
-    @PostMapping(path = "/evaluate")
+    @PostMapping(path = "/evaluation")
     public void evaluateReview(@AuthenticationPrincipal UserAuthDetails loginUser,
                                @RequestBody EvaluateReviewInfo evaluateReviewInfo) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
