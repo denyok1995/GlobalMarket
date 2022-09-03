@@ -4,6 +4,7 @@ import com.pjt.globalmarket.config.auth.UserAuthDetails;
 import com.pjt.globalmarket.product.domain.Product;
 import com.pjt.globalmarket.product.dto.ProductResponseDto;
 import com.pjt.globalmarket.product.service.ProductService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,7 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
+    @ApiOperation(value = "전체 상품 조회", notes = "Paging 처리된 모든 상품을 조회한다.")
     public Page<ProductResponseDto> allProducts(@AuthenticationPrincipal UserAuthDetails loginUser,
                                                 @RequestParam int page,
                                                 @RequestParam int size) {
@@ -39,6 +41,7 @@ public class ProductController {
     }
 
     @GetMapping(path = "/search")
+    @ApiOperation(value = "상품 검색", notes = "입력(content)에 일치하는 상품을 조회한다.")
     public Page<ProductResponseDto> searchProducts(@RequestParam String content,
                                                    @RequestParam int page,
                                                    @RequestParam int size) {

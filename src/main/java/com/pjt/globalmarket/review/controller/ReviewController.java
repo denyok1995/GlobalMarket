@@ -10,6 +10,7 @@ import com.pjt.globalmarket.review.service.ReviewService;
 import com.pjt.globalmarket.user.domain.NeedLogin;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,7 @@ public class ReviewController {
 
     @NeedLogin
     @PostMapping()
+    @ApiOperation(value = "리뷰 작성", notes = "상품 리뷰 정보를 저장한다.")
     public void writeReview(@AuthenticationPrincipal UserAuthDetails loginUser,
                             @RequestBody WriteReviewInfo review) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
@@ -36,6 +38,7 @@ public class ReviewController {
     }
 
     @GetMapping
+    @ApiOperation(value = "리뷰 조회", notes = "해당 상품에 작성된 리뷰를 조회한다.")
     public List<ReviewInfo> getReviews(@RequestParam Long productId) {
         Product product = productService.getProductById(productId).orElseThrow();
         return reviewService.getReviews(product).stream().map(review -> {
@@ -51,6 +54,7 @@ public class ReviewController {
 
     @NeedLogin
     @PostMapping(path = "/evaluation")
+    @ApiOperation(value = "리뷰 평가", notes = "작성된 리뷰를 평가한다.")
     public void evaluateReview(@AuthenticationPrincipal UserAuthDetails loginUser,
                                @RequestBody EvaluateReviewInfo evaluateReviewInfo) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();

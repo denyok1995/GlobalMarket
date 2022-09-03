@@ -10,6 +10,8 @@ import com.pjt.globalmarket.product.dto.SimpleProductInfo;
 import com.pjt.globalmarket.user.domain.NeedLogin;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.service.UserService;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,7 @@ public class OrderController {
     //Restful design
     @NeedLogin
     @PostMapping
+    @ApiOperation(value = "구매 정보 조회", notes = "구매 진행할 정보를 조회한다.")
     public CheckInfo getOrderInfo(@AuthenticationPrincipal UserAuthDetails loginUser,
                                   @RequestBody List<SimpleProductInfo> productsInfo) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
@@ -38,6 +41,7 @@ public class OrderController {
 
     @NeedLogin
     @PostMapping(path = "/pay")
+    @ApiOperation(value = "결제", notes = "상품, 주문 정보를 바탕으로 결제를 진행한다.")
     public void doOrder(@AuthenticationPrincipal UserAuthDetails loginUser,
                         @RequestBody OrderRequestInfo orderRequestInfo) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
