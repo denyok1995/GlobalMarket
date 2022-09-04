@@ -2,6 +2,7 @@ package com.pjt.globalmarket.user.service;
 
 import com.pjt.globalmarket.user.dao.UserRepository;
 import com.pjt.globalmarket.user.domain.User;
+import com.pjt.globalmarket.user.domain.UserConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,9 @@ public class UserService {
 
     @PostConstruct
     public void init() {
+        if(getActiveUserByEmailAndProvider("manager@coupang.com", DEFAULT_PROVIDER).isPresent()) {
+            return ;
+        }
         User user = User.builder("manager@coupang.com", encoder.encode("password"))
                 .name("manager")
                 .role(ROLE_MANAGER)
