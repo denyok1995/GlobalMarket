@@ -83,11 +83,11 @@ public class OrderService {
     public void payOrder(User user, OrderRequestInfo orderRequestInfo, Coupon coupon) {
         // 재고 있는지 다시 확인
         Map<Long, Long> productMap = new HashMap<>();
-        for(OrderProductInfo info : orderRequestInfo.getOrderProducts()) {
-            productMap.put(info.getId(), info.getCount());
+        for(SimpleProductInfo info : orderRequestInfo.getOrderProducts()) {
+            productMap.put(info.getProductId(), info.getProductNum());
         }
         List<Product> products = productService.
-                findProductsByIds(orderRequestInfo.getOrderProducts().stream().map(info -> info.getId()).collect(Collectors.toList()));
+                findProductsByIds(orderRequestInfo.getOrderProducts().stream().map(info -> info.getProductId()).collect(Collectors.toList()));
         List<OrderProduct> orderProducts = new ArrayList<>();
 
         Double originalPrice = 0.0;

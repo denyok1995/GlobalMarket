@@ -1,6 +1,7 @@
 package com.pjt.globalmarket.order.dto;
 
 import com.pjt.globalmarket.payment.domain.PaymentType;
+import com.pjt.globalmarket.product.dto.SimpleProductInfo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
@@ -30,8 +31,8 @@ public class OrderRequestInfo {
     @ApiModelProperty(name = "주문 시 요청사항", example = "문 앞에 놔주세요.")
     private String receiverRequest;
 
-    @ApiModelProperty(name = "주문 상품 정보")
-    private List<OrderProductInfo> orderProducts;
+    @ApiModelProperty(name = "주문 상품 정보", example = "[2, 3, 4]")
+    private List<SimpleProductInfo> orderProducts;
 
     @ApiModelProperty(name = "전체 상품 금액", example = "640000")
     private Double totalPrice;
