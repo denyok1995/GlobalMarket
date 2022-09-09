@@ -83,8 +83,8 @@ public class CouponService {
     }
 
     @Transactional
-    public void useCoupon(User user, Coupon coupon) {
-        Optional<UserCoupon> userCoupon = userCouponRepository.findUserCouponByUserAndCoupon(user, coupon);
-        userCoupon.ifPresent(value -> value.setUseCount(value.getUseCount() + 1));
+    public void useCoupon(UserCoupon userCoupon) {
+        Optional<UserCoupon> issuedCoupon = userCouponRepository.findById(userCoupon.getId());
+        issuedCoupon.ifPresent(coupon -> coupon.setUseCount(coupon.getUseCount() + 1));;
     }
 }
