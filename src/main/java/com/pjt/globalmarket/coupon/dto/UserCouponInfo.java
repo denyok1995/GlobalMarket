@@ -21,4 +21,7 @@ public class UserCouponInfo {
 
     @ApiModelProperty(name = "할인 금액", example = "1000")
     private Long discountPrice;
+
+    @ApiModelProperty(name = "쿠폰 개수", example = "2")
+    private Long count;
 }

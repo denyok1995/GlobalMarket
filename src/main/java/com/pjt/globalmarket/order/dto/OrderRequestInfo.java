@@ -31,7 +31,7 @@ public class OrderRequestInfo {
     @ApiModelProperty(name = "주문 시 요청사항", example = "문 앞에 놔주세요.")
     private String receiverRequest;
 
-    @ApiModelProperty(name = "주문 상품 정보", example = "[2, 3, 4]")
+    @ApiModelProperty(name = "주문 상품 정보", example = "[\n{\"productId\": 290,\n\"productNum\": 2\n}\n]")
     private List<SimpleProductInfo> orderProducts;
 
     @ApiModelProperty(name = "전체 상품 금액", example = "640000")

@@ -26,6 +26,10 @@ public class CouponService {
         return couponRepository.findById(couponId);
     }
 
+    public Optional<UserCoupon> getUserCouponById(Long userCouponId) {
+        return userCouponRepository.findById(userCouponId);
+    }
+
     public List<Coupon> getAllAvailableCoupons() {
         return couponRepository.findCouponsByExpirationTimeIsGreaterThan(ZonedDateTime.now());
     }
@@ -79,8 +83,8 @@ public class CouponService {
     }
 
     @Transactional
-    public void useCoupon(User user, Coupon coupon) {
-        Optional<UserCoupon> userCoupon = userCouponRepository.findUserCouponByUserAndCoupon(user, coupon);
-        userCoupon.ifPresent(value -> value.setUseCount(value.getUseCount() + 1));
+    public void useCoupon(UserCoupon userCoupon) {
+        Optional<UserCoupon> issuedCoupon = userCouponRepository.findById(userCoupon.getId());
+        issuedCoupon.ifPresent(coupon -> coupon.setUseCount(coupon.getUseCount() + 1));;
     }
 }

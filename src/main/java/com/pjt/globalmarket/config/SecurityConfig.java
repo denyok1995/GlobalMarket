@@ -31,7 +31,7 @@ public class SecurityConfig {
                 //.and()
                 .formLogin().loginPage("/loginForm")
                 .usernameParameter("email") // username을 앞으로 email로 사용한다.
-                .loginProcessingUrl("/user/sign-in").defaultSuccessUrl("/")
+                .loginProcessingUrl("/user/sign-in").defaultSuccessUrl("/").failureUrl("/failure")
                 .and().logout().logoutUrl("/user/sign-out").logoutSuccessUrl("/")
                 .and().oauth2Login().loginPage("/user/sign-in").userInfoEndpoint().userService(oAuth2UserService);
 
