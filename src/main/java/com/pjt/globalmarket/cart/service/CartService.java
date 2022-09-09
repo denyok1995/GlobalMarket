@@ -22,13 +22,11 @@ public class CartService {
 
     @Transactional
     public void saveProductInUserCart(User user, Product product, Long productNum) {
-        if(product.getStock() < productNum) {
-            throw new IllegalArgumentException("해당 상품의 재고가 부족합니다.");
-        }
-
         Optional<Cart> savedCart = cartRepository.findCartByProductAndUser(product, user);
+        isOverStock(product, productNum);
 
         if (savedCart.isPresent()) {
+            isOverStock(product, productNum + savedCart.get().getProductNum());
             savedCart.get().setProductNum(savedCart.get().getProductNum() + productNum);
         } else {
             Cart cart = Cart.builder().product(product)
@@ -36,6 +34,12 @@ public class CartService {
                     .user(user)
                     .build();
             cartRepository.save(cart);
+        }
+    }
+
+    private static void isOverStock(Product product, Long productNum) {
+        if(product.getStock() < productNum) {
+            throw new IllegalArgumentException("해당 상품의 재고가 부족합니다.");
         }
     }
 
