@@ -6,9 +6,9 @@ import lombok.Data;
 @Data
 public class LoginDto {
 
-    @ApiModelProperty(name = "아이디", notes = "로그인을 진행 할 이메일", example = "test@coupang.com")
+    @ApiModelProperty(notes = "사용자 아이디", example = "sa@coupang.com")
     private String email;
-    @ApiModelProperty(name = "비밀번호", notes = "로그인을 진행 할 비밀번호", example = "password")
+    @ApiModelProperty(notes = "사용자 비밀번호", example = "password")
     private String password;
 
 }

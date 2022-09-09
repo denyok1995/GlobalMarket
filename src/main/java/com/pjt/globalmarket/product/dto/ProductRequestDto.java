@@ -35,6 +35,6 @@ public class ProductRequestDto {
     @ApiModelProperty(name = "상품 배달 지원 정도", example = "ROCKET_WOW")
     private String rocketDelivery;
 
-    @ApiModelProperty(name = "상품 카테고리", example = "악세서리")
+    @ApiModelProperty(name = "상품 카테고리", example = "[\"악세서리\"]")
     private Set<String> categories;
 }
