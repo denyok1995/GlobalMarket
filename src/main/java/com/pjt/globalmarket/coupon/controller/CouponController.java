@@ -51,6 +51,7 @@ public class CouponController {
                     .name(userCoupon.getCoupon().getName())
                     .discountPrice(userCoupon.getCoupon().getDiscountPrice())
                     .minPrice(userCoupon.getCoupon().getMinPrice())
+                    .count(userCoupon.getIssuedCount() - userCoupon.getUseCount())
                     .build();
         }).collect(Collectors.toList());
     }
@@ -69,7 +70,7 @@ public class CouponController {
     //쿠폰 생성
     @OnlyManager
     @PostMapping(path = "/manager")
-    @ApiOperation(value = "쿠폰 발급", notes = "쿠폰을 저장한다.")
+    @ApiOperation(value = "쿠폰 생성", notes = "쿠폰을 저장한다.")
     public void saveCoupon(@AuthenticationPrincipal UserAuthDetails loginUser,
                            @RequestBody CouponDto dto) {
         couponService.saveCoupon(dto);
