@@ -3,7 +3,7 @@ package com.pjt.globalmarket.order.service;
 import com.pjt.globalmarket.address.dao.AddressRepository;
 import com.pjt.globalmarket.address.domain.Address;
 import com.pjt.globalmarket.cart.service.CartService;
-import com.pjt.globalmarket.coupon.domain.Coupon;
+import com.pjt.globalmarket.coupon.domain.UserCoupon;
 import com.pjt.globalmarket.coupon.service.CouponService;
 import com.pjt.globalmarket.order.dao.OrderProductRepository;
 import com.pjt.globalmarket.order.dao.OrderRepository;
@@ -80,7 +80,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void payOrder(User user, OrderRequestInfo orderRequestInfo, Coupon coupon) {
+    public void payOrder(User user, OrderRequestInfo orderRequestInfo, UserCoupon userCoupon) {
         // 재고 있는지 다시 확인
         Map<Long, Long> productMap = new HashMap<>();
         for(SimpleProductInfo info : orderRequestInfo.getOrderProducts()) {
@@ -98,9 +98,9 @@ public class OrderService {
                 throw new IllegalArgumentException("재고가 없습니다.");
             } else {
                 // 금액 책정
-                originalPrice += product.getPrice();
                 Double discountedPrice = productService.getDiscountedPriceByUserGrade(user.getGrade(), product.getPrice());
                 Long count = productMap.get(product.getId());
+                originalPrice += product.getPrice() * count;
                 totalPrice += discountedPrice * count;
                 totalDeliveryFee += product.getDeliveryFee();
 
@@ -116,9 +116,9 @@ public class OrderService {
         }
 
         // 쿠폰 있으면 사용
-        if(coupon != null && originalPrice >= coupon.getMinPrice()) {
-            totalPrice -= coupon.getDiscountPrice();
-            couponService.useCoupon(user, coupon);
+        if(userCoupon != null && originalPrice >= userCoupon.getCoupon().getMinPrice()) {
+            totalPrice -= userCoupon.getCoupon().getDiscountPrice();
+            couponService.useCoupon(userCoupon);
         }
         Double discountPrice = originalPrice - totalPrice;
 

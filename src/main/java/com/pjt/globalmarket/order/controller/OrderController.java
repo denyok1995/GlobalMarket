@@ -1,7 +1,7 @@
 package com.pjt.globalmarket.order.controller;
 
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
-import com.pjt.globalmarket.coupon.domain.Coupon;
+import com.pjt.globalmarket.coupon.domain.UserCoupon;
 import com.pjt.globalmarket.coupon.service.CouponService;
 import com.pjt.globalmarket.order.dto.CheckInfo;
 import com.pjt.globalmarket.order.dto.OrderRequestInfo;
@@ -10,11 +10,13 @@ import com.pjt.globalmarket.product.dto.SimpleProductInfo;
 import com.pjt.globalmarket.user.domain.NeedLogin;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.service.UserService;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +47,7 @@ public class OrderController {
     public void doOrder(@AuthenticationPrincipal UserAuthDetails loginUser,
                         @RequestBody OrderRequestInfo orderRequestInfo) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
-        Coupon coupon = couponService.getCouponById(orderRequestInfo.getCouponId()).orElse(null);
-        orderService.payOrder(user, orderRequestInfo, coupon);
+        UserCoupon userCoupon = couponService.getUserCouponById(orderRequestInfo.getCouponId()).orElse(null);
+        orderService.payOrder(user, orderRequestInfo, userCoupon);
     }
 }
