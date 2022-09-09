@@ -26,6 +26,10 @@ public class CouponService {
         return couponRepository.findById(couponId);
     }
 
+    public Optional<UserCoupon> getUserCouponById(Long userCouponId) {
+        return userCouponRepository.findById(userCouponId);
+    }
+
     public List<Coupon> getAllAvailableCoupons() {
         return couponRepository.findCouponsByExpirationTimeIsGreaterThan(ZonedDateTime.now());
     }
