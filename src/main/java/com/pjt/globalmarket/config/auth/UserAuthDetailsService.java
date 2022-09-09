@@ -35,6 +35,6 @@ public class UserAuthDetailsService implements UserDetailsService {
         if(user.isPresent()) {
             return new UserAuthDetails(user.get());
         }
-        return null;
+        throw new UsernameNotFoundException("Any User Email : " + email);
     }
 }
