@@ -8,10 +8,13 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,9 +24,12 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@TestInstance(value = TestInstance.Lifecycle.PER_CLASS)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@AutoConfigureMockMvc
 class ProductControllerTest {
 
     private Map<String, Double> discount = new HashMap<>();
@@ -32,6 +38,8 @@ class ProductControllerTest {
 
     @Mock
     private ProductService productService;
+    @Autowired
+    private MockMvc mockMvc;
 
     @BeforeAll
     public void init() {
@@ -71,6 +79,15 @@ class ProductControllerTest {
                 assertNotEquals(product.getPrice() * discount.get(grade), product.getPrice());
             }
         });
+    }
+
+    @ParameterizedTest(name = "{0} 상품 조회")
+    @ValueSource(strings = {"시계", "지갑"})
+    public void search_product_test(String content) throws Exception {
+        this.mockMvc.perform(get("/product/search").param("content", content)
+                        .param("page", "0")
+                        .param("size", "2"))
+                .andExpect(status().isOk());
     }
 
 }
