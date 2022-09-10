@@ -2,6 +2,7 @@ package com.pjt.globalmarket.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pjt.globalmarket.user.dao.UserRepository;
+import com.pjt.globalmarket.user.dto.SignUpDto;
 import com.pjt.globalmarket.user.dto.UserUpdateDto;
 import com.pjt.globalmarket.user.service.UserService;
 import org.junit.jupiter.api.*;
@@ -40,6 +41,22 @@ class UserControllerTest {
     @BeforeAll
     public void init() {
         userService.saveUser("sa@test.com", encoder.encode("password"), "010-1234-5678", "테스트 이름");
+    }
+
+
+    @Test
+    @Order(0)
+    @DisplayName("유저 정보 저장 테스트 - 회원가입")
+    public void save_user_test() throws Exception {
+        SignUpDto dto = new SignUpDto();
+        dto.setEmail("test@example.com");
+        dto.setName("update test");
+        dto.setPassword("password");
+        dto.setPhone("010-1234-1234");
+        this.mockMvc.perform(post("/user/sign-up")
+                .content(objectMapper.writeValueAsString(dto))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
