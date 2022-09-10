@@ -26,9 +26,10 @@ public class CouponController {
     private final UserService userService;
 
 
-    @GetMapping(path = "/available")
+    @OnlyManager
+    @GetMapping(path = "/available/manager")
     @ApiOperation(value = "전체 쿠폰 조회", notes = "사용자에게 발급 가능한 모든 쿠폰을 조회한다.")
-    public List<CouponDto> getAvailableCoupons() {
+    public List<CouponDto> getAvailableCoupons(@AuthenticationPrincipal UserAuthDetails loginUser) {
         return couponService.getAllAvailableCoupons().stream().map(coupon -> {
             return CouponDto.builder().id(coupon.getId())
                     .name(coupon.getName())
