@@ -82,6 +82,7 @@ class CouponControllerTest {
 
     @Test
     @DisplayName("쿠폰 발급 테스트")
+    @Deprecated
     @WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
             , setupBefore = TestExecutionEvent.TEST_EXECUTION)
     public void issue_coupon_test() throws Exception {
