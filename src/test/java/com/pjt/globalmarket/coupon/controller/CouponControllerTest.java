@@ -13,18 +13,14 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.ZonedDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -78,19 +74,6 @@ class CouponControllerTest {
             , setupBefore = TestExecutionEvent.TEST_EXECUTION)
     public void get_all_my_coupons_test() throws Exception {
         this.mockMvc.perform(get("/coupon")).andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("쿠폰 발급 테스트")
-    @Deprecated
-    @WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
-            , setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    public void issue_coupon_test() throws Exception {
-        Map<String, Long> body = new HashMap<>();
-        body.put("couponId", coupon.getId());
-        this.mockMvc.perform(post("/coupon/issue")
-                .content(objectMapper.writeValueAsString(body))
-                .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
 }
