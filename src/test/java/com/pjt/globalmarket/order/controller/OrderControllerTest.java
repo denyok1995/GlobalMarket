@@ -35,6 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureMockMvc
+@WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
+        , setupBefore = TestExecutionEvent.TEST_EXECUTION)
 class OrderControllerTest {
 
     @Autowired
@@ -80,8 +82,6 @@ class OrderControllerTest {
 
     @Test
     @DisplayName("결제 테스트")
-    @WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
-            , setupBefore = TestExecutionEvent.TEST_EXECUTION)
     public void get_order_info_test() throws Exception {
         List<SimpleProductInfo> productInfos = new ArrayList<>();
         SimpleProductInfo simpleProductInfo = SimpleProductInfo.builder().productId(product.getId()).productNum(2L).build();

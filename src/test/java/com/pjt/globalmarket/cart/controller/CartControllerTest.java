@@ -26,6 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureMockMvc
+@WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
+        , setupBefore = TestExecutionEvent.TEST_EXECUTION)
 class CartControllerTest {
 
     @Autowired
@@ -55,8 +57,6 @@ class CartControllerTest {
 
     @Test
     @DisplayName("장바구니에 담기 테스트")
-    @WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
-            , setupBefore = TestExecutionEvent.TEST_EXECUTION)
     public void save_products_in_my_cart_test() throws Exception {
         SimpleProductInfo productInfo = new SimpleProductInfo();
         productInfo.setProductId(product.getId());
@@ -76,8 +76,6 @@ class CartControllerTest {
 
     @Test
     @DisplayName("장바구니 조회 테스트")
-    @WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
-            , setupBefore = TestExecutionEvent.TEST_EXECUTION)
     public void get_products_in_may_cart_test() throws Exception {
         this.mockMvc.perform(get("/cart")).andExpect(status().isOk());
     }

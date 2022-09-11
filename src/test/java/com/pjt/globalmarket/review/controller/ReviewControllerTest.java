@@ -29,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
+        , setupBefore = TestExecutionEvent.TEST_EXECUTION)
 class ReviewControllerTest {
 
     @Autowired
@@ -60,8 +62,6 @@ class ReviewControllerTest {
 
     @Test
     @DisplayName("리뷰 작성 테스트")
-    @WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
-            , setupBefore = TestExecutionEvent.TEST_EXECUTION)
     public void write_review_test() throws Exception {
         WriteReviewInfo review = new WriteReviewInfo();
         review.setProductId(product.getId());
@@ -82,8 +82,6 @@ class ReviewControllerTest {
 
     @Test
     @DisplayName("리뷰 평가 테스트")
-    @WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
-            , setupBefore = TestExecutionEvent.TEST_EXECUTION)
     public void evaluate_review_test() throws Exception {
         Review review = Review.builder().user(user)
                 .product(product)

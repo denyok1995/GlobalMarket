@@ -26,6 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureMockMvc
+@WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
+        , setupBefore = TestExecutionEvent.TEST_EXECUTION)
 class CouponControllerTest {
 
     @Autowired
@@ -62,16 +64,12 @@ class CouponControllerTest {
 
     @Test
     @DisplayName("발급 가능한 전체 쿠폰 조회 테스트")
-    @WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
-            , setupBefore = TestExecutionEvent.TEST_EXECUTION)
     public void get_all_coupons_test() throws Exception {
         this.mockMvc.perform(get("/coupon/available/manager")).andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("사용자가 가지고있는 전체 쿠폰 조회 테스트")
-    @WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
-            , setupBefore = TestExecutionEvent.TEST_EXECUTION)
     public void get_all_my_coupons_test() throws Exception {
         this.mockMvc.perform(get("/coupon")).andExpect(status().isOk());
     }
