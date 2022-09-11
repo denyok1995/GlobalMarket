@@ -9,6 +9,7 @@ import com.pjt.globalmarket.review.dto.EvaluateReviewInfo;
 import com.pjt.globalmarket.review.dto.WriteReviewInfo;
 import com.pjt.globalmarket.user.dao.UserRepository;
 import com.pjt.globalmarket.user.domain.User;
+import com.pjt.globalmarket.user.domain.UserConstant;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,7 +22,9 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashSet;
+import java.util.Optional;
 
+import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,11 +55,18 @@ class ReviewControllerTest {
 
     @BeforeAll
     public void init() {
-        user = User.builder("sa@test.com", encoder.encode("password"))
-                .phone("010-1234-5678")
-                .name("테스트 이름")
-                .build();
-        userRepository.save(user);
+        Optional<User> userOptional = userRepository.findUserByEmailAndProviderAndDeletedAt("sa@test.com", DEFAULT_PROVIDER, null);
+        if(userOptional.isPresent()) {
+            user = userOptional.get();
+        } else {
+            user = User.builder("sa@test.com", encoder.encode("password"))
+                    .phone("010-1234-5678")
+                    .name("테스트 이름")
+                    .role(UserConstant.ROLE_MANAGER)
+                    .build();
+            userRepository.save(user);
+        }
+
         product = Product.builder("시계", 100000.0).build();
         productService.saveProduct(product, new HashSet<>());
     }

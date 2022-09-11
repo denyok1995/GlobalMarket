@@ -2,6 +2,8 @@ package com.pjt.globalmarket.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pjt.globalmarket.user.dao.UserRepository;
+import com.pjt.globalmarket.user.domain.User;
+import com.pjt.globalmarket.user.domain.UserConstant;
 import com.pjt.globalmarket.user.dto.SignUpDto;
 import com.pjt.globalmarket.user.dto.UserUpdateDto;
 import com.pjt.globalmarket.user.service.UserService;
@@ -17,6 +19,9 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Optional;
+
+import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -44,7 +49,15 @@ class UserControllerTest {
 
     @BeforeAll
     public void init() {
-        userService.saveUser("sa@test.com", encoder.encode("password"), "010-1234-5678", "테스트 이름");
+        Optional<User> userOptional = userRepository.findUserByEmailAndProviderAndDeletedAt("sa@test.com", DEFAULT_PROVIDER, null);
+        if(userOptional.isEmpty()) {
+            User user = User.builder("sa@test.com", encoder.encode("password"))
+                    .phone("010-1234-5678")
+                    .name("테스트 이름")
+                    .role(UserConstant.ROLE_MANAGER)
+                    .build();
+            userRepository.save(user);
+        }
     }
 
 

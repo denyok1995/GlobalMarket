@@ -20,7 +20,9 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.ZonedDateTime;
+import java.util.Optional;
 
+import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,12 +49,17 @@ class CouponControllerTest {
 
     @BeforeAll
     public void init() {
-        manager = User.builder("sa@test.com", encoder.encode("password"))
-                .phone("010-1234-5678")
-                .name("테스트 이름")
-                .role(UserConstant.ROLE_MANAGER)
-                .build();
-        userRepository.save(manager);
+        Optional<User> userOptional = userRepository.findUserByEmailAndProviderAndDeletedAt("sa@test.com", DEFAULT_PROVIDER, null);
+        if(userOptional.isPresent()) {
+            manager = userOptional.get();
+        } else {
+            manager = User.builder("sa@test.com", encoder.encode("password"))
+                    .phone("010-1234-5678")
+                    .name("테스트 이름")
+                    .role(UserConstant.ROLE_MANAGER)
+                    .build();
+            userRepository.save(manager);
+        }
 
         coupon = Coupon.builder()
                 .name("봄맞이 쿠폰")

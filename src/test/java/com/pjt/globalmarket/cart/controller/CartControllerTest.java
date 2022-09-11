@@ -6,6 +6,7 @@ import com.pjt.globalmarket.product.domain.Product;
 import com.pjt.globalmarket.product.dto.SimpleProductInfo;
 import com.pjt.globalmarket.user.dao.UserRepository;
 import com.pjt.globalmarket.user.domain.User;
+import com.pjt.globalmarket.user.domain.UserConstant;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,9 @@ import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
+import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -47,11 +51,18 @@ class CartControllerTest {
 
     @BeforeAll
     public void init() {
-        user = User.builder("sa@test.com", encoder.encode("password"))
-                .phone("010-1234-5678")
-                .name("테스트 이름")
-                .build();
-        userRepository.save(user);
+        Optional<User> userOptional = userRepository.findUserByEmailAndProviderAndDeletedAt("sa@test.com", DEFAULT_PROVIDER, null);
+        if(userOptional.isPresent()) {
+            user = userOptional.get();
+        } else {
+            user = User.builder("sa@test.com", encoder.encode("password"))
+                    .phone("010-1234-5678")
+                    .name("테스트 이름")
+                    .role(UserConstant.ROLE_MANAGER)
+                    .build();
+            userRepository.save(user);
+        }
+
         product = Product.builder("시계", 100000.0)
                 .stock(3L).build();
         productRepository.save(product);
