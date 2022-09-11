@@ -78,10 +78,4 @@ class CouponControllerTest {
         this.mockMvc.perform(get("/coupon")).andExpect(status().isOk());
     }
 
-    @AfterAll
-    public void delete_all() {
-        userRepository.deleteAll();
-        couponRepository.deleteAll();
-    }
-
 }

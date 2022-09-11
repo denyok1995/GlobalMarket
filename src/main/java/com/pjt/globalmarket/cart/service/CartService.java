@@ -60,7 +60,7 @@ public class CartService {
         List<Cart> myCart = cartRepository.findCartsByUser(user);
         for(Cart cart : myCart) {
             Long orderMount = productMap.get(cart.getProduct().getId());
-            if(orderMount > 0) {
+            if(orderMount != null && orderMount > 0) {
                 if(cart.getProductNum() > orderMount) {
                     cart.setProductNum(cart.getProductNum() - orderMount);
                 } else {

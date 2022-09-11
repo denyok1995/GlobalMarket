@@ -119,8 +119,4 @@ class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @AfterAll
-    public void delete_all() {
-        userRepository.deleteAll();
-    }
 }

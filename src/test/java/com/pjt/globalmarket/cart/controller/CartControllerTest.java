@@ -1,14 +1,16 @@
 package com.pjt.globalmarket.cart.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pjt.globalmarket.cart.dao.CartRepository;
 import com.pjt.globalmarket.product.dao.ProductRepository;
 import com.pjt.globalmarket.product.domain.Product;
 import com.pjt.globalmarket.product.dto.SimpleProductInfo;
 import com.pjt.globalmarket.user.dao.UserRepository;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.domain.UserConstant;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,8 +42,6 @@ class CartControllerTest {
     private ProductRepository productRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private CartRepository cartRepository;
     @Autowired
     private BCryptPasswordEncoder encoder;
 
@@ -93,10 +93,4 @@ class CartControllerTest {
         this.mockMvc.perform(get("/cart")).andExpect(status().isOk());
     }
 
-    @AfterAll
-    public void delete_all() {
-        productRepository.deleteAll();
-        userRepository.deleteAll();
-        cartRepository.deleteAll();
-    }
 }

@@ -109,9 +109,4 @@ class ReviewControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @AfterAll
-    public void deleteAll() {
-        productRepository.deleteAll();
-        reviewRepository.deleteAll();
-    }
 }
