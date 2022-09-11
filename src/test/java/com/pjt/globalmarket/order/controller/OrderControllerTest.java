@@ -3,6 +3,7 @@ package com.pjt.globalmarket.order.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pjt.globalmarket.coupon.dao.CouponRepository;
 import com.pjt.globalmarket.coupon.domain.Coupon;
+import com.pjt.globalmarket.order.dao.OrderRepository;
 import com.pjt.globalmarket.order.dto.OrderRequestInfo;
 import com.pjt.globalmarket.payment.domain.PaymentType;
 import com.pjt.globalmarket.product.dao.ProductRepository;
@@ -11,10 +12,7 @@ import com.pjt.globalmarket.product.dto.SimpleProductInfo;
 import com.pjt.globalmarket.user.dao.UserRepository;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.domain.UserConstant;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +25,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +51,8 @@ class OrderControllerTest {
     private BCryptPasswordEncoder encoder;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
     Product product;
     User user;
@@ -101,6 +100,14 @@ class OrderControllerTest {
         orderInfo.setPaymentType(PaymentType.CARD);
         this.mockMvc.perform(post("/order/pay").content(objectMapper.writeValueAsString(orderInfo))
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+    }
+
+    @AfterAll
+    public void delete_all() {
+        userRepository.deleteAll();
+        productRepository.deleteAll();
+        couponRepository.deleteAll();
+        orderRepository.deleteAll();
     }
 
 }

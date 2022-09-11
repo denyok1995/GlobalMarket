@@ -1,8 +1,8 @@
 package com.pjt.globalmarket.review.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pjt.globalmarket.product.dao.ProductRepository;
 import com.pjt.globalmarket.product.domain.Product;
-import com.pjt.globalmarket.product.service.ProductService;
 import com.pjt.globalmarket.review.dao.ReviewRepository;
 import com.pjt.globalmarket.review.domain.Review;
 import com.pjt.globalmarket.review.dto.EvaluateReviewInfo;
@@ -21,7 +21,6 @@ import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashSet;
 import java.util.Optional;
 
 import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
@@ -41,7 +40,7 @@ class ReviewControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private ProductService productService;
+    private ProductRepository productRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -68,7 +67,7 @@ class ReviewControllerTest {
         }
 
         product = Product.builder("시계", 100000.0).build();
-        productService.saveProduct(product, new HashSet<>());
+        productRepository.save(product);
     }
 
 
@@ -108,5 +107,11 @@ class ReviewControllerTest {
                 .content(objectMapper.writeValueAsString(evaluateReviewInfo))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @AfterAll
+    public void deleteAll() {
+        productRepository.deleteAll();
+        reviewRepository.deleteAll();
     }
 }

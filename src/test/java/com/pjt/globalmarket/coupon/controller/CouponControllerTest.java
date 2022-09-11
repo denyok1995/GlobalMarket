@@ -1,15 +1,11 @@
 package com.pjt.globalmarket.coupon.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pjt.globalmarket.coupon.dao.CouponRepository;
 import com.pjt.globalmarket.coupon.domain.Coupon;
 import com.pjt.globalmarket.user.dao.UserRepository;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.domain.UserConstant;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,7 +41,6 @@ class CouponControllerTest {
 
     User manager;
     Coupon coupon;
-    ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeAll
     public void init() {
@@ -81,6 +76,12 @@ class CouponControllerTest {
     @DisplayName("사용자가 가지고있는 전체 쿠폰 조회 테스트")
     public void get_all_my_coupons_test() throws Exception {
         this.mockMvc.perform(get("/coupon")).andExpect(status().isOk());
+    }
+
+    @AfterAll
+    public void delete_all() {
+        userRepository.deleteAll();
+        couponRepository.deleteAll();
     }
 
 }
