@@ -25,6 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
+        , setupBefore = TestExecutionEvent.TEST_EXECUTION)
 class UserControllerTest {
 
     @Autowired
@@ -62,8 +64,8 @@ class UserControllerTest {
     @Test
     @Order(1)
     @DisplayName("유저 정보 수정 테스트")
-    @WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
-            , setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    //@WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
+    //        , setupBefore = TestExecutionEvent.TEST_EXECUTION)
     public void update_user_test() throws Exception {
         UserUpdateDto dto = new UserUpdateDto();
         dto.setName("update test");
@@ -102,8 +104,8 @@ class UserControllerTest {
     @Test
     @Order(2)
     @DisplayName("유저 회원 탈퇴 테스트")
-    @WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
-            , setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    //@WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
+    //        , setupBefore = TestExecutionEvent.TEST_EXECUTION)
     public void user_withDrawal_test() throws Exception {
         this.mockMvc.perform(post("/user/withdrawal"))
                 .andExpect(status().isOk());
