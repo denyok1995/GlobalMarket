@@ -37,6 +37,7 @@ public class User implements Serializable {
     @Setter
     private String phone;
 
+    // NOTE: role도 grade와 같이 enum을 사용할 수 있지 않나요?
     @Builder.Default
     private String role = ROLE_USER;
 

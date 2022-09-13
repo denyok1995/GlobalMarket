@@ -40,6 +40,7 @@ public class ReviewController {
     @GetMapping
     @ApiOperation(value = "리뷰 조회", notes = "해당 상품에 작성된 리뷰를 조회한다.")
     public List<ReviewInfo> getReviews(@RequestParam Long productId) {
+        // NOTE: 아래와 같은 문장이 반복되는데, 이걸 단순화 시킬 수 있을까요? @AuthenticationPrincipal와 같은 방법을 도입하면 되지 않을까요?
         Product product = productService.getProductById(productId).orElseThrow();
         return reviewService.getReviews(product).stream().map(review -> {
             return ReviewInfo.builder().email(review.getUser().getEmail())
