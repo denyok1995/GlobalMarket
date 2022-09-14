@@ -41,6 +41,11 @@ public class OrderController {
         return (orderInfo.isEmpty()) ? CheckInfo.builder().build() : orderInfo.get();
     }
 
+    // NOTE: OrderRequestInfo에 상품 주문 정보가 List<SimpleProductInfo> orderProducts으로 들어가 있는데,
+    // 이 부분이 디자인이 정말 까다로운 부분 중에 하나에요. 이정도면 충분히 좋을까, 나중에 확장은 괜찮을까? 충분히 고민이 필요해요.
+    // 실제 쇼핑몰에서 결제할때 상각하면 단순하지 않습니다. 1개의 쿠폰을 어떤 상품에 적용할지, 장비구니 쿠폰은 전체 금액에 적용되고..
+    // 상품에 옵션(색상이나 사이즈 등)을 변경하는 경우도 있고.
+    // 이런 부분은 실제 비지니스 도메인을 반영해야 하는 부분이라, 정답을 말하기 어려워요. 사용자의 액션을 기반으로 한번 디자인이 잘 되었는지 검토해보세요.
     @NeedLogin
     @PostMapping(path = "/pay")
     @ApiOperation(value = "결제", notes = "상품, 주문 정보를 바탕으로 결제를 진행한다.")

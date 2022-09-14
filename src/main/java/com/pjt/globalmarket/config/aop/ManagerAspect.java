@@ -31,6 +31,7 @@ public class ManagerAspect {
                 }
             }
         }
+        // NOTE: throw 하는 것은 좋아요. 그럼, 이게 실제로 에러 코드로는 어떻게 정의되나요?
         throw new AuthenticationCredentialsNotFoundException("Manager가 아닙니다.");
     }
 }
