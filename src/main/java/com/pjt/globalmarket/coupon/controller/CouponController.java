@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +30,7 @@ public class CouponController {
     @OnlyManager
     @GetMapping(path = "/available/manager")
     @ApiOperation(value = "전체 쿠폰 조회", notes = "사용자에게 발급 가능한 모든 쿠폰을 조회한다.")
-    public List<CouponDto> getAvailableCoupons(@AuthenticationPrincipal UserAuthDetails loginUser) {
+    public List<CouponDto> getAvailableCoupons(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser) {
         return couponService.getAllAvailableCoupons().stream().map(coupon -> {
             return CouponDto.builder().id(coupon.getId())
                     .name(coupon.getName())
@@ -45,7 +46,7 @@ public class CouponController {
     @NeedLogin
     @GetMapping
     @ApiOperation(value = "가지고 있는 전체 쿠폰 조회", notes = "사용자가 가지고 있는 모든 쿠폰을 조회한다.")
-    public List<UserCouponInfo> getUserCoupons(@AuthenticationPrincipal UserAuthDetails loginUser) {
+    public List<UserCouponInfo> getUserCoupons(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         return couponService.getUserCoupon(user).stream().map(userCoupon -> {
             return UserCouponInfo.builder().id(userCoupon.getId())
@@ -61,7 +62,7 @@ public class CouponController {
     @NeedLogin
     @PostMapping(path = "/issue")
     @ApiOperation(value = "쿠폰 발급", notes = "사용자에게 쿠폰을 발급한다.")
-    public void issueCoupon(@AuthenticationPrincipal UserAuthDetails loginUser,
+    public void issueCoupon(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
                            @RequestBody Long couponId) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         Coupon coupon = couponService.getCouponById(couponId).orElseThrow();
@@ -72,7 +73,7 @@ public class CouponController {
     @OnlyManager
     @PostMapping(path = "/manager")
     @ApiOperation(value = "쿠폰 생성", notes = "쿠폰을 저장한다.")
-    public void saveCoupon(@AuthenticationPrincipal UserAuthDetails loginUser,
+    public void saveCoupon(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
                            @RequestBody CouponDto dto) {
         couponService.saveCoupon(dto);
     }

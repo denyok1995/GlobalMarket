@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class ReviewController {
     @NeedLogin
     @PostMapping()
     @ApiOperation(value = "리뷰 작성", notes = "상품 리뷰 정보를 저장한다.")
-    public void writeReview(@AuthenticationPrincipal UserAuthDetails loginUser,
+    public void writeReview(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
                             @RequestBody WriteReviewInfo review) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         Product product = productService.getProductById(review.getProductId()).orElseThrow();
@@ -56,7 +57,7 @@ public class ReviewController {
     @NeedLogin
     @PostMapping(path = "/evaluation")
     @ApiOperation(value = "리뷰 평가", notes = "작성된 리뷰를 평가한다.")
-    public void evaluateReview(@AuthenticationPrincipal UserAuthDetails loginUser,
+    public void evaluateReview(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
                                @RequestBody EvaluateReviewInfo evaluateReviewInfo) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         reviewService.saveEvaluationReview(user, evaluateReviewInfo);

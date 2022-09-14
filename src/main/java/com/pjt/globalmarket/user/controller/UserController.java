@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
@@ -54,7 +55,8 @@ public class UserController {
     @NeedLogin
     @PostMapping(path = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "회원정보 수정", notes = "유저 정보를 수정한다.")
-    public void updateUser(@AuthenticationPrincipal UserAuthDetails loginUser, @Valid @RequestBody UserUpdateDto userUpdateDto) {
+    public void updateUser(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser
+            , @Valid @RequestBody UserUpdateDto userUpdateDto) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         if(encoder.matches(userUpdateDto.getPassword(), user.getPassword())) {
             userService.updateUser(user, userUpdateDto.getName(), userUpdateDto.getPhone());
@@ -66,7 +68,7 @@ public class UserController {
     @NeedLogin
     @PostMapping(path = "/withdrawal")
     @ApiOperation(value = "회원 탈퇴", notes = "유저 정보를 삭제한다.")
-    public void withdrawalUser(@AuthenticationPrincipal UserAuthDetails loginUser) {
+    public void withdrawalUser(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         userService.deleteUser(user);
     }

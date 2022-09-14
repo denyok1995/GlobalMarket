@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class ProductController {
     // 이런 조건들은 어떻게 처리해야 할까요?
     @GetMapping
     @ApiOperation(value = "전체 상품 조회", notes = "Paging 처리된 모든 상품을 조회한다.")
-    public Page<ProductResponseDto> allProducts(@AuthenticationPrincipal UserAuthDetails loginUser,
+    public Page<ProductResponseDto> allProducts(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
                                                 @RequestParam int page,
                                                 @RequestParam int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
