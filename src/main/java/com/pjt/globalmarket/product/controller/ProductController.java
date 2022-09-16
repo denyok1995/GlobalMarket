@@ -44,11 +44,17 @@ public class ProductController {
 
     @GetMapping(path = "/products")
     @ApiOperation(value = "상품 검색", notes = "입력(content)에 일치하는 상품을 조회한다.")
-    public Page<ProductResponseDto> searchProducts(@RequestParam String content,
+    public Page<ProductResponseDto> searchProducts(@AuthenticationPrincipal UserAuthDetails loginUser,
+                                                   @RequestParam(required = false) String content,
                                                    @RequestParam int page,
                                                    @RequestParam int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Product> products = productService.searchProductsByContent(content, pageRequest);
+        Page<Product> products;
+        if(content == null) {
+            products = productService.getAllProducts(pageRequest);
+        } else {
+            products = productService.searchProductsByContent(content, pageRequest);
+        }
         return products.map(product -> ProductResponseDto.builder()
                 .id(product.getId())
                 .name(product.getName())
