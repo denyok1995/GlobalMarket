@@ -42,7 +42,7 @@ public class ProductController {
                 .build());
     }
 
-    @GetMapping(path = "/products/search")
+    @GetMapping(path = "/products")
     @ApiOperation(value = "상품 검색", notes = "입력(content)에 일치하는 상품을 조회한다.")
     public Page<ProductResponseDto> searchProducts(@RequestParam String content,
                                                    @RequestParam int page,
