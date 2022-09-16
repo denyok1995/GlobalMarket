@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @NeedLogin
-    @PostMapping(path = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping
     @ApiOperation(value = "회원정보 수정", notes = "유저 정보를 수정한다.")
     public void updateUser(@AuthenticationPrincipal UserAuthDetails loginUser, @Valid @RequestBody UserUpdateDto userUpdateDto) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
@@ -64,7 +64,7 @@ public class UserController {
     }
 
     @NeedLogin
-    @PostMapping(path = "/withdrawal")
+    @DeleteMapping
     @ApiOperation(value = "회원 탈퇴", notes = "유저 정보를 삭제한다.")
     public void withdrawalUser(@AuthenticationPrincipal UserAuthDetails loginUser) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();

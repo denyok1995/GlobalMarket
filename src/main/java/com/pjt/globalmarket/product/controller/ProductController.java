@@ -9,14 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/product")
 public class ProductController {
 
     private final ProductService productService;
@@ -24,7 +20,7 @@ public class ProductController {
     // NOTE: 만일 page=0 또는 size=1000000 와 같이 큰 숫자를 넣으면 어떻게 될까요?
     // allProduct와 search의 차이는 뭘까요?, 특정 카테고리에 있는 제품만 목록을 표시하고 싶어요, 또는 특정 카테고리(신발)에 포함된 제품중 "나이키" 제품을 찾고 싶어요.
     // 이런 조건들은 어떻게 처리해야 할까요?
-    @GetMapping
+    @GetMapping(path = "/products")
     @ApiOperation(value = "전체 상품 조회", notes = "Paging 처리된 모든 상품을 조회한다.")
     public Page<ProductResponseDto> allProducts(@AuthenticationPrincipal UserAuthDetails loginUser,
                                                 @RequestParam int page,
@@ -46,7 +42,7 @@ public class ProductController {
                 .build());
     }
 
-    @GetMapping(path = "/search")
+    @GetMapping(path = "/products/search")
     @ApiOperation(value = "상품 검색", notes = "입력(content)에 일치하는 상품을 조회한다.")
     public Page<ProductResponseDto> searchProducts(@RequestParam String content,
                                                    @RequestParam int page,

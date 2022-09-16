@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/coupon")
 public class CouponController {
 
     private final CouponService couponService;
@@ -27,7 +26,7 @@ public class CouponController {
 
 
     @OnlyManager
-    @GetMapping(path = "/available/manager")
+    @GetMapping(path = "/coupons/manager/available")
     @ApiOperation(value = "전체 쿠폰 조회", notes = "사용자에게 발급 가능한 모든 쿠폰을 조회한다.")
     public List<CouponDto> getAvailableCoupons(@AuthenticationPrincipal UserAuthDetails loginUser) {
         return couponService.getAllAvailableCoupons().stream().map(coupon -> {
@@ -43,7 +42,7 @@ public class CouponController {
     }
 
     @NeedLogin
-    @GetMapping
+    @GetMapping(path = "/coupon")
     @ApiOperation(value = "가지고 있는 전체 쿠폰 조회", notes = "사용자가 가지고 있는 모든 쿠폰을 조회한다.")
     public List<UserCouponInfo> getUserCoupons(@AuthenticationPrincipal UserAuthDetails loginUser) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
@@ -59,7 +58,7 @@ public class CouponController {
 
     //쿠폰 발급
     @NeedLogin
-    @PostMapping(path = "/issue")
+    @PostMapping(path = "/coupon/issue")
     @ApiOperation(value = "쿠폰 발급", notes = "사용자에게 쿠폰을 발급한다.")
     public void issueCoupon(@AuthenticationPrincipal UserAuthDetails loginUser,
                            @RequestBody Long couponId) {
@@ -70,7 +69,7 @@ public class CouponController {
 
     //쿠폰 생성
     @OnlyManager
-    @PostMapping(path = "/manager")
+    @PostMapping(path = "/coupon/manager")
     @ApiOperation(value = "쿠폰 생성", notes = "쿠폰을 저장한다.")
     public void saveCoupon(@AuthenticationPrincipal UserAuthDetails loginUser,
                            @RequestBody CouponDto dto) {

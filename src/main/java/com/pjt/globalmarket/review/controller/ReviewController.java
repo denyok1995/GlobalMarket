@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(path = "/review")
 @RequiredArgsConstructor
 public class ReviewController {
 
@@ -28,7 +27,7 @@ public class ReviewController {
     private final ProductService productService;
 
     @NeedLogin
-    @PostMapping()
+    @PostMapping(path = "/review")
     @ApiOperation(value = "리뷰 작성", notes = "상품 리뷰 정보를 저장한다.")
     public void writeReview(@AuthenticationPrincipal UserAuthDetails loginUser,
                             @RequestBody WriteReviewInfo review) {
@@ -37,7 +36,7 @@ public class ReviewController {
         reviewService.saveReview(user, product, review);
     }
 
-    @GetMapping
+    @GetMapping(path = "/reviews")
     @ApiOperation(value = "리뷰 조회", notes = "해당 상품에 작성된 리뷰를 조회한다.")
     public List<ReviewInfo> getReviews(@RequestParam Long productId) {
         // NOTE: 아래와 같은 문장이 반복되는데, 이걸 단순화 시킬 수 있을까요? @AuthenticationPrincipal와 같은 방법을 도입하면 되지 않을까요?
@@ -54,7 +53,7 @@ public class ReviewController {
     }
 
     @NeedLogin
-    @PostMapping(path = "/evaluation")
+    @PostMapping(path = "/review/evaluation")
     @ApiOperation(value = "리뷰 평가", notes = "작성된 리뷰를 평가한다.")
     public void evaluateReview(@AuthenticationPrincipal UserAuthDetails loginUser,
                                @RequestBody EvaluateReviewInfo evaluateReviewInfo) {
