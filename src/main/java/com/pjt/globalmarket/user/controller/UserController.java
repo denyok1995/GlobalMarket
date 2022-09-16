@@ -5,6 +5,7 @@ import com.pjt.globalmarket.user.domain.NeedLogin;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.dto.LoginDto;
 import com.pjt.globalmarket.user.dto.SignUpDto;
+import com.pjt.globalmarket.user.dto.UserCreateInfo;
 import com.pjt.globalmarket.user.dto.UserUpdateDto;
 import com.pjt.globalmarket.user.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -41,8 +42,9 @@ public class UserController {
 
     @PostMapping(path = "/sign-up")
     @ApiOperation(value = "회원가입", notes = "유저 정보를 저장한다.")
-    public void signUp(@Valid @RequestBody SignUpDto signUpDto) {
-        userService.saveUser(signUpDto.getEmail(), encoder.encode(signUpDto.getPassword()), signUpDto.getName(), signUpDto.getPhone());
+    public UserCreateInfo signUp(@Valid @RequestBody SignUpDto signUpDto) {
+        return UserCreateInfo.toDto(userService.saveUser(signUpDto.getEmail()
+                , encoder.encode(signUpDto.getPassword()), signUpDto.getName(), signUpDto.getPhone()));
     }
 
     @GetMapping(path = "/{email}/id")
@@ -54,10 +56,10 @@ public class UserController {
     @NeedLogin
     @PutMapping
     @ApiOperation(value = "회원정보 수정", notes = "유저 정보를 수정한다.")
-    public void updateUser(@AuthenticationPrincipal UserAuthDetails loginUser, @Valid @RequestBody UserUpdateDto userUpdateDto) {
+    public UserCreateInfo updateUser(@AuthenticationPrincipal UserAuthDetails loginUser, @Valid @RequestBody UserUpdateDto userUpdateDto) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         if(encoder.matches(userUpdateDto.getPassword(), user.getPassword())) {
-            userService.updateUser(user, userUpdateDto.getName(), userUpdateDto.getPhone());
+            return UserCreateInfo.toDto(userService.updateUser(user, userUpdateDto.getName(), userUpdateDto.getPhone()));
         } else {
             throw new IllegalArgumentException("비밀번호를 잘못 입력했습니다.");
         }
