@@ -1,6 +1,7 @@
 package com.pjt.globalmarket.product.dto;
 
 import com.pjt.globalmarket.product.domain.Category;
+import com.pjt.globalmarket.product.domain.Product;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
@@ -35,4 +36,17 @@ public class ProductResponseDto {
 
     @ApiModelProperty(name = "상품 카테고리", example = "악세서리")
     private Set<Category> categories;
+
+    public static ProductResponseDto toDto(Product product) {
+        return ProductResponseDto.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .price(product.getPrice())
+                .stock(product.getStock())
+                .score(product.getScore())
+                .deliveryFee(product.getDeliveryFee())
+                .rocketDelivery(product.getRocketDelivery())
+                .categories(product.getCategory())
+                .build();
+    }
 }
