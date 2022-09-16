@@ -29,12 +29,11 @@ public class ProductController {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Product> allProducts = productService.getAllProducts(pageRequest);
         // NOTE: product에서 가격을 담는 부분이 cart와 동일하지 않나요? 전체 코드가 모드 겹치는 것 같은데??
-        // 바로 아래의 search도 사실 이것과 겹칩니다. 검색했을때와 전체 상품 가격이 다르면 안될텐데요?
-        // loginUser == null이 되는 경우는 없나요? (로그인 사용자가 아니면 loginUser가 어떻게 넘어오죠?)
+        // 바로 아래의 search도 사실 이것과 겹칩니다.
         return allProducts.map(product -> ProductResponseDto.builder()
                 .id(product.getId())
                 .name(product.getName())
-                .price(productService.getDiscountedPriceByUserGrade(loginUser.getUserGrade(), product.getPrice()))
+                .price(productService.getDiscountedPriceByUserGrade((loginUser==null)? null : loginUser.getUserGrade(), product.getPrice()))
                 .stock(product.getStock())
                 .score(product.getScore())
                 .deliveryFee(product.getDeliveryFee())
@@ -53,7 +52,7 @@ public class ProductController {
         return products.map(product -> ProductResponseDto.builder()
                 .id(product.getId())
                 .name(product.getName())
-                .price(product.getPrice())
+                .price(productService.getDiscountedPriceByUserGrade((loginUser==null)? null : loginUser.getUserGrade(), product.getPrice()))
                 .stock(product.getStock())
                 .score(product.getScore())
                 .deliveryFee(product.getDeliveryFee())
