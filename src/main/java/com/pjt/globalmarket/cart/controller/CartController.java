@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/cart")
 public class CartController {
 
     private final CartService cartService;
@@ -28,7 +27,7 @@ public class CartController {
     private final UserService userService;
 
     @NeedLogin
-    @PostMapping
+    @PostMapping(path = "/cart")
     @ApiOperation(value = "장바구니에 담기", notes = "장바구니에 담은 상품을 저장한다.")
     public void saveProductInCart(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
                                   @RequestBody SimpleProductInfo simpleProductInfo) {
@@ -37,7 +36,7 @@ public class CartController {
         cartService.saveProductInUserCart(user, product, simpleProductInfo.getProductNum());
     }
 
-    @GetMapping
+    @GetMapping(path = "/carts")
     @ApiOperation(value = "장바구니 조회", notes = "장바구니에 담긴 상품을 조회한다.")
     public List<CartDto> getAllProductInMyCart(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();

@@ -44,7 +44,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void saveProduct(Product product, Set<String> categories) {
+    public Product saveProduct(Product product, Set<String> categories) {
         categories.forEach(name -> {
             Optional<Category> category = categoryRepository.findCategoryByName(name);
             if (category.isPresent()) {
@@ -58,6 +58,7 @@ public class ProductService {
             }
         });
         productRepository.save(product);
+        return product;
     }
 
     public Page<Product> searchProductsByContent(String content, Pageable pageable) {

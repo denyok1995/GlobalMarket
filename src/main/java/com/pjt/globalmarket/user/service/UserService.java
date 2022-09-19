@@ -35,26 +35,28 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void saveUser(String email, String password, String name, String phone) {
+    public User saveUser(String email, String password, String name, String phone) {
         Optional<User> savedUser = getActiveUserByEmailAndProvider(email, DEFAULT_PROVIDER);
         if(savedUser.isPresent()) {
-            return;
+            return savedUser.get();
         }
         User user = User.builder(email, password)
                 .name(name)
                 .phone(phone)
                 .build();
         userRepository.save(user);
+        return user;
     }
 
     public Optional<User> getActiveUserByEmailAndProvider(String email, String provider) {
         return userRepository.findUserByEmailAndProviderAndDeletedAt(email, provider, null);
     }
 
-    public void updateUser(User user, String name, String phone) {
+    public User updateUser(User user, String name, String phone) {
         user.setName(name);
         user.setPhone(phone);
         userRepository.save(user);
+        return user;
     }
 
     public void deleteUser(User user) {
