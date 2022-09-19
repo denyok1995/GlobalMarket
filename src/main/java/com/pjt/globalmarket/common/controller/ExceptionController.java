@@ -1,8 +1,8 @@
-package com.pjt.globalmarket;
+package com.pjt.globalmarket.common.controller;
 
+import com.pjt.globalmarket.common.dto.ErrorResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,17 +16,24 @@ import java.util.NoSuchElementException;
 public class ExceptionController {
 
     @ExceptionHandler({AuthenticationCredentialsNotFoundException.class, InternalAuthenticationServiceException.class})
-    public ResponseEntity<String> authExceptionHandler() {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Need To Login!!");
+    public ErrorResponseDto authExceptionHandler() {
+        return returnErrorDto(HttpStatus.FORBIDDEN, "Need To Login!!");
     }
 
     @ExceptionHandler({UsernameNotFoundException.class})
-    public ResponseEntity<String> loginExceptionHandler() {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Need To Sign-Up!!");
+    public ErrorResponseDto loginExceptionHandler() {
+        return returnErrorDto(HttpStatus.FORBIDDEN, "Need To Sign-Up!!");
     }
 
     @ExceptionHandler({NoSuchElementException.class, IllegalArgumentException.class})
-    public ResponseEntity<String> orElseThrowHandler() {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wrong Input!!");
+    public ErrorResponseDto orElseThrowHandler() {
+        return returnErrorDto(HttpStatus.INTERNAL_SERVER_ERROR, "Wrong Input!!");
+    }
+
+    private ErrorResponseDto returnErrorDto(HttpStatus status, String message) {
+        return ErrorResponseDto.builder()
+                .httpStatus(status)
+                .message(message)
+                .build();
     }
 }
