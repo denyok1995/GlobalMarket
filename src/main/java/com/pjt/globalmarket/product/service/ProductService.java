@@ -39,6 +39,10 @@ public class ProductService {
         return price * discount.get((userGrade == null) ? IS_NOT_USER : userGrade.getGrade());
     }
 
+    public Double getDiscountPercentByUserGrade(UserGrade userGrade) {
+        return discount.get((userGrade == null) ? IS_NOT_USER : userGrade.getGrade());
+    }
+
     public Page<Product> getAllProducts(Pageable pageable) {
         return productRepository.findAllBy(pageable);
     }
