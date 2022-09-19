@@ -11,6 +11,8 @@ import com.pjt.globalmarket.user.domain.NeedLogin;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.service.UserService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +37,9 @@ public class OrderController {
     @NeedLogin
     @PostMapping
     @ApiOperation(value = "구매 정보 조회", notes = "구매 진행할 정보를 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "구매 정보 조회 성공", response = CheckInfo.class)
+    })
     public CheckInfo getOrderInfo(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
                                   @RequestBody List<SimpleProductInfo> productsInfo) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();

@@ -1,5 +1,6 @@
 package com.pjt.globalmarket.cart.controller;
 
+import com.nimbusds.oauth2.sdk.ErrorResponse;
 import com.pjt.globalmarket.cart.dto.CartDto;
 import com.pjt.globalmarket.cart.service.CartService;
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
@@ -10,9 +11,14 @@ import com.pjt.globalmarket.user.domain.NeedLogin;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.service.UserService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
@@ -29,6 +35,9 @@ public class CartController {
     @NeedLogin
     @PostMapping(path = "/cart")
     @ApiOperation(value = "장바구니에 담기", notes = "장바구니에 담은 상품을 저장한다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
+    })
     public void saveProductInCart(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
                                   @RequestBody SimpleProductInfo simpleProductInfo) {
         Product product = productService.getProductById(simpleProductInfo.getProductId()).orElseThrow();
@@ -38,6 +47,9 @@ public class CartController {
 
     @GetMapping(path = "/carts")
     @ApiOperation(value = "장바구니 조회", notes = "장바구니에 담긴 상품을 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "장바구니 조회 성공", response = CartDto.class)
+    })
     public List<CartDto> getAllProductInMyCart(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         return cartService.getAllProductsInCartByUser(user).stream().map(cart -> {
