@@ -64,16 +64,7 @@ public class ProductController {
         } else {
             products = productService.searchProductsByContent(content, pageRequest);
         }
-        return products.map(product -> ProductResponseDto.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .price(productService.getDiscountedPriceByUserGrade((loginUser==null)? null : loginUser.getUserGrade(), product.getPrice()))
-                .stock(product.getStock())
-                .score(product.getScore())
-                .deliveryFee(product.getDeliveryFee())
-                .rocketDelivery(product.getRocketDelivery())
-                .categories(product.getCategory())
-                .build());
+        return products.map(product -> ProductResponseDto.toDto(product, productService.getDiscountPercentByUserGrade(loginUser.getUserGrade())));
     }
 
     @PostMapping(path = "/product/manager/save")
@@ -85,7 +76,7 @@ public class ProductController {
                 .deliveryFee(dto.getDeliveryFee())
                 .rocketDelivery(dto.getRocketDelivery())
                 .build();
-        return ProductResponseDto.toDto(productService.saveProduct(product, dto.getCategories()));
+        return ProductResponseDto.toDto(productService.saveProduct(product, dto.getCategories()), 1.0);
 
     }
 

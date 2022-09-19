@@ -1,8 +1,8 @@
 package com.pjt.globalmarket.product.dto;
 
 import com.pjt.globalmarket.product.domain.Category;
-import io.swagger.annotations.ApiModel;
 import com.pjt.globalmarket.product.domain.Product;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
@@ -39,11 +39,11 @@ public class ProductResponseDto {
     @ApiModelProperty(notes = "상품 카테고리", example = "[\"악세서리\"]")
     private Set<Category> categories;
 
-    public static ProductResponseDto toDto(Product product) {
+    public static ProductResponseDto toDto(Product product, Double percent) {
         return ProductResponseDto.builder()
                 .id(product.getId())
                 .name(product.getName())
-                .price(product.getPrice())
+                .price(product.getPrice() * percent)
                 .stock(product.getStock())
                 .score(product.getScore())
                 .deliveryFee(product.getDeliveryFee())
