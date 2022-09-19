@@ -50,10 +50,7 @@ public class ProductController {
 
     @GetMapping(path = "/products")
     @ApiOperation(value = "상품 검색", notes = "입력(content)에 일치하는 상품을 조회한다.")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "상품 조회 성공", response = ProductResponseDto.class)
-    })
-    public Page<ProductResponseDto> searchProducts(@AuthenticationPrincipal UserAuthDetails loginUser,
+    public Page<ProductResponseDto> searchProducts(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
                                                    @RequestParam(required = false) String content,
                                                    @RequestParam int page,
                                                    @RequestParam int size) {
