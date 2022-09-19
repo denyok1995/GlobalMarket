@@ -1,4 +1,4 @@
-package com.pjt.globalmarket;
+package com.pjt.globalmarket.common.controller;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
