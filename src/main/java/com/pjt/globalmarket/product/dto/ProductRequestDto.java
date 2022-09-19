@@ -1,5 +1,6 @@
 package com.pjt.globalmarket.product.dto;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
@@ -9,32 +10,33 @@ import java.util.Set;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @Builder
+@ApiModel(description = "상품 저장 시에 필요한 정보")
 public class ProductRequestDto {
 
-    @ApiModelProperty(name = "상품 이름", example = "시계")
+    @ApiModelProperty(notes = "상품 이름", example = "시계", required = true)
     private String name;
 
-    @ApiModelProperty(name = "상품 가격(원)", example = "2000000")
+    @ApiModelProperty(notes = "상품 가격(원)", example = "2000000", required = true)
     private Double price;
 
-    @ApiModelProperty(name = "상품 메인 사진")
+    @ApiModelProperty(notes = "상품 메인 사진")
     private String mainImg;
 
-    @ApiModelProperty(name = "상품 상세 사진")
+    @ApiModelProperty(notes = "상품 상세 사진")
     private String detailImg;
 
-    @ApiModelProperty(name = "상품 수량(개)", example = "6")
+    @ApiModelProperty(notes = "상품 수량(개)", example = "6", required = true)
     private Long stock;
 
-    @ApiModelProperty(name = "상품 평점", example = "4.8")
+    @ApiModelProperty(notes = "상품 평점", example = "4.8")
     private Long score;
 
-    @ApiModelProperty(name = "상품 배달 비용", example = "3000")
+    @ApiModelProperty(notes = "상품 배달 비용", example = "3000", required = true)
     private Long deliveryFee;
 
-    @ApiModelProperty(name = "상품 배달 지원 정도", example = "ROCKET_WOW")
+    @ApiModelProperty(notes = "상품 배달 지원 정도", example = "ROCKET_WOW", required = true)
     private String rocketDelivery;
 
-    @ApiModelProperty(name = "상품 카테고리", example = "[\"악세서리\"]")
+    @ApiModelProperty(notes = "상품 카테고리", example = "[\"악세서리\"]", required = true)
     private Set<String> categories;
 }
