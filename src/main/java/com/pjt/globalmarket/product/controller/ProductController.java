@@ -64,5 +64,12 @@ public class ProductController {
 
     }
 
-    // NOTE: 상품의 상세 조회도 필요해요.
+    @GetMapping(path = "/product/{productId}")
+    @ApiOperation(value = "상품 상세 조회", notes = "상품 상세 정보를 조회한다.")
+    public ProductResponseDto getProduct(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
+                                         @PathVariable long productId) {
+        Product product = productService.getProductById(productId).orElseThrow();
+        return ProductResponseDto.toDto(product,
+                productService.getDiscountPercentByUserGrade((loginUser == null) ? null : loginUser.getUserGrade()));
+    }
 }
