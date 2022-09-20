@@ -6,7 +6,7 @@ import com.pjt.globalmarket.product.domain.Product;
 import com.pjt.globalmarket.product.dto.ProductRequestDto;
 import com.pjt.globalmarket.product.dto.ProductResponseDto;
 import com.pjt.globalmarket.product.service.ProductService;
-import com.pjt.globalmarket.user.domain.OnlyManager;
+import com.pjt.globalmarket.common.annotation.OnlyManager;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

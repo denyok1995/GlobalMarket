@@ -2,7 +2,7 @@ package com.pjt.globalmarket.user.controller;
 
 import com.nimbusds.oauth2.sdk.ErrorResponse;
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
-import com.pjt.globalmarket.user.domain.NeedLogin;
+import com.pjt.globalmarket.common.annotation.NeedLogin;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.dto.LoginDto;
 import com.pjt.globalmarket.user.dto.SignUpDto;

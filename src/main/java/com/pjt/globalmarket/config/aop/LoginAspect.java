@@ -21,7 +21,7 @@ public class LoginAspect {
 
     private UserService userService;
 
-    //@Before(value = "@annotation(com.pjt.globalmarket.user.domain.NeedLogin)")
+    //@Before(value = "@annotation(com.pjt.globalmarket.common.annotation.NeedLogin)")
     public void checkLogin(JoinPoint joinPoint) {
         List<Object> args = Arrays.asList(joinPoint.getArgs());
         for(Object o : args) {

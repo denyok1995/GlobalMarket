@@ -8,7 +8,7 @@ import com.pjt.globalmarket.review.dto.EvaluateReviewInfo;
 import com.pjt.globalmarket.review.dto.ReviewInfo;
 import com.pjt.globalmarket.review.dto.WriteReviewInfo;
 import com.pjt.globalmarket.review.service.ReviewService;
-import com.pjt.globalmarket.user.domain.NeedLogin;
+import com.pjt.globalmarket.common.annotation.NeedLogin;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.service.UserService;
 import io.swagger.annotations.ApiOperation;

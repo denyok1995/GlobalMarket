@@ -20,7 +20,7 @@ import static com.pjt.globalmarket.user.domain.UserConstant.ROLE_MANAGER;
 @RequiredArgsConstructor
 public class ManagerAspect {
     
-    @Before(value = "@annotation(com.pjt.globalmarket.user.domain.OnlyManager)")
+    @Before(value = "@annotation(com.pjt.globalmarket.common.annotation.OnlyManager)")
     public void checkManager(JoinPoint joinPoint) {
         List<Object> args = Arrays.asList(joinPoint.getArgs());
         for(Object o : args) {
@@ -31,7 +31,6 @@ public class ManagerAspect {
                 }
             }
         }
-        // NOTE: throw 하는 것은 좋아요. 그럼, 이게 실제로 에러 코드로는 어떻게 정의되나요?
         throw new AuthenticationCredentialsNotFoundException("Manager가 아닙니다.");
     }
 }

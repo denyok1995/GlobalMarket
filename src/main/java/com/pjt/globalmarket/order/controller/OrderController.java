@@ -7,7 +7,7 @@ import com.pjt.globalmarket.order.dto.CheckInfo;
 import com.pjt.globalmarket.order.dto.OrderRequestInfo;
 import com.pjt.globalmarket.order.service.OrderService;
 import com.pjt.globalmarket.product.dto.SimpleProductInfo;
-import com.pjt.globalmarket.user.domain.NeedLogin;
+import com.pjt.globalmarket.common.annotation.NeedLogin;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.service.UserService;
 import io.swagger.annotations.ApiOperation;

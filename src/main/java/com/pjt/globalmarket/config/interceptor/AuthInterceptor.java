@@ -1,6 +1,6 @@
 package com.pjt.globalmarket.config.interceptor;
 
-import com.pjt.globalmarket.user.domain.NeedLogin;
+import com.pjt.globalmarket.common.annotation.NeedLogin;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Component;
