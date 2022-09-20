@@ -2,18 +2,16 @@ package com.pjt.globalmarket.user.service;
 
 import com.pjt.globalmarket.user.dao.UserRepository;
 import com.pjt.globalmarket.user.domain.User;
-import com.pjt.globalmarket.user.domain.UserConstant;
+import com.pjt.globalmarket.user.domain.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
 import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
-import static com.pjt.globalmarket.user.domain.UserConstant.ROLE_MANAGER;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +27,7 @@ public class UserService {
         }
         User user = User.builder("manager@coupang.com", encoder.encode("password"))
                 .name("manager")
-                .role(ROLE_MANAGER)
+                .role(UserRole.ROLE_MANAGER)
                 .phone("010-1234-5678")
                 .build();
         userRepository.save(user);

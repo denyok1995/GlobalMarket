@@ -1,6 +1,7 @@
 package com.pjt.globalmarket.config.aop;
 
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
+import com.pjt.globalmarket.user.domain.UserRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.pjt.globalmarket.user.domain.UserConstant.ROLE_MANAGER;
+import static com.pjt.globalmarket.user.domain.UserRole.ROLE_MANAGER;
 
 @Slf4j
 @Aspect
@@ -26,7 +27,7 @@ public class ManagerAspect {
         for(Object o : args) {
             if(o instanceof UserAuthDetails) {
                 UserAuthDetails user = (UserAuthDetails) o;
-                if(ROLE_MANAGER.equals(user.getRole())) {
+                if(ROLE_MANAGER == user.getRole()) {
                     return;
                 }
             }

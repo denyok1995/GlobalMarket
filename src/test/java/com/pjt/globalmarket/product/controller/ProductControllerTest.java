@@ -6,6 +6,7 @@ import com.pjt.globalmarket.user.dao.UserRepository;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.domain.UserConstant;
 import com.pjt.globalmarket.user.domain.UserGrade;
+import com.pjt.globalmarket.user.domain.UserRole;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -62,7 +63,7 @@ class ProductControllerTest {
             user = User.builder("sa@test.com", encoder.encode("password"))
                     .phone("010-1234-5678")
                     .name("테스트 이름")
-                    .role(UserConstant.ROLE_MANAGER)
+                    .role(UserRole.ROLE_MANAGER)
                     .build();
             userRepository.save(user);
         }

@@ -9,7 +9,6 @@ import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
-import static com.pjt.globalmarket.user.domain.UserConstant.ROLE_USER;
 
 @Entity
 @Getter
@@ -37,9 +36,8 @@ public class User implements Serializable {
     @Setter
     private String phone;
 
-    // NOTE: role도 grade와 같이 enum을 사용할 수 있지 않나요?
     @Builder.Default
-    private String role = ROLE_USER;
+    private UserRole role = UserRole.ROLE_USER;
 
     @Builder.Default
     private UserGrade grade = UserGrade.BRONZE;

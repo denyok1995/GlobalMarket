@@ -2,6 +2,7 @@ package com.pjt.globalmarket.config.auth;
 
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.domain.UserGrade;
+import com.pjt.globalmarket.user.domain.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -39,7 +40,7 @@ public class UserAuthDetails implements UserDetails, OAuth2User {
         collection.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return user.getRole();
+                return getRole().getRole();
             }
         });
         return collection;
@@ -88,7 +89,7 @@ public class UserAuthDetails implements UserDetails, OAuth2User {
         return this.user.getGrade();
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return this.user.getRole();
     }
 }

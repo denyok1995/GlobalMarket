@@ -2,6 +2,7 @@ package com.pjt.globalmarket.user.dto;
 
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.domain.UserGrade;
+import com.pjt.globalmarket.user.domain.UserRole;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,7 +12,7 @@ import lombok.Getter;
 import java.time.ZonedDateTime;
 
 import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
-import static com.pjt.globalmarket.user.domain.UserConstant.ROLE_USER;
+import static com.pjt.globalmarket.user.domain.UserRole.ROLE_USER;
 
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -35,7 +36,7 @@ public class UserCreateInfo {
 
     @Builder.Default
     @ApiModelProperty(notes = "사용자 역할", example = "ROLE_USER")
-    private String role = ROLE_USER;
+    private UserRole role = ROLE_USER;
 
     @Builder.Default
     @ApiModelProperty(notes = "사용자 등급", example = "bronze")
