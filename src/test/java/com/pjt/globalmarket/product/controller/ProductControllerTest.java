@@ -2,6 +2,9 @@ package com.pjt.globalmarket.product.controller;
 
 import com.pjt.globalmarket.product.domain.Product;
 import com.pjt.globalmarket.product.service.ProductService;
+import com.pjt.globalmarket.user.dao.UserRepository;
+import com.pjt.globalmarket.user.domain.User;
+import com.pjt.globalmarket.user.domain.UserConstant;
 import com.pjt.globalmarket.user.domain.UserGrade;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
@@ -14,13 +17,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.when;
@@ -30,6 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureMockMvc
+@WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
+        , setupBefore = TestExecutionEvent.TEST_EXECUTION)
 class ProductControllerTest {
 
     private Map<String, Double> discount = new HashMap<>();
@@ -40,9 +46,27 @@ class ProductControllerTest {
     private ProductService productService;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
+    User user;
 
     @BeforeAll
     public void init() {
+        Optional<User> userOptional = userRepository.findUserByEmailAndProviderAndDeletedAt("sa@test.com", DEFAULT_PROVIDER, null);
+        if(userOptional.isPresent()) {
+            user = userOptional.get();
+        } else {
+            user = User.builder("sa@test.com", encoder.encode("password"))
+                    .phone("010-1234-5678")
+                    .name("테스트 이름")
+                    .role(UserConstant.ROLE_MANAGER)
+                    .build();
+            userRepository.save(user);
+        }
+
         this.discount.put("default", 1.0); //아직 로그인 하지 않은 회원
         this.discount.put(UserGrade.BRONZE.getGrade(), 0.99 ); //1% 할인율
         this.discount.put(UserGrade.SILVER.getGrade(), 0.97 ); //3% 할인율
@@ -84,7 +108,7 @@ class ProductControllerTest {
     @ParameterizedTest(name = "{0} 상품 조회")
     @ValueSource(strings = {"시계", "지갑"})
     public void search_product_test(String content) throws Exception {
-        this.mockMvc.perform(get("/product/search").param("content", content)
+        this.mockMvc.perform(get("/products").param("content", content)
                         .param("page", "0")
                         .param("size", "2"))
                 .andExpect(status().isOk());

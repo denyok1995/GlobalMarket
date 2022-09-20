@@ -1,14 +1,14 @@
 package com.pjt.globalmarket.product.controller;
 
+import com.pjt.globalmarket.common.dto.PageList;
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
 import com.pjt.globalmarket.product.domain.Product;
 import com.pjt.globalmarket.product.dto.ProductRequestDto;
 import com.pjt.globalmarket.product.dto.ProductResponseDto;
 import com.pjt.globalmarket.product.service.ProductService;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,28 +17,35 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class ProductController {
 
     private final ProductService productService;
 
     // NOTE: 만일 page=0 또는 size=1000000 와 같이 큰 숫자를 넣으면 어떻게 될까요?
-    // allProduct와 search의 차이는 뭘까요?, 특정 카테고리에 있는 제품만 목록을 표시하고 싶어요, 또는 특정 카테고리(신발)에 포함된 제품중 "나이키" 제품을 찾고 싶어요.
+    // 특정 카테고리에 있는 제품만 목록을 표시하고 싶어요, 또는 특정 카테고리(신발)에 포함된 제품중 "나이키" 제품을 찾고 싶어요.
     // 이런 조건들은 어떻게 처리해야 할까요?
 
     @GetMapping(path = "/products")
     @ApiOperation(value = "상품 검색", notes = "입력(content)에 일치하는 상품을 조회한다.")
-    public Page<ProductResponseDto> searchProducts(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
-                                                   @RequestParam(required = false) String content,
-                                                   @RequestParam int page,
-                                                   @RequestParam int size) {
+    public PageList searchProducts(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
+                                   @RequestParam(required = false) String content,
+                                   @RequestParam int page,
+                                   @RequestParam int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Product> products;
+        PageList products;
         if(content == null) {
-            products = productService.getAllProducts(pageRequest);
+            Page<ProductResponseDto> paged = productService.getAllProducts(pageRequest).map(product ->
+                    ProductResponseDto.toDto(product,
+                            productService.getDiscountPercentByUserGrade((loginUser == null) ? null : loginUser.getUserGrade())));
+            products = PageList.toDto(paged.getContent(), paged.getTotalPages(), paged.getTotalElements());
         } else {
-            products = productService.searchProductsByContent(content, pageRequest);
+            Page<ProductResponseDto> paged = productService.searchProductsByContent(content, pageRequest).map(product
+                    -> ProductResponseDto.toDto(product,
+                    productService.getDiscountPercentByUserGrade((loginUser == null) ? null : loginUser.getUserGrade())));
+            products = PageList.toDto(paged.getContent(), paged.getTotalPages(), paged.getTotalElements());
         }
-        return products.map(product -> ProductResponseDto.toDto(product, productService.getDiscountPercentByUserGrade(loginUser.getUserGrade())));
+        return products;
     }
 
     @PostMapping(path = "/product/manager/save")
