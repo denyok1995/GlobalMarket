@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
         , setupBefore = TestExecutionEvent.TEST_EXECUTION)
-@Profile("local")
+@Profile("test")
 class ReviewControllerTest {
 
     @Autowired
@@ -87,7 +87,7 @@ class ReviewControllerTest {
     @Test
     @DisplayName("리뷰 조회 테스트")
     public void get_review_test() throws Exception {
-        this.mockMvc.perform(get("/review").param("productId", String.valueOf(product.getId())))
+        this.mockMvc.perform(get("/reviews").param("productId", String.valueOf(product.getId())))
                 .andExpect(status().isOk());
     }
 

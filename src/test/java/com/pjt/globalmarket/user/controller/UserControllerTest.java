@@ -22,8 +22,7 @@ import java.util.Optional;
 
 import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -32,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
         , setupBefore = TestExecutionEvent.TEST_EXECUTION)
-@Profile("local")
+@Profile("test")
 class UserControllerTest {
 
     @Autowired
@@ -81,14 +80,14 @@ class UserControllerTest {
         dto.setName("update test");
         dto.setPassword("password");
         dto.setPhone("010-1234-1234");
-        this.mockMvc.perform(post("/user/update")
+        this.mockMvc.perform(put("/user")
                         .content(objectMapper.writeValueAsString(dto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         //수정 하면서 입력한 비밀번호가 틀린 경우
         dto.setPassword("password123");
-        this.mockMvc.perform(post("/user/update")
+        this.mockMvc.perform(put("/user")
                         .content(objectMapper.writeValueAsString(dto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError());
@@ -115,7 +114,7 @@ class UserControllerTest {
     @Order(2)
     @DisplayName("유저 회원 탈퇴 테스트")
     public void user_withDrawal_test() throws Exception {
-        this.mockMvc.perform(post("/user/withdrawal"))
+        this.mockMvc.perform(delete("/user"))
                 .andExpect(status().isOk());
     }
 

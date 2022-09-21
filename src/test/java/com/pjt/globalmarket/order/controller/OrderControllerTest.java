@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
         , setupBefore = TestExecutionEvent.TEST_EXECUTION)
-@Profile("local")
+@Profile("test")
 class OrderControllerTest {
 
     @Autowired
