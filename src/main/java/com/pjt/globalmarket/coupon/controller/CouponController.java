@@ -53,7 +53,7 @@ public class CouponController {
     }
 
     @NeedLogin
-    @GetMapping(path = "/coupon")
+    @GetMapping(path = "/coupons")
     @ApiOperation(value = "가지고 있는 전체 쿠폰 조회", notes = "사용자가 가지고 있는 모든 쿠폰을 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "조회 성공", response = UserCouponInfo.class),
