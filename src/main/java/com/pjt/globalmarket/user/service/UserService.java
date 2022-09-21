@@ -2,18 +2,16 @@ package com.pjt.globalmarket.user.service;
 
 import com.pjt.globalmarket.user.dao.UserRepository;
 import com.pjt.globalmarket.user.domain.User;
-import com.pjt.globalmarket.user.domain.UserConstant;
+import com.pjt.globalmarket.user.domain.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
 import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
-import static com.pjt.globalmarket.user.domain.UserConstant.ROLE_MANAGER;
 
 @Service
 @RequiredArgsConstructor
@@ -29,32 +27,34 @@ public class UserService {
         }
         User user = User.builder("manager@coupang.com", encoder.encode("password"))
                 .name("manager")
-                .role(ROLE_MANAGER)
+                .role(UserRole.ROLE_MANAGER)
                 .phone("010-1234-5678")
                 .build();
         userRepository.save(user);
     }
 
-    public void saveUser(String email, String password, String name, String phone) {
+    public User saveUser(String email, String password, String name, String phone) {
         Optional<User> savedUser = getActiveUserByEmailAndProvider(email, DEFAULT_PROVIDER);
         if(savedUser.isPresent()) {
-            return;
+            return savedUser.get();
         }
         User user = User.builder(email, password)
                 .name(name)
                 .phone(phone)
                 .build();
         userRepository.save(user);
+        return user;
     }
 
     public Optional<User> getActiveUserByEmailAndProvider(String email, String provider) {
         return userRepository.findUserByEmailAndProviderAndDeletedAt(email, provider, null);
     }
 
-    public void updateUser(User user, String name, String phone) {
+    public User updateUser(User user, String name, String phone) {
         user.setName(name);
         user.setPhone(phone);
         userRepository.save(user);
+        return user;
     }
 
     public void deleteUser(User user) {

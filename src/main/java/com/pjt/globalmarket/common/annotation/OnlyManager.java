@@ -1,4 +1,4 @@
-package com.pjt.globalmarket.user.domain;
+package com.pjt.globalmarket.common.annotation;
 
 import org.springframework.stereotype.Component;
 
@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Component
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface NeedLogin {
+public @interface OnlyManager {
 }

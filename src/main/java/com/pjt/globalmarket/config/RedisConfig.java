@@ -1,6 +1,5 @@
 package com.pjt.globalmarket.config;
 
-import com.pjt.globalmarket.user.domain.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +35,13 @@ public class RedisConfig {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
         configuration.setHostName(host);
         configuration.setPort(port);
+        /*RedisClusterConfiguration configuration = new RedisClusterConfiguration();
+        configuration.clusterNode(host, port);*/
         return new LettuceConnectionFactory(configuration);
     }
+
+    /*@Bean
+    public ConfigureRedisAction configureRedisAction() {
+        return ConfigureRedisAction.NO_OP;
+    }*/
 }

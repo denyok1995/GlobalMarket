@@ -2,6 +2,7 @@ package com.pjt.globalmarket.config.auth;
 
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.domain.UserGrade;
+import com.pjt.globalmarket.user.domain.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -34,10 +35,12 @@ public class UserAuthDetails implements UserDetails, OAuth2User {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
+
+        // NOTE: lambda를 사용한다면, 아래 코드를 expression으로 변경할 수 있어요. 그리고, collection 이라는 변수가 필요할까요?
         collection.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return user.getRole();
+                return getRole().getRole();
             }
         });
         return collection;
@@ -86,7 +89,7 @@ public class UserAuthDetails implements UserDetails, OAuth2User {
         return this.user.getGrade();
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return this.user.getRole();
     }
 }

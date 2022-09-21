@@ -39,12 +39,16 @@ public class ProductService {
         return price * discount.get((userGrade == null) ? IS_NOT_USER : userGrade.getGrade());
     }
 
+    public Double getDiscountPercentByUserGrade(UserGrade userGrade) {
+        return discount.get((userGrade == null) ? IS_NOT_USER : userGrade.getGrade());
+    }
+
     public Page<Product> getAllProducts(Pageable pageable) {
         return productRepository.findAllBy(pageable);
     }
 
     @Transactional
-    public void saveProduct(Product product, Set<String> categories) {
+    public Product saveProduct(Product product, Set<String> categories) {
         categories.forEach(name -> {
             Optional<Category> category = categoryRepository.findCategoryByName(name);
             if (category.isPresent()) {
@@ -58,6 +62,7 @@ public class ProductService {
             }
         });
         productRepository.save(product);
+        return product;
     }
 
     public Page<Product> searchProductsByContent(String content, Pageable pageable) {

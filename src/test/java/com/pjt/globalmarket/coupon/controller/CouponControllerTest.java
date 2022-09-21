@@ -5,6 +5,7 @@ import com.pjt.globalmarket.coupon.domain.Coupon;
 import com.pjt.globalmarket.user.dao.UserRepository;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.domain.UserConstant;
+import com.pjt.globalmarket.user.domain.UserRole;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -51,7 +52,7 @@ class CouponControllerTest {
             manager = User.builder("sa@test.com", encoder.encode("password"))
                     .phone("010-1234-5678")
                     .name("테스트 이름")
-                    .role(UserConstant.ROLE_MANAGER)
+                    .role(UserRole.ROLE_MANAGER)
                     .build();
             userRepository.save(manager);
         }
