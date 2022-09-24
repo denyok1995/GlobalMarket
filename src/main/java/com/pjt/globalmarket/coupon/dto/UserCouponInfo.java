@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@ApiModel(description = "유저 쿠폰 정보")
+@ApiModel(description = "사용자 쿠폰 정보")
 public class UserCouponInfo {
 
     @ApiModelProperty(name = "발급된 쿠폰 고유 번호", example = "3", required = true)

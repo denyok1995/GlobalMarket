@@ -36,7 +36,12 @@ public class ProductResponseDto {
     @ApiModelProperty(notes = "상품 배달 지원 정도", example = "ROCKET_WOW")
     private String rocketDelivery;
 
-    @ApiModelProperty(notes = "상품 카테고리", example = "[\"악세서리\"]")
+    @ApiModelProperty(notes = "상품 카테고리", example = "\"categories\": [\n" +
+            "    {\n" +
+            "      \"id\": 3,\n" +
+            "      \"name\": \"악세서리\"\n" +
+            "    }\n" +
+            "  ]")
     private Set<Category> categories;
 
     public static ProductResponseDto toDto(Product product, Double percent) {

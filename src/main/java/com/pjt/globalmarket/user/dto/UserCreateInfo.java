@@ -18,7 +18,7 @@ import static com.pjt.globalmarket.user.domain.UserRole.ROLE_USER;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@ApiModel(description = "사용자 생성된 정보")
+@ApiModel(description = "생성된 사용자 정보")
 public class UserCreateInfo {
 
     @ApiModelProperty(notes = "사용자 고유 번호", example = "1")

@@ -33,7 +33,7 @@ public class ReviewCreateInfo {
     @Builder.Default
     private int noHelpNum = 0;
 
-    @ApiModelProperty(notes = "리뷰가 작성된 날짜", example = "2022-09-03T10:06:53.778Z")
+    @ApiModelProperty(notes = "리뷰가 작성된 날짜", example = "1664004425.63526")
     private ZonedDateTime createdAt;
 
     public static ReviewCreateInfo toDto(Review review) {
