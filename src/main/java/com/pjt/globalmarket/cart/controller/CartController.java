@@ -45,10 +45,12 @@ public class CartController {
         cartService.saveProductInUserCart(user, product, simpleProductInfo.getProductNum());
     }
 
+    @NeedLogin
     @GetMapping(path = "/carts")
     @ApiOperation(value = "장바구니 조회", notes = "장바구니에 담긴 상품을 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "장바구니 조회 성공", response = CartDto.class)
+            @ApiResponse(code = 200, message = "장바구니 조회 성공", response = CartDto.class),
+            @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
     })
     public List<CartDto> getAllProductInMyCart(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();

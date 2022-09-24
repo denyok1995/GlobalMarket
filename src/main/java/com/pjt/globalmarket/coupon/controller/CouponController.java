@@ -88,7 +88,8 @@ public class CouponController {
     @PostMapping(path = "/coupon/manager")
     @ApiOperation(value = "쿠폰 생성", notes = "쿠폰을 저장한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "쿠폰 저장 성공", response = CouponDto.class)
+            @ApiResponse(code = 200, message = "쿠폰 저장 성공", response = CouponDto.class),
+            @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
     })
     public void saveCoupon(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
                            @RequestBody CouponDto dto) {

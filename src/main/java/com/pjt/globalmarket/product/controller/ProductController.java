@@ -53,6 +53,9 @@ public class ProductController {
     @OnlyManager
     @PostMapping(path = "/product/manager/save")
     @ApiOperation(value = "상품 저장", notes = "상품을 저장한다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
+    })
     public ProductResponseDto saveProduct(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
                                           @RequestBody ProductRequestDto dto) {
         Product product = Product.builder(dto.getName(), dto.getPrice())
