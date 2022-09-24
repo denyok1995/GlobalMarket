@@ -1,12 +1,9 @@
 package com.pjt.globalmarket.product.controller;
 
+import com.pjt.globalmarket.common.AutoInsert;
 import com.pjt.globalmarket.product.domain.Product;
 import com.pjt.globalmarket.product.service.ProductService;
-import com.pjt.globalmarket.user.dao.UserRepository;
-import com.pjt.globalmarket.user.domain.User;
-import com.pjt.globalmarket.user.domain.UserConstant;
 import com.pjt.globalmarket.user.domain.UserGrade;
-import com.pjt.globalmarket.user.domain.UserRole;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,14 +15,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.*;
 
-import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.when;
@@ -39,52 +34,40 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         , setupBefore = TestExecutionEvent.TEST_EXECUTION)
 class ProductControllerTest {
 
-    private Map<String, Double> discount = new HashMap<>();
-    private List<Product> productList = new ArrayList<>();
-    private Page<Product> products;
-
     @Mock
     private ProductService productService;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private BCryptPasswordEncoder encoder;
+    private AutoInsert autoInsert;
 
-    User user;
 
     @BeforeAll
     public void init() {
-        Optional<User> userOptional = userRepository.findUserByEmailAndProviderAndDeletedAt("sa@test.com", DEFAULT_PROVIDER, null);
-        if(userOptional.isPresent()) {
-            user = userOptional.get();
-        } else {
-            user = User.builder("sa@test.com", encoder.encode("password"))
-                    .phone("010-1234-5678")
-                    .name("테스트 이름")
-                    .role(UserRole.ROLE_MANAGER)
-                    .build();
-            userRepository.save(user);
-        }
-
-        this.discount.put("default", 1.0); //아직 로그인 하지 않은 회원
-        this.discount.put(UserGrade.BRONZE.getGrade(), 0.99 ); //1% 할인율
-        this.discount.put(UserGrade.SILVER.getGrade(), 0.97 ); //3% 할인율
-        this.discount.put(UserGrade.GOLD.getGrade(), 0.95 ); //5% 할인율
-        this.discount.put(UserGrade.DIAMOND.getGrade(), 0.9 ); //10% 할인율
-
-        Product wallet = Product.builder("지갑", 10000.0).build();
-        Product watch = Product.builder("시계", 35830.2).build();
-        this.productList.add(wallet);
-        this.productList.add(watch);
-
-        this.products = new PageImpl<>(productList);
+        autoInsert.saveUser();
     }
 
     @ParameterizedTest(name = "유저 \"{0}\" 등급 - 전체 상품 조회")
     @ValueSource(strings = {"bronze", "silver", "gold", "diamond"})
     public void get_all_product_test(String grade) {
+        Map<String, Double> discount = new HashMap<>();
+        List<Product> productList = new ArrayList<>();
+        Page<Product> products;
+
+        discount.put("default", 1.0); //아직 로그인 하지 않은 회원
+        discount.put(UserGrade.BRONZE.getGrade(), 0.99 ); //1% 할인율
+        discount.put(UserGrade.SILVER.getGrade(), 0.97 ); //3% 할인율
+        discount.put(UserGrade.GOLD.getGrade(), 0.95 ); //5% 할인율
+        discount.put(UserGrade.DIAMOND.getGrade(), 0.9 ); //10% 할인율
+
+        Product wallet = Product.builder("지갑", 10000.0).build();
+        Product watch = Product.builder("시계", 35830.2).build();
+        productList.add(wallet);
+        productList.add(watch);
+
+        products = new PageImpl<>(productList);
+
+
         PageRequest pageRequest = PageRequest.of(0,1);
         when(productService.getAllProducts(pageRequest)).thenReturn(products);
 

@@ -1,10 +1,7 @@
 package com.pjt.globalmarket.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pjt.globalmarket.user.dao.UserRepository;
-import com.pjt.globalmarket.user.domain.User;
-import com.pjt.globalmarket.user.domain.UserConstant;
-import com.pjt.globalmarket.user.domain.UserRole;
+import com.pjt.globalmarket.common.AutoInsert;
 import com.pjt.globalmarket.user.dto.SignUpDto;
 import com.pjt.globalmarket.user.dto.UserUpdateDto;
 import org.junit.jupiter.api.*;
@@ -13,15 +10,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.Optional;
-
-import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,23 +31,13 @@ class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private BCryptPasswordEncoder encoder;
+    private AutoInsert autoInsert;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeAll
     public void init() {
-        Optional<User> userOptional = userRepository.findUserByEmailAndProviderAndDeletedAt("sa@test.com", DEFAULT_PROVIDER, null);
-        if(userOptional.isEmpty()) {
-            User user = User.builder("sa@test.com", encoder.encode("password"))
-                    .phone("010-1234-5678")
-                    .name("테스트 이름")
-                    .role(UserRole.ROLE_MANAGER)
-                    .build();
-            userRepository.save(user);
-        }
+        autoInsert.saveUser();
     }
 
 

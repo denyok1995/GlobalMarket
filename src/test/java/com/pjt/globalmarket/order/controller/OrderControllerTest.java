@@ -1,17 +1,12 @@
 package com.pjt.globalmarket.order.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pjt.globalmarket.common.AutoInsert;
 import com.pjt.globalmarket.coupon.dao.CouponRepository;
-import com.pjt.globalmarket.coupon.domain.Coupon;
 import com.pjt.globalmarket.order.dto.OrderRequestInfo;
 import com.pjt.globalmarket.payment.domain.PaymentType;
 import com.pjt.globalmarket.product.dao.ProductRepository;
-import com.pjt.globalmarket.product.domain.Product;
 import com.pjt.globalmarket.product.dto.SimpleProductInfo;
-import com.pjt.globalmarket.user.dao.UserRepository;
-import com.pjt.globalmarket.user.domain.User;
-import com.pjt.globalmarket.user.domain.UserConstant;
-import com.pjt.globalmarket.user.domain.UserRole;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,17 +16,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,57 +38,32 @@ class OrderControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private CouponRepository couponRepository;
     @Autowired
-    private BCryptPasswordEncoder encoder;
+    private AutoInsert autoInsert;
     @Autowired
     private ProductRepository productRepository;
 
-    Product product;
-    User user;
-    Coupon coupon;
+    private long productId;
+    private long couponId;
     ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeAll
     public void init() {
-        Optional<User> userOptional = userRepository.findUserByEmailAndProviderAndDeletedAt("sa@test.com", DEFAULT_PROVIDER, null);
-        if(userOptional.isPresent()) {
-            user = userOptional.get();
-        } else {
-            user = User.builder("sa@test.com", encoder.encode("password"))
-                    .phone("010-1234-5678")
-                    .name("테스트 이름")
-                    .role(UserRole.ROLE_MANAGER)
-                    .build();
-            userRepository.save(user);
-        }
-
-        coupon = Coupon.builder()
-                .name("봄맞이 쿠폰")
-                .minPrice(10000L)
-                .discountPrice(2000L)
-                .maxCouponCount(2L)
-                .expirationTime(ZonedDateTime.of(2022, 12, 2, 1, 2, 2,2, ZonedDateTime.now().getZone()))
-                .build();
-        couponRepository.save(coupon);
-
-        product = Product.builder("시계", 100000.0)
-                .stock(3L)
-                .deliveryFee(3000L).build();
-        productRepository.save(product);
+        autoInsert.saveUser();
+        productId = autoInsert.saveProduct();
+        couponId = autoInsert.saveCoupon();
     }
 
     @Test
     @DisplayName("결제 테스트")
     public void get_order_info_test() throws Exception {
         List<SimpleProductInfo> productInfos = new ArrayList<>();
-        SimpleProductInfo simpleProductInfo = SimpleProductInfo.builder().productId(product.getId()).productNum(2L).build();
+        SimpleProductInfo simpleProductInfo = SimpleProductInfo.builder().productId(productId).productNum(2L).build();
         productInfos.add(simpleProductInfo);
         OrderRequestInfo orderInfo = new OrderRequestInfo();
         orderInfo.setOrderProducts(productInfos);
-        orderInfo.setCouponId(coupon.getId());
+        orderInfo.setCouponId(couponId);
         orderInfo.setPaymentType(PaymentType.CARD);
         this.mockMvc.perform(post("/order/pay").content(objectMapper.writeValueAsString(orderInfo))
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
