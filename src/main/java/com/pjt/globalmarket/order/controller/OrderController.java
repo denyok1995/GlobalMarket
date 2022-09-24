@@ -1,9 +1,11 @@
 package com.pjt.globalmarket.order.controller;
 
+import com.nimbusds.oauth2.sdk.ErrorResponse;
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
 import com.pjt.globalmarket.coupon.domain.UserCoupon;
 import com.pjt.globalmarket.coupon.service.CouponService;
 import com.pjt.globalmarket.order.dto.CheckInfo;
+import com.pjt.globalmarket.order.dto.DoOrderInfo;
 import com.pjt.globalmarket.order.dto.OrderRequestInfo;
 import com.pjt.globalmarket.order.service.OrderService;
 import com.pjt.globalmarket.product.dto.SimpleProductInfo;
@@ -38,7 +40,8 @@ public class OrderController {
     @PostMapping
     @ApiOperation(value = "구매 정보 조회", notes = "구매 진행할 정보를 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "구매 정보 조회 성공", response = CheckInfo.class)
+            @ApiResponse(code = 200, message = "구매 정보 조회 성공", response = CheckInfo.class),
+            @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
     })
     public CheckInfo getOrderInfo(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
                                   @RequestBody List<SimpleProductInfo> productsInfo) {
@@ -55,10 +58,14 @@ public class OrderController {
     @NeedLogin
     @PostMapping(path = "/pay")
     @ApiOperation(value = "결제", notes = "상품, 주문 정보를 바탕으로 결제를 진행한다.")
-    public void doOrder(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "구매 성공", response = DoOrderInfo.class),
+            @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
+    })
+    public DoOrderInfo doOrder(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
                         @RequestBody OrderRequestInfo orderRequestInfo) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         UserCoupon userCoupon = couponService.getUserCouponById(orderRequestInfo.getCouponId()).orElse(null);
-        orderService.payOrder(user, orderRequestInfo, userCoupon);
+        return DoOrderInfo.toDto(orderService.payOrder(user, orderRequestInfo, userCoupon));
     }
 }

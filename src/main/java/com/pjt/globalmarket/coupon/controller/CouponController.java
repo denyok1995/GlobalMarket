@@ -36,7 +36,7 @@ public class CouponController {
     @GetMapping(path = "/coupons/manager/available")
     @ApiOperation(value = "전체 쿠폰 조회", notes = "사용자에게 발급 가능한 모든 쿠폰을 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "조회 성공", response = CouponDto.class),
+            @ApiResponse(code = 200, message = "전체 쿠폰 조회 성공", response = CouponDto.class),
             @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
     })
     public List<CouponDto> getAvailableCoupons(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser) {
@@ -56,7 +56,7 @@ public class CouponController {
     @GetMapping(path = "/coupons")
     @ApiOperation(value = "가지고 있는 전체 쿠폰 조회", notes = "사용자가 가지고 있는 모든 쿠폰을 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "조회 성공", response = UserCouponInfo.class),
+            @ApiResponse(code = 200, message = "유저 쿠폰 조회 성공", response = UserCouponInfo.class),
             @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
 
     })
@@ -76,11 +76,15 @@ public class CouponController {
     @NeedLogin
     @PostMapping(path = "/coupon/issue")
     @ApiOperation(value = "쿠폰 발급", notes = "사용자에게 쿠폰을 발급한다.")
-    public void issueCoupon(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "쿠폰 발급 성공", response = UserCouponInfo.class),
+            @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
+    })
+    public UserCouponInfo issueCoupon(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
                            @RequestBody Long couponId) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         Coupon coupon = couponService.getCouponById(couponId).orElseThrow();
-        couponService.issueCoupon(user, coupon);
+        return UserCouponInfo.toDto(couponService.issueCoupon(user, coupon));
     }
 
     //쿠폰 생성
@@ -88,10 +92,11 @@ public class CouponController {
     @PostMapping(path = "/coupon/manager")
     @ApiOperation(value = "쿠폰 생성", notes = "쿠폰을 저장한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "쿠폰 저장 성공", response = CouponDto.class)
+            @ApiResponse(code = 200, message = "쿠폰 저장 성공", response = CouponDto.class),
+            @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
     })
-    public void saveCoupon(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
+    public CouponDto saveCoupon(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
                            @RequestBody CouponDto dto) {
-        couponService.saveCoupon(dto);
+        return CouponDto.toDto(couponService.saveCoupon(dto));
     }
 }

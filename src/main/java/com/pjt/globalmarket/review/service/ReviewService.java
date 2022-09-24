@@ -20,7 +20,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final EvaluationReviewRepository evaluationReviewRepository;
 
-    public void saveReview(User user, Product product, WriteReviewInfo reviewInfo) {
+    public Review saveReview(User user, Product product, WriteReviewInfo reviewInfo) {
         Review review = Review.builder().user(user)
                 .product(product)
                 .score(reviewInfo.getScore())
@@ -28,6 +28,7 @@ public class ReviewService {
                 .build();
 
         reviewRepository.save(review);
+        return review;
     }
 
     public List<Review> getReviews(Product product) {
@@ -35,7 +36,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public void saveEvaluationReview(User user, EvaluateReviewInfo evaluateReviewInfo) {
+    public EvaluationReview saveEvaluationReview(User user, EvaluateReviewInfo evaluateReviewInfo) {
         Review review = reviewRepository.findById(evaluateReviewInfo.getReviewId()).orElseThrow();
 
         EvaluationReview evaluationReview = EvaluationReview.builder().user(user)
@@ -50,5 +51,6 @@ public class ReviewService {
         } else {
             review.setNoHelpNum(review.getNoHelpNum() + 1);
         }
+        return evaluationReview;
     }
 }

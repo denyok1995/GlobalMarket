@@ -80,7 +80,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void payOrder(User user, OrderRequestInfo orderRequestInfo, UserCoupon userCoupon) {
+    public Order payOrder(User user, OrderRequestInfo orderRequestInfo, UserCoupon userCoupon) {
         // 재고 있는지 다시 확인
         Map<Long, Long> productMap = new HashMap<>();
         for(SimpleProductInfo info : orderRequestInfo.getOrderProducts()) {
@@ -126,6 +126,7 @@ public class OrderService {
         Payment payment = paymentService.savePayment(PaymentInfo.builder()
                 .type(orderRequestInfo.getPaymentType())
                 .discountPrice(discountPrice)
+                .deliveryFee(totalDeliveryFee)
                 .totalPrice(totalPrice + totalDeliveryFee)
                 .build());
 
@@ -142,5 +143,7 @@ public class OrderService {
 
         // 장바구니에 있는 품목 제거
         cartService.buyProductsInCart(user, productMap);
+
+        return order;
     }
 }

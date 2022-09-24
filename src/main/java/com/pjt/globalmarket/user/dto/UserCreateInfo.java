@@ -3,6 +3,7 @@ package com.pjt.globalmarket.user.dto;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.domain.UserGrade;
 import com.pjt.globalmarket.user.domain.UserRole;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import static com.pjt.globalmarket.user.domain.UserRole.ROLE_USER;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@ApiModel(description = "생성된 사용자 정보")
 public class UserCreateInfo {
 
     @ApiModelProperty(notes = "사용자 고유 번호", example = "1")

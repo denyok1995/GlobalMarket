@@ -1,5 +1,6 @@
 package com.pjt.globalmarket.coupon.dto;
 
+import com.pjt.globalmarket.coupon.domain.UserCoupon;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -8,7 +9,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@ApiModel(description = "유저 쿠폰 정보")
+@ApiModel(description = "사용자 쿠폰 정보")
 public class UserCouponInfo {
 
     @ApiModelProperty(name = "발급된 쿠폰 고유 번호", example = "3", required = true)
@@ -27,4 +28,14 @@ public class UserCouponInfo {
 
     @ApiModelProperty(name = "쿠폰 개수", example = "2")
     private Long count;
+
+    public static UserCouponInfo toDto(UserCoupon userCoupon) {
+        return UserCouponInfo.builder()
+                .id(userCoupon.getId())
+                .name(userCoupon.getCoupon().getName())
+                .minPrice(userCoupon.getCoupon().getMinPrice())
+                .discountPrice(userCoupon.getCoupon().getDiscountPrice())
+                .count(userCoupon.getIssuedCount() - userCoupon.getUseCount())
+                .build();
+    }
 }

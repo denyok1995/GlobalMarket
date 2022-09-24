@@ -1,5 +1,6 @@
 package com.pjt.globalmarket.cart.dto;
 
+import com.pjt.globalmarket.cart.domain.Cart;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,6 @@ public class CartDto {
     @ApiModelProperty(notes = "장바구니 고유 번호", example = "2", required = true)
     private Long id;
 
-    // product id로 해결할 방법 찾기
     @ApiModelProperty(notes = "상품 이름", example = "시계")
     private String productName;
 
@@ -29,5 +29,16 @@ public class CartDto {
 
     @ApiModelProperty(notes = "상품 배달 지원 정도", example = "ROCKET_WOW")
     private String rocketDelivery;
+
+    public static CartDto toDto(Cart cart) {
+        return CartDto.builder()
+                .id(cart.getId())
+                .productName(cart.getProduct().getName())
+                .productNum(cart.getProductNum())
+                .price(cart.getProduct().getPrice())
+                .deliveryFee(cart.getProduct().getDeliveryFee())
+                .rocketDelivery(cart.getProduct().getRocketDelivery())
+                .build();
+    }
 
 }
