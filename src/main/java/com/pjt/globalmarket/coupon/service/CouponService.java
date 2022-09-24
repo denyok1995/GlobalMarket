@@ -35,16 +35,18 @@ public class CouponService {
     }
 
     @Transactional
-    public void issueCoupon(User user, Coupon coupon) {
+    public UserCoupon issueCoupon(User user, Coupon coupon) {
         Optional<UserCoupon> savedUserCoupon = userCouponRepository.findUserCouponByUserAndCoupon(user, coupon);
         if(savedUserCoupon.isPresent() && !isOverIssue(savedUserCoupon.get(), coupon)) {
             savedUserCoupon.get().setIssuedCount(savedUserCoupon.get().getIssuedCount() + 1);
+            return savedUserCoupon.get();
         } else {
             UserCoupon userCoupon = UserCoupon.builder()
                     .user(user)
                     .coupon(coupon)
                     .build();
             userCouponRepository.save(userCoupon);
+            return userCoupon;
         }
     }
 
@@ -56,7 +58,7 @@ public class CouponService {
         }
     }
 
-    public void saveCoupon(CouponDto dto) {
+    public Coupon saveCoupon(CouponDto dto) {
         Coupon coupon = Coupon.builder()
                 .name(dto.getName())
                 .minPrice(dto.getMinPrice())
@@ -66,6 +68,7 @@ public class CouponService {
                 .build();
 
         couponRepository.save(coupon);
+        return coupon;
     }
 
     public List<UserCoupon> getUserCoupon(User user) {

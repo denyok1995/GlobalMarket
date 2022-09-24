@@ -1,9 +1,11 @@
 package com.pjt.globalmarket.order.controller;
 
+import com.nimbusds.oauth2.sdk.ErrorResponse;
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
 import com.pjt.globalmarket.coupon.domain.UserCoupon;
 import com.pjt.globalmarket.coupon.service.CouponService;
 import com.pjt.globalmarket.order.dto.CheckInfo;
+import com.pjt.globalmarket.order.dto.DoOrderInfo;
 import com.pjt.globalmarket.order.dto.OrderRequestInfo;
 import com.pjt.globalmarket.order.service.OrderService;
 import com.pjt.globalmarket.product.dto.SimpleProductInfo;
@@ -64,6 +66,6 @@ public class OrderController {
                         @RequestBody OrderRequestInfo orderRequestInfo) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         UserCoupon userCoupon = couponService.getUserCouponById(orderRequestInfo.getCouponId()).orElse(null);
-        orderService.payOrder(user, orderRequestInfo, userCoupon);
+        return DoOrderInfo.toDto(orderService.payOrder(user, orderRequestInfo, userCoupon));
     }
 }

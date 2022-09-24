@@ -1,5 +1,6 @@
 package com.pjt.globalmarket.product.controller;
 
+import com.nimbusds.oauth2.sdk.ErrorResponse;
 import com.pjt.globalmarket.common.dto.PageList;
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
 import com.pjt.globalmarket.product.domain.Product;
@@ -8,6 +9,8 @@ import com.pjt.globalmarket.product.dto.ProductResponseDto;
 import com.pjt.globalmarket.product.service.ProductService;
 import com.pjt.globalmarket.common.annotation.OnlyManager;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

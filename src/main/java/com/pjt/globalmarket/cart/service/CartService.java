@@ -21,7 +21,7 @@ public class CartService {
     private final CartRepository cartRepository;
 
     @Transactional
-    public void saveProductInUserCart(User user, Product product, Long productNum) {
+    public Cart saveProductInUserCart(User user, Product product, Long productNum) {
         // NOTE: 보통은 UserAndProduct를 사용합니다. 사람이 상품을 답는다는 조건이 강하고, 이건 다른데서도 사용 많이 하거든요.
         Optional<Cart> savedCart = cartRepository.findCartByProductAndUser(product, user);
         isOverStock(product, productNum);
@@ -29,12 +29,14 @@ public class CartService {
         if (savedCart.isPresent()) {
             isOverStock(product, productNum + savedCart.get().getProductNum());
             savedCart.get().setProductNum(savedCart.get().getProductNum() + productNum);
+            return savedCart.get();
         } else {
             Cart cart = Cart.builder().product(product)
                     .productNum(productNum)
                     .user(user)
                     .build();
             cartRepository.save(cart);
+            return cart;
         }
     }
 

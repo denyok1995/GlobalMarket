@@ -1,5 +1,6 @@
 package com.pjt.globalmarket.coupon.dto;
 
+import com.pjt.globalmarket.coupon.domain.Coupon;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
@@ -34,4 +35,15 @@ public class CouponDto {
 
     @ApiModelProperty(notes = "쿠폰 만료 기간", example = "2023-09-10T10:06:53.778Z", required = true)
     private ZonedDateTime expirationTime;
+
+    public static CouponDto toDto(Coupon coupon) {
+        return CouponDto.builder()
+                .id(coupon.getId())
+                .name(coupon.getName())
+                .minPrice(coupon.getMinPrice())
+                .discountPrice(coupon.getDiscountPrice())
+                .maxCouponCount(coupon.getMaxCouponCount())
+                .expirationTime(coupon.getExpirationTime())
+                .build();
+    }
 }

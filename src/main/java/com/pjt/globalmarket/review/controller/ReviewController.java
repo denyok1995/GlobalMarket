@@ -4,9 +4,7 @@ import com.nimbusds.oauth2.sdk.ErrorResponse;
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
 import com.pjt.globalmarket.product.domain.Product;
 import com.pjt.globalmarket.product.service.ProductService;
-import com.pjt.globalmarket.review.dto.EvaluateReviewInfo;
-import com.pjt.globalmarket.review.dto.ReviewInfo;
-import com.pjt.globalmarket.review.dto.WriteReviewInfo;
+import com.pjt.globalmarket.review.dto.*;
 import com.pjt.globalmarket.review.service.ReviewService;
 import com.pjt.globalmarket.common.annotation.NeedLogin;
 import com.pjt.globalmarket.user.domain.User;
@@ -34,13 +32,14 @@ public class ReviewController {
     @PostMapping(path = "/review")
     @ApiOperation(value = "리뷰 작성", notes = "상품 리뷰 정보를 저장한다.")
     @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "리뷰 저장 완료", response = ReviewInfo.class),
             @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
     })
-    public void writeReview(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
-                            @RequestBody WriteReviewInfo review) {
+    public ReviewCreateInfo writeReview(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
+                                        @RequestBody WriteReviewInfo review) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         Product product = productService.getProductById(review.getProductId()).orElseThrow();
-        reviewService.saveReview(user, product, review);
+        return ReviewCreateInfo.toDto(reviewService.saveReview(user, product, review));
     }
 
     @GetMapping(path = "/reviews")
@@ -66,11 +65,12 @@ public class ReviewController {
     @PostMapping(path = "/review/evaluation")
     @ApiOperation(value = "리뷰 평가", notes = "작성된 리뷰를 평가한다.")
     @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "리뷰 평가 성공", response = EvaluateReviewCreateInfo.class),
             @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
     })
-    public void evaluateReview(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
-                               @RequestBody EvaluateReviewInfo evaluateReviewInfo) {
+    public EvaluateReviewCreateInfo evaluateReview(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
+                                                   @RequestBody EvaluateReviewInfo evaluateReviewInfo) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
-        reviewService.saveEvaluationReview(user, evaluateReviewInfo);
+        return EvaluateReviewCreateInfo.toDto(reviewService.saveEvaluationReview(user, evaluateReviewInfo));
     }
 }
