@@ -21,6 +21,7 @@ public class PaymentService {
                 .type(info.getType())
                 .totalPrice(info.getTotalPrice())
                 .discountPrice(info.getDiscountPrice())
+                .deliveryFee(info.getDeliveryFee())
                 .build();
 
         paymentRepository.save(payment);
