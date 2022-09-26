@@ -1,13 +1,13 @@
 package com.pjt.globalmarket.product.controller;
 
 import com.nimbusds.oauth2.sdk.ErrorResponse;
+import com.pjt.globalmarket.common.annotation.OnlyManager;
 import com.pjt.globalmarket.common.dto.PageList;
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
 import com.pjt.globalmarket.product.domain.Product;
 import com.pjt.globalmarket.product.dto.ProductRequestDto;
 import com.pjt.globalmarket.product.dto.ProductResponseDto;
 import com.pjt.globalmarket.product.service.ProductService;
-import com.pjt.globalmarket.common.annotation.OnlyManager;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -57,6 +57,7 @@ public class ProductController {
     @PostMapping(path = "/product/manager/save")
     @ApiOperation(value = "상품 저장", notes = "상품을 저장한다.")
     @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "상품 저장 완료", response = ProductResponseDto.class),
             @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
     })
     public ProductResponseDto saveProduct(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
