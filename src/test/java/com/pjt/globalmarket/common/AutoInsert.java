@@ -47,6 +47,19 @@ public class AutoInsert {
         return userOptional.get();
     }
 
+    public User saveUser(String email, UserRole userRole) {
+        Optional<User> userOptional = userRepository.findUserByEmailAndProviderAndDeletedAt(email, DEFAULT_PROVIDER, null);
+        if(userOptional.isEmpty()) {
+            User user = User.builder(email, encoder.encode("password"))
+                    .phone("010-1234-5678")
+                    .name("테스트 이름")
+                    .role(userRole)
+                    .build();
+            return userRepository.save(user);
+        }
+        return userOptional.get();
+    }
+
     public long saveProduct() {
         Category category = Category.builder()
                 .name("악세서리")
