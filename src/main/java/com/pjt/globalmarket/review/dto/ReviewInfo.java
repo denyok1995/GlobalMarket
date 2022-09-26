@@ -18,13 +18,13 @@ public class ReviewInfo {
     private String content;
 
     @ApiModelProperty(notes = "상품 점수", example = "4.8")
-    private Double score;
+    private double score;
 
     @ApiModelProperty(notes = "해당 리뷰가 도움이 되었다고 평가 된 횟수", example = "5")
-    private Integer helpNum;
+    private int helpNum;
 
     @ApiModelProperty(notes = "해당 리뷰가 도움이 되지 않았다고 평가 된 횟수", example = "1")
-    private Integer noHelpNum;
+    private int noHelpNum;
 
     @ApiModelProperty(notes = "리뷰가 작성된 날짜", example = "2022-09-03T10:06:53.778Z")
     private ZonedDateTime createdAt;

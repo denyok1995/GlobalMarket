@@ -37,13 +37,13 @@ public class OrderRequestInfo {
     private List<SimpleProductInfo> orderProducts;
 
     @ApiModelProperty(notes = "전체 상품 금액", example = "640000", required = true)
-    private Double totalPrice;
+    private double totalPrice;
 
     @ApiModelProperty(notes = "전체 상품 배달 금액", example = "3000", required = true)
-    private Double totalDeliveryFee;
+    private double totalDeliveryFee;
 
     @ApiModelProperty(notes = "적용 할 쿠폰 고유 번호", example = "5", required = true)
-    private Long couponId;
+    private long couponId;
 
     @ApiModelProperty(notes = "결제 수단", example = "CARD", required = true)
     private PaymentType paymentType;

@@ -17,11 +17,11 @@ public class OrderProduct {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
     @ManyToOne
     private Product product;
 
-    private Long productNum;
+    private long productNum;
 
 }

@@ -31,7 +31,7 @@ public class EvaluateReviewCreateInfo {
         return EvaluateReviewCreateInfo.builder()
                 .id(evaluationReview.getId())
                 .reviewId(evaluationReview.getReview().getId())
-                .isHelp(evaluationReview.getIsHelp())
+                .isHelp(evaluationReview.isHelp())
                 .userEmail(evaluationReview.getUser().getEmail())
                 .build();
     }

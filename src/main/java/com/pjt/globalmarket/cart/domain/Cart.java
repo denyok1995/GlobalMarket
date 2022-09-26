@@ -18,7 +18,7 @@ public class Cart {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
     // 장바구니에 넣은 product
     @ManyToOne
@@ -26,7 +26,7 @@ public class Cart {
 
     // 장바구니에 넣은 위 product의 갯수
     @Setter
-    private Long productNum;
+    private long productNum;
 
     @ManyToOne
     private User user;

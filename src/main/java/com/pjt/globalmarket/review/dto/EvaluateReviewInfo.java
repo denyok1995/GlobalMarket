@@ -9,8 +9,8 @@ import lombok.Data;
 public class EvaluateReviewInfo {
 
     @ApiModelProperty(notes = "평가 하려는 리뷰 고유 아이디", example = "22", required = true)
-    private Long reviewId;
+    private long reviewId;
 
     @ApiModelProperty(notes = "평가" , example = "true", required = true)
-    private Boolean isHelp;
+    private boolean isHelp;
 }

@@ -13,21 +13,21 @@ import lombok.*;
 public class UserCouponInfo {
 
     @ApiModelProperty(name = "발급된 쿠폰 고유 번호", example = "3", required = true)
-    private Long id;
+    private long id;
 
     // NOTE : coupon id로 전부 해결하는거 생각 - 할인 금액까지
     @ApiModelProperty(name = "쿠폰 이름", example = "3월 봄맞이 할인 쿠폰")
     private String name;
 
     // 쿠폰 사용 최소 금액
-    @ApiModelProperty(name = "쿠폰 사용을 위한 최소 금액", example = "20000")
-    private Long minPrice;
+    @ApiModelProperty(name = "쿠폰 사용을 위한 최소 금액", example = "20000.0")
+    private double minPrice;
 
-    @ApiModelProperty(name = "할인 금액", example = "1000")
-    private Long discountPrice;
+    @ApiModelProperty(name = "할인 금액", example = "1000.0")
+    private double discountPrice;
 
     @ApiModelProperty(name = "쿠폰 개수", example = "2")
-    private Long count;
+    private long count;
 
     public static UserCouponInfo toDto(UserCoupon userCoupon) {
         return UserCouponInfo.builder()

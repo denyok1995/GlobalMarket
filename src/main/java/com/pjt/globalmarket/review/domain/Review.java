@@ -20,7 +20,7 @@ public class Review {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
     @ManyToOne
     private User user;
@@ -32,13 +32,13 @@ public class Review {
 
     @Builder.Default
     @Setter
-    private Integer helpNum = 0;
+    private int helpNum = 0;
 
     @Builder.Default
     @Setter
-    private Integer noHelpNum = 0;
+    private int noHelpNum = 0;
 
-    private Double score;
+    private double score;
 
     @CreationTimestamp
     private ZonedDateTime createdAt;

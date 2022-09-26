@@ -22,7 +22,7 @@ import static com.pjt.globalmarket.user.domain.UserRole.ROLE_USER;
 public class UserCreateInfo {
 
     @ApiModelProperty(notes = "사용자 고유 번호", example = "1")
-    private Long id;
+    private long id;
 
     @ApiModelProperty(notes = "사용자 고유 번호", example = "7443ebe7-02e1-4a67-90d8-e0d52a91b1e9")
     private String uuid;

@@ -20,7 +20,7 @@ public class Order {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
     @ManyToOne
     private User user;

@@ -23,7 +23,7 @@ public class ReviewCreateInfo {
     private String content;
 
     @ApiModelProperty(notes = "상품 점수", example = "4.8")
-    private Double score;
+    private double score;
 
     @ApiModelProperty(notes = "해당 리뷰가 도움이 되었다고 평가 된 횟수", example = "0")
     @Builder.Default

@@ -16,22 +16,22 @@ import java.util.Set;
 public class ProductResponseDto {
 
     @ApiModelProperty(notes = "상품 고유 번호(DB)", example = "290")
-    private Long id;
+    private long id;
 
     @ApiModelProperty(notes = "상품 이름", example = "시계")
     private String name;
 
     @ApiModelProperty(notes = "상품 가격(원)", example = "2000000")
-    private Double price;
+    private double price;
 
     @ApiModelProperty(notes = "상품 수량(개)", example = "6")
-    private Long stock;
+    private long stock;
 
     @ApiModelProperty(notes = "상품 평점", example = "4.8")
-    private Double score;
+    private double score;
 
     @ApiModelProperty(notes = "상품 배달 비용", example = "3000")
-    private Long deliveryFee;
+    private long deliveryFee;
 
     @ApiModelProperty(notes = "상품 배달 지원 정도", example = "ROCKET_WOW")
     private String rocketDelivery;

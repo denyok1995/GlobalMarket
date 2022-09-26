@@ -52,12 +52,12 @@ public class ReviewService {
 
         EvaluationReview evaluationReview = EvaluationReview.builder().user(user)
                 .review(review)
-                .isHelp(evaluateReviewInfo.getIsHelp())
+                .isHelp(evaluateReviewInfo.isHelp())
                 .build();
 
         evaluationReviewRepository.save(evaluationReview);
 
-        if(evaluateReviewInfo.getIsHelp()) {
+        if(evaluateReviewInfo.isHelp()) {
             review.setHelpNum(review.getHelpNum() + 1);
         } else {
             review.setNoHelpNum(review.getNoHelpNum() + 1);

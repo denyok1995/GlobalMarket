@@ -17,15 +17,15 @@ public class Payment {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
     private PaymentType type;
 
-    private Double discountPrice;
+    private double discountPrice;
 
-    private Double totalPrice;
+    private double totalPrice;
 
-    private Double deliveryFee;
+    private double deliveryFee;
 
     //private boolean status;
 

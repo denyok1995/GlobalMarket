@@ -15,25 +15,25 @@ public class Product {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private Double price;
+    private double price;
 
     private String mainImg;
 
     private String detailImg;
 
     @Setter
-    private Long stock;
+    private long stock;
 
     @Setter
-    private Double score;
+    private double score;
 
-    private Long deliveryFee;
+    private long deliveryFee;
 
     private String rocketDelivery;
 

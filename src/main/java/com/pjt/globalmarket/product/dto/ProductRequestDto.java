@@ -17,7 +17,7 @@ public class ProductRequestDto {
     private String name;
 
     @ApiModelProperty(notes = "상품 가격(원)", example = "2000000", required = true)
-    private Double price;
+    private double price;
 
     @ApiModelProperty(notes = "상품 메인 사진")
     private String mainImg;
@@ -26,13 +26,13 @@ public class ProductRequestDto {
     private String detailImg;
 
     @ApiModelProperty(notes = "상품 수량(개)", example = "6", required = true)
-    private Long stock;
+    private long stock;
 
     @ApiModelProperty(notes = "상품 평점", example = "4.8")
-    private Double score;
+    private double score;
 
     @ApiModelProperty(notes = "상품 배달 비용", example = "3000", required = true)
-    private Long deliveryFee;
+    private long deliveryFee;
 
     @ApiModelProperty(notes = "상품 배달 지원 정도", example = "ROCKET_WOW", required = true)
     private String rocketDelivery;

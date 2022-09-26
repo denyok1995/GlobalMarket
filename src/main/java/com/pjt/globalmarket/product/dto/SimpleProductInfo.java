@@ -12,8 +12,8 @@ import lombok.*;
 public class SimpleProductInfo {
 
     @ApiModelProperty(notes = "상품 고유 번호(DB)", example = "290", required = true)
-    private Long productId;
+    private long productId;
 
     @ApiModelProperty(notes = "상품 개수", example = "2", required = true)
-    private Long productNum;
+    private long productNum;
 }

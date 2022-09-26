@@ -18,20 +18,20 @@ public class Coupon {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
     private String name;
 
     // 쿠폰 사용 최소 금액
-    private Long minPrice;
+    private double minPrice;
 
-    private Long discountPrice;
+    private double discountPrice;
 
     //상품에 따라 사용할 수 있는 쿠폰이 다르다.
     //private Long productId;
 
     //최대로 발급할 수 있는 쿠폰의 수
-    private Long maxCouponCount;
+    private long maxCouponCount;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private ZonedDateTime expirationTime;

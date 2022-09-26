@@ -14,9 +14,9 @@ public class Address {
 
     @Id
     @GeneratedValue
-    private Long Id;
+    private long Id;
 
-    private Boolean main;
+    private boolean main;
 
     private String name;
 

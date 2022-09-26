@@ -25,9 +25,9 @@ public class CheckInfo {
     private List<OrderProductInfo> orderProducts;
 
     @ApiModelProperty(name = "전체 상품 금액", example = "640000")
-    private Double totalPrice;
+    private double totalPrice;
 
     @ApiModelProperty(name = "전체 상품 배달 금액", example = "3000")
-    private Double totalDeliveryFee;
+    private double totalDeliveryFee;
 
 }

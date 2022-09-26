@@ -18,7 +18,7 @@ public class EvaluationReview {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
     @ManyToOne
     private Review review;
@@ -26,5 +26,5 @@ public class EvaluationReview {
     @ManyToOne
     private User user;
 
-    private Boolean isHelp;
+    private boolean isHelp;
 }

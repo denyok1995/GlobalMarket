@@ -13,19 +13,19 @@ import lombok.Data;
 public class CartDto {
 
     @ApiModelProperty(notes = "장바구니 고유 번호", example = "2", required = true)
-    private Long id;
+    private long id;
 
     @ApiModelProperty(notes = "상품 이름", example = "시계")
     private String productName;
 
     @ApiModelProperty(notes = "상품 개수", example = "1")
-    private Long productNum;
+    private long productNum;
 
     @ApiModelProperty(notes = "상품 가격", example = "100000")
-    private Double price;
+    private double price;
 
     @ApiModelProperty(notes = "상품 배달 금액", example = "20000")
-    private Long deliveryFee;
+    private long deliveryFee;
 
     @ApiModelProperty(notes = "상품 배달 지원 정도", example = "ROCKET_WOW")
     private String rocketDelivery;

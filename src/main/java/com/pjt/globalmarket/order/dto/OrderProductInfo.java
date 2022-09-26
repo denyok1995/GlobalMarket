@@ -12,19 +12,19 @@ import lombok.*;
 public class OrderProductInfo {
 
     @ApiModelProperty(notes = "상품 고유 번호", example = "2", required = true)
-    private Long id;
+    private long id;
 
     @ApiModelProperty(notes = "상품 이름", example = "2", required = true)
     private String name;
 
     @ApiModelProperty(notes = "상품 가격", example = "2", required = true)
-    private Double price;
+    private double price;
 
     @ApiModelProperty(notes = "주문한 상품 수량", example = "2", required = true)
-    private Long count;
+    private long count;
 
     @ApiModelProperty(notes = "배달 금액", example = "2", required = true)
-    private Long deliveryFee;
+    private long deliveryFee;
 
     @ApiModelProperty(notes = "상품 배달 지원 정도", example = "2", required = true)
     private String rocketDelivery;

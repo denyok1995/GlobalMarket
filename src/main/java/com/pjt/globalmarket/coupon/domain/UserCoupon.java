@@ -16,7 +16,7 @@ public class UserCoupon {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
     @OneToOne
     private User user;
@@ -27,10 +27,10 @@ public class UserCoupon {
     //사용된 쿠폰의 수
     @Setter
     @Builder.Default
-    private Long useCount = 0L;
+    private long useCount = 0L;
 
     //발급된 쿠폰의 수
     @Setter
     @Builder.Default
-    private Long issuedCount = 1L;
+    private long issuedCount = 1L;
 }

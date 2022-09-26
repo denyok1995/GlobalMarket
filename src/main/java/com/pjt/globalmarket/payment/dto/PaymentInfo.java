@@ -16,12 +16,12 @@ public class PaymentInfo {
     private PaymentType type;
 
     @ApiModelProperty(notes = "할인 금액", example = "32000", required = true)
-    private Double discountPrice;
+    private double discountPrice;
 
     @ApiModelProperty(notes = "배달 금액", example = "2000", required = true)
     private double deliveryFee;
 
     @ApiModelProperty(notes = "전체 금액", example = "640000", required = true)
-    private Double totalPrice;
+    private double totalPrice;
 
 }
