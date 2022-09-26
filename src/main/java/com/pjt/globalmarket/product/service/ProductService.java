@@ -49,18 +49,20 @@ public class ProductService {
 
     @Transactional
     public Product saveProduct(Product product, Set<String> categories) {
-        categories.forEach(name -> {
-            Optional<Category> category = categoryRepository.findCategoryByName(name);
-            if (category.isPresent()) {
-                product.addCategory(category.get());
-            } else {
-                Category newCategory = Category.builder()
-                        .name(name)
-                        .build();
-                categoryRepository.save(newCategory);
-                product.addCategory(newCategory);
-            }
-        });
+        if(categories != null) {
+            categories.forEach(name -> {
+                Optional<Category> category = categoryRepository.findCategoryByName(name);
+                if (category.isPresent()) {
+                    product.addCategory(category.get());
+                } else {
+                    Category newCategory = Category.builder()
+                            .name(name)
+                            .build();
+                    categoryRepository.save(newCategory);
+                    product.addCategory(newCategory);
+                }
+            });
+        }
         productRepository.save(product);
         return product;
     }
