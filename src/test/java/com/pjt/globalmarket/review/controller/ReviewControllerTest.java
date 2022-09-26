@@ -87,7 +87,7 @@ class ReviewControllerTest {
 
         EvaluateReviewInfo evaluateReviewInfo = new EvaluateReviewInfo();
         evaluateReviewInfo.setReviewId(review.getId());
-        evaluateReviewInfo.setIsHelp(true);
+        evaluateReviewInfo.setHelp(true);
         this.mockMvc.perform(post("/review/evaluation")
                 .content(objectMapper.writeValueAsString(evaluateReviewInfo))
                 .contentType(MediaType.APPLICATION_JSON))
