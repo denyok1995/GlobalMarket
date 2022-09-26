@@ -1,5 +1,6 @@
 package com.pjt.globalmarket.review.service;
 
+import com.pjt.globalmarket.product.dao.ProductRepository;
 import com.pjt.globalmarket.product.domain.Product;
 import com.pjt.globalmarket.review.dao.EvaluationReviewRepository;
 import com.pjt.globalmarket.review.dao.ReviewRepository;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final EvaluationReviewRepository evaluationReviewRepository;
+    private final ProductRepository productRepository;
 
     public Review saveReview(User user, Product product, WriteReviewInfo reviewInfo) {
         Review review = Review.builder().user(user)
@@ -26,6 +28,15 @@ public class ReviewService {
                 .score(reviewInfo.getScore())
                 .content(reviewInfo.getContent())
                 .build();
+
+        List<Review> reviews = getReviews(product);
+
+        double score = reviewInfo.getScore();
+        for(Review savedReview : reviews) {
+            score += savedReview.getScore();
+        }
+        product.setScore(score/(reviews.size()+1));
+        productRepository.save(product);
 
         reviewRepository.save(review);
         return review;

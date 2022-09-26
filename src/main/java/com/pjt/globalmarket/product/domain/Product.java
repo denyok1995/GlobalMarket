@@ -30,7 +30,8 @@ public class Product {
     @Setter
     private Long stock;
 
-    private Long score;
+    @Setter
+    private Double score;
 
     private Long deliveryFee;
 

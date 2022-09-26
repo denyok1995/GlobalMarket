@@ -28,7 +28,7 @@ public class ProductResponseDto {
     private Long stock;
 
     @ApiModelProperty(notes = "상품 평점", example = "4.8")
-    private Long score;
+    private Double score;
 
     @ApiModelProperty(notes = "상품 배달 비용", example = "3000")
     private Long deliveryFee;
