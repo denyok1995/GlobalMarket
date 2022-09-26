@@ -1,10 +1,15 @@
 package com.pjt.globalmarket.product.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pjt.globalmarket.common.AutoInsert;
 import com.pjt.globalmarket.product.domain.Product;
+import com.pjt.globalmarket.product.dto.ProductRequestDto;
 import com.pjt.globalmarket.product.service.ProductService;
 import com.pjt.globalmarket.user.domain.UserGrade;
+import com.pjt.globalmarket.user.domain.UserRole;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -15,23 +20,26 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureMockMvc
-@WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
-        , setupBefore = TestExecutionEvent.TEST_EXECUTION)
 class ProductControllerTest {
 
     @Mock
@@ -41,10 +49,12 @@ class ProductControllerTest {
     @Autowired
     private AutoInsert autoInsert;
 
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeAll
     public void init() {
         autoInsert.saveUser();
+        autoInsert.saveUser("other@coupang.com", UserRole.ROLE_USER);
     }
 
     @ParameterizedTest(name = "유저 \"{0}\" 등급 - 전체 상품 조회")
@@ -96,6 +106,42 @@ class ProductControllerTest {
                         .param("page", "0")
                         .param("size", "2"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("상품 저장 테스트")
+    @WithUserDetails(value = "sa@test.com", userDetailsServiceBeanName = "userAuthDetailsService"
+            , setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    public void save_product_manager_test() throws Exception {
+        ProductRequestDto productRequestDto = ProductRequestDto.builder()
+                .name("벨트")
+                .score(0)
+                .stock(8)
+                .deliveryFee(3000)
+                .price(200000)
+                .rocketDelivery("Rocket_Wow")
+                .build();
+        this.mockMvc.perform(post("/product/manager/save").contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productRequestDto)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("상품 저장 테스트 - manager가 아닌경우")
+    @WithUserDetails(value = "other@coupang.com", userDetailsServiceBeanName = "userAuthDetailsService"
+            , setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    public void save_product_test() throws Exception {
+        ProductRequestDto productRequestDto = ProductRequestDto.builder()
+                .name("벨트")
+                .score(0)
+                .stock(8)
+                .deliveryFee(3000)
+                .price(200000)
+                .rocketDelivery("Rocket_Wow")
+                .build();
+        this.mockMvc.perform(post("/product/manager/save").contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(productRequestDto)))
+                .andExpect(status().isForbidden());
     }
 
 }
