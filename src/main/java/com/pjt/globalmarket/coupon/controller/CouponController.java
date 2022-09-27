@@ -3,6 +3,7 @@ package com.pjt.globalmarket.coupon.controller;
 import com.nimbusds.oauth2.sdk.ErrorResponse;
 import com.pjt.globalmarket.config.auth.UserAuthDetails;
 import com.pjt.globalmarket.coupon.domain.Coupon;
+import com.pjt.globalmarket.coupon.dto.ActivateCouponInfo;
 import com.pjt.globalmarket.coupon.dto.CouponDto;
 import com.pjt.globalmarket.coupon.dto.UserCouponInfo;
 import com.pjt.globalmarket.coupon.service.CouponService;
@@ -66,6 +67,8 @@ public class CouponController {
             return UserCouponInfo.builder().id(userCoupon.getId())
                     .name(userCoupon.getCoupon().getName())
                     .discountPrice(userCoupon.getCoupon().getDiscountPrice())
+                    .discountPercent(userCoupon.getCoupon().getDiscountPercent())
+                    .maxDiscountPrice(userCoupon.getCoupon().getMaxDiscountPrice())
                     .minPrice(userCoupon.getCoupon().getMinPrice())
                     .count(userCoupon.getIssuedCount() - userCoupon.getUseCount())
                     .build();
@@ -76,21 +79,14 @@ public class CouponController {
     @PostMapping(path = "/coupons")
     @ApiOperation(value = "쿠폰 적용 된 가격 확인", notes = "쿠폰을 적용하고 쿠폰이 적용 된다면 할인 가격을 리턴한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "유저 쿠폰 조회 성공", response = UserCouponInfo.class),
+            @ApiResponse(code = 200, message = "유저 쿠폰 조회 성공", response = ActivateCouponInfo.class),
             @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
 
     })
-    public List<UserCouponInfo> getCouponsWithPrice(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
-                                                    @RequestBody List<SimpleProductInfo> productInfos) {
+    public List<ActivateCouponInfo> getCouponsWithPrice(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
+                                                        @RequestBody List<SimpleProductInfo> productInfos) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
-        return couponService.getUserCoupon(user).stream().map(userCoupon -> {
-            return UserCouponInfo.builder().id(userCoupon.getId())
-                    .name(userCoupon.getCoupon().getName())
-                    .discountPrice(userCoupon.getCoupon().getDiscountPrice())
-                    .minPrice(userCoupon.getCoupon().getMinPrice())
-                    .count(userCoupon.getIssuedCount() - userCoupon.getUseCount())
-                    .build();
-        }).collect(Collectors.toList());
+        return couponService.getActivateCoupon(user, productInfos);
     }
 
     //쿠폰 발급

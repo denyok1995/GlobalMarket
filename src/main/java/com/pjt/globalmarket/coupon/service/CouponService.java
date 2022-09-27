@@ -119,15 +119,24 @@ public class CouponService {
 
     public List<ActivateCouponInfo> getActivateCoupon(User user, List<SimpleProductInfo> simpleProductInfos) {
         List<UserCoupon> userCoupons = getUserCoupon(user);
-        if(userCoupons.size() == 0) return new ArrayList<>();
+        List<ActivateCouponInfo> activateCouponInfos = new ArrayList<>();
+        if(userCoupons.isEmpty()) return activateCouponInfos;
 
         double totalPrice = getProductsPrice(user.getGrade(), simpleProductInfos);
         for(UserCoupon userCoupon : userCoupons) {
+            if(!isOverMinPrice(userCoupon.getCoupon(), totalPrice)) continue;
 
+            if(isPercentCoupon(userCoupon)) {
+                double discountPrice = totalPrice * (100-userCoupon.getCoupon().getDiscountPercent()) / 100;
+                activateCouponInfos.add(getActivateCouponInfo(userCoupon, discountPrice));
+            } else if(isPriceCoupon(userCoupon)) {
+                activateCouponInfos.add(getActivateCouponInfo(userCoupon, totalPrice - userCoupon.getCoupon().getDiscountPrice()));
+            }
         }
+        return activateCouponInfos;
     }
 
-    public double getProductsPrice(UserGrade userGrade, List<SimpleProductInfo> simpleProductInfos) {
+    private double getProductsPrice(UserGrade userGrade, List<SimpleProductInfo> simpleProductInfos) {
         double totalPrice = 0;
         for(SimpleProductInfo simpleProductInfo : simpleProductInfos) {
             Product product = productService.getProductById(simpleProductInfo.getProductId()).get();
@@ -136,16 +145,31 @@ public class CouponService {
         return totalPrice;
     }
 
-    public double isOnlyProduct(UserCoupon userCoupon, double price, List<Long> productIds) {
-
+    private boolean isOverMinPrice(Coupon coupon, double price) {
+        return price >= coupon.getMinPrice();
     }
 
-    public boolean isPercentCoupon() {
-
+    private ActivateCouponInfo getActivateCouponInfo(UserCoupon userCoupon, double price) {
+        if(price > userCoupon.getCoupon().getMaxDiscountPrice()) {
+            price = userCoupon.getCoupon().getMaxDiscountPrice();
+        }
+        return ActivateCouponInfo.builder()
+                .id(userCoupon.getId())
+                .discountPrice(price)
+                .name(userCoupon.getCoupon().getName())
+                .build();
     }
 
-    public boolean isPriceCoupon() {
+    private double isOnlyProduct(UserCoupon userCoupon, double price, List<Long> productIds) {
+        return 0;
+    }
 
+    private boolean isPercentCoupon(UserCoupon userCoupon) {
+        return userCoupon.getCoupon().getDiscountPercent() > 0;
+    }
+
+    private boolean isPriceCoupon(UserCoupon userCoupon) {
+        return userCoupon.getCoupon().getDiscountPrice() > 0;
     }
 
     @Transactional
