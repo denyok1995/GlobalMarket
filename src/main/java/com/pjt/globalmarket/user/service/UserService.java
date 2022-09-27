@@ -9,6 +9,7 @@ import com.pjt.globalmarket.user.domain.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.time.ZonedDateTime;
@@ -39,6 +40,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public User saveUser(String email, String password, String name, String phone) {
         Optional<User> savedUser = getActiveUserByEmailAndProvider(email, DEFAULT_PROVIDER);
         if(savedUser.isPresent()) {
