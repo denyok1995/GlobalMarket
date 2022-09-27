@@ -6,7 +6,6 @@ import com.pjt.globalmarket.coupon.domain.Coupon;
 import com.pjt.globalmarket.coupon.domain.UserCoupon;
 import com.pjt.globalmarket.coupon.dto.ActivateCouponInfo;
 import com.pjt.globalmarket.coupon.dto.CouponDto;
-import com.pjt.globalmarket.product.dao.ProductRepository;
 import com.pjt.globalmarket.product.domain.Product;
 import com.pjt.globalmarket.product.dto.SimpleProductInfo;
 import com.pjt.globalmarket.product.service.ProductService;
@@ -16,14 +15,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.pjt.globalmarket.user.domain.UserConstant.NEW_USER_COUPON;
 
 @Service
 @RequiredArgsConstructor
@@ -31,23 +28,8 @@ public class CouponService {
 
     private final CouponRepository couponRepository;
     private final UserCouponRepository userCouponRepository;
-    private final ProductRepository productRepository;
     private final ProductService productService;
 
-    @PostConstruct
-    public void createWelcomeCoupon() {
-        Optional<Coupon> savedCoupon = couponRepository.findCouponByName(NEW_USER_COUPON);
-        if(savedCoupon.isPresent()) {
-            return ;
-        }
-        Coupon coupon = Coupon.builder()
-                .name(NEW_USER_COUPON)
-                .discountPercent(10)
-                .maxDiscountPrice(30000)
-                .maxCouponCount(-1)
-                .build();
-        couponRepository.save(coupon);
-    }
 
     public Optional<Coupon> getCouponById(Long couponId) {
         return couponRepository.findById(couponId);
@@ -111,7 +93,7 @@ public class CouponService {
         if(userCoupon.getIssuedCount() <= userCoupon.getUseCount()) {
             return false;
         }
-        if(userCoupon.getExpirationTime().isBefore(ZonedDateTime.now())) {
+        if(userCoupon.getExpirationTime() == null || userCoupon.getExpirationTime().isBefore(ZonedDateTime.now())) {
             return false;
         }
         return true;
