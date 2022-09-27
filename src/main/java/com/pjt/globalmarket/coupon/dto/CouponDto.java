@@ -21,12 +21,17 @@ public class CouponDto {
     @ApiModelProperty(notes = "쿠폰 이름", example = "3월 봄맞이 할인 쿠폰", required = true)
     private String name;
 
-    // 쿠폰 사용 최소 금액
     @ApiModelProperty(notes = "쿠폰 사용을 위한 최소 금액", example = "20000.0", required = true)
     private double minPrice;
 
-    @ApiModelProperty(notes = "할인 금액", example = "1000.0", required = true)
+    @ApiModelProperty(notes = "할인 금액", example = "1000.0", required = false)
     private double discountPrice;
+
+    @ApiModelProperty(notes = "할인 율", example = "10", required = false)
+    private double discountPercent;
+
+    @ApiModelProperty(notes = "최대 할인 금액", example = "2000원", required = true)
+    private double maxDiscountPrice;
 
     //private Long productId;
 

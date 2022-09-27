@@ -29,6 +29,12 @@ public class UserCouponInfo {
     @ApiModelProperty(name = "할인 금액", example = "1000.0")
     private double discountPrice;
 
+    @ApiModelProperty(notes = "할인 율", example = "10")
+    private double discountPercent;
+
+    @ApiModelProperty(notes = "최대 할인 금액", example = "2000원")
+    private double maxDiscountPrice;
+
     @ApiModelProperty(name = "쿠폰 개수", example = "2")
     private long count;
 
