@@ -8,6 +8,7 @@ import com.pjt.globalmarket.coupon.dto.UserCouponInfo;
 import com.pjt.globalmarket.coupon.service.CouponService;
 import com.pjt.globalmarket.common.annotation.NeedLogin;
 import com.pjt.globalmarket.common.annotation.OnlyManager;
+import com.pjt.globalmarket.product.dto.SimpleProductInfo;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -40,14 +41,13 @@ public class CouponController {
             @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
     })
     public List<CouponDto> getAvailableCoupons(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser) {
-        return couponService.getAllAvailableCoupons().stream().map(coupon -> {
+        return couponService.getAllCoupons().stream().map(coupon -> {
             return CouponDto.builder().id(coupon.getId())
                     .name(coupon.getName())
                     .minPrice(coupon.getMinPrice())
                     .discountPrice(coupon.getDiscountPrice())
                     //.productId(coupon.getProductId())
                     .maxCouponCount(coupon.getMaxCouponCount())
-                    .expirationTime(coupon.getExpirationTime())
                     .build();
         }).collect(Collectors.toList());
     }
@@ -61,6 +61,27 @@ public class CouponController {
 
     })
     public List<UserCouponInfo> getUserCoupons(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser) {
+        User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
+        return couponService.getUserCoupon(user).stream().map(userCoupon -> {
+            return UserCouponInfo.builder().id(userCoupon.getId())
+                    .name(userCoupon.getCoupon().getName())
+                    .discountPrice(userCoupon.getCoupon().getDiscountPrice())
+                    .minPrice(userCoupon.getCoupon().getMinPrice())
+                    .count(userCoupon.getIssuedCount() - userCoupon.getUseCount())
+                    .build();
+        }).collect(Collectors.toList());
+    }
+
+    @NeedLogin
+    @PostMapping(path = "/coupons")
+    @ApiOperation(value = "쿠폰 적용 된 가격 확인", notes = "쿠폰을 적용하고 쿠폰이 적용 된다면 할인 가격을 리턴한다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "유저 쿠폰 조회 성공", response = UserCouponInfo.class),
+            @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
+
+    })
+    public List<UserCouponInfo> getCouponsWithPrice(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
+                                                    @RequestBody List<SimpleProductInfo> productInfos) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
         return couponService.getUserCoupon(user).stream().map(userCoupon -> {
             return UserCouponInfo.builder().id(userCoupon.getId())

@@ -29,4 +29,7 @@ public class SignUpDto {
     @ApiModelProperty(notes = "사용자 번호", example = "010-1234-5678", required = false)
     private String phone;
 
+    @ApiModelProperty(notes = "최초 회원가입 사용자 쿠폰 발급 여부", example = "true", required = false)
+    private boolean welcomeCoupon;
+
 }

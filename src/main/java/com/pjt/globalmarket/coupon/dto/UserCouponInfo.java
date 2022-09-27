@@ -1,9 +1,12 @@
 package com.pjt.globalmarket.coupon.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pjt.globalmarket.coupon.domain.UserCoupon;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+
+import java.time.ZonedDateTime;
 
 @Data
 @Builder
@@ -29,6 +32,9 @@ public class UserCouponInfo {
     @ApiModelProperty(name = "쿠폰 개수", example = "2")
     private long count;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private ZonedDateTime expirationTime;
+
     public static UserCouponInfo toDto(UserCoupon userCoupon) {
         return UserCouponInfo.builder()
                 .id(userCoupon.getId())
@@ -36,6 +42,7 @@ public class UserCouponInfo {
                 .minPrice(userCoupon.getCoupon().getMinPrice())
                 .discountPrice(userCoupon.getCoupon().getDiscountPrice())
                 .count(userCoupon.getIssuedCount() - userCoupon.getUseCount())
+                .expirationTime(userCoupon.getExpirationTime())
                 .build();
     }
 }

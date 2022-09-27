@@ -33,8 +33,6 @@ public class CouponDto {
     @ApiModelProperty(notes = "최대 발급 개수", example = "300000", required = true)
     private long maxCouponCount;
 
-    @ApiModelProperty(notes = "쿠폰 만료 기간", example = "2023-09-10T10:06:53.778Z", required = true)
-    private ZonedDateTime expirationTime;
 
     public static CouponDto toDto(Coupon coupon) {
         return CouponDto.builder()
@@ -43,7 +41,6 @@ public class CouponDto {
                 .minPrice(coupon.getMinPrice())
                 .discountPrice(coupon.getDiscountPrice())
                 .maxCouponCount(coupon.getMaxCouponCount())
-                .expirationTime(coupon.getExpirationTime())
                 .build();
     }
 }
