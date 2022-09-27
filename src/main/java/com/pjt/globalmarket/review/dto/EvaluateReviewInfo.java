@@ -12,5 +12,5 @@ public class EvaluateReviewInfo {
     private long reviewId;
 
     @ApiModelProperty(notes = "평가" , example = "true", required = true)
-    private boolean isHelp;
+    private boolean help;
 }

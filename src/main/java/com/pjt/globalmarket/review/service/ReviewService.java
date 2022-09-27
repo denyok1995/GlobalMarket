@@ -52,7 +52,7 @@ public class ReviewService {
 
         EvaluationReview evaluationReview = EvaluationReview.builder().user(user)
                 .review(review)
-                .isHelp(evaluateReviewInfo.isHelp())
+                .help(evaluateReviewInfo.isHelp())
                 .build();
 
         evaluationReviewRepository.save(evaluationReview);

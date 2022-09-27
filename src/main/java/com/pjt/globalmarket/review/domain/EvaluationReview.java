@@ -26,5 +26,5 @@ public class EvaluationReview {
     @ManyToOne
     private User user;
 
-    private boolean isHelp;
+    private boolean help;
 }

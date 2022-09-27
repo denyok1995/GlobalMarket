@@ -21,7 +21,7 @@ public class EvaluateReviewCreateInfo {
     private long reviewId;
 
     @ApiModelProperty(notes = "평가" , example = "true")
-    private boolean isHelp;
+    private boolean help;
 
     @ApiModelProperty(notes = "평가한 사용자", example = "sa@coupang.com")
     private String userEmail;
@@ -31,7 +31,7 @@ public class EvaluateReviewCreateInfo {
         return EvaluateReviewCreateInfo.builder()
                 .id(evaluationReview.getId())
                 .reviewId(evaluationReview.getReview().getId())
-                .isHelp(evaluationReview.isHelp())
+                .help(evaluationReview.isHelp())
                 .userEmail(evaluationReview.getUser().getEmail())
                 .build();
     }
