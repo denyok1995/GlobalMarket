@@ -1,6 +1,7 @@
 package com.pjt.globalmarket.coupon.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pjt.globalmarket.coupon.domain.CouponType;
 import com.pjt.globalmarket.coupon.domain.UserCoupon;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,6 +18,9 @@ public class UserCouponInfo {
 
     @ApiModelProperty(name = "발급된 쿠폰 고유 번호", example = "3", required = true)
     private long id;
+
+    @ApiModelProperty(name = "쿠폰 타입", example = "PRICE")
+    private CouponType couponType;
 
     // NOTE : coupon id로 전부 해결하는거 생각 - 할인 금액까지
     @ApiModelProperty(name = "쿠폰 이름", example = "3월 봄맞이 할인 쿠폰")
@@ -41,14 +45,18 @@ public class UserCouponInfo {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private ZonedDateTime expirationTime;
 
-    public static UserCouponInfo toDto(UserCoupon userCoupon) {
+
+    public static UserCouponInfo toDto(UserCoupon userCoupon, IntegratedCoupon coupon) {
         return UserCouponInfo.builder()
                 .id(userCoupon.getId())
-                .name(userCoupon.getCoupon().getName())
-                .minPrice(userCoupon.getCoupon().getMinPrice())
-                .discountPrice(userCoupon.getCoupon().getDiscountPrice())
+                .couponType(userCoupon.getCouponType())
+                .name(coupon.getName())
+                .minPrice(coupon.getMinPrice())
+                .discountPrice(coupon.getDiscountPrice())
+                .discountPercent(coupon.getDiscountPercent())
+                .maxDiscountPrice(coupon.getMaxDiscountPrice())
                 .count(userCoupon.getIssuedCount() - userCoupon.getUseCount())
-                .expirationTime(userCoupon.getExpirationTime())
+                .expirationTime(userCoupon.getExpiredDate())
                 .build();
     }
 }

@@ -44,18 +44,21 @@ public class CouponService {
     }
 
     @Transactional
-    public UserCoupon issueCoupon(User user, Coupon coupon) {
-        Optional<UserCoupon> savedUserCoupon = userCouponRepository.findUserCouponByUserAndCoupon(user, coupon);
+    public UserCouponInfo issueCoupon(User user, long id, CouponType couponType) {
+        Optional<UserCoupon> savedUserCoupon =
+                userCouponRepository.findUserCouponByUserAndCouponTypeAndCouponId(user, couponType, id);
+        IntegratedCoupon coupon = getCoupon(couponType, id);
         if(savedUserCoupon.isPresent() && !isOverIssue(savedUserCoupon.get(), coupon)) {
             savedUserCoupon.get().setIssuedCount(savedUserCoupon.get().getIssuedCount() + 1);
-            return savedUserCoupon.get();
+            return UserCouponInfo.toDto(savedUserCoupon.get(), coupon);
         } else {
             UserCoupon userCoupon = UserCoupon.builder()
                     .user(user)
-                    .coupon(coupon)
+                    .couponType(couponType)
+                    .couponId(id)
                     .build();
             userCouponRepository.save(userCoupon);
-            return userCoupon;
+            return UserCouponInfo.toDto(userCoupon, coupon);
         }
     }
 

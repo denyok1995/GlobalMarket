@@ -23,8 +23,9 @@ public class UserCoupon {
     @OneToOne
     private User user;
 
-    @OneToOne
-    private Coupon coupon;
+    private CouponType couponType;
+
+    private long couponId;
 
     //사용된 쿠폰의 수
     @Setter
@@ -37,6 +38,6 @@ public class UserCoupon {
     private long issuedCount = 1L;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private ZonedDateTime expirationTime;
+    private ZonedDateTime expiredDate;
 
 }

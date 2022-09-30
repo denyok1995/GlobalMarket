@@ -98,10 +98,9 @@ public class CouponController {
             @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
     })
     public UserCouponInfo issueCoupon(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
-                           @RequestBody Long couponId) {
+                                      @RequestBody IssueCouponInfo issueInfo) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
-        Coupon coupon = couponService.getCouponById(couponId).orElseThrow();
-        return UserCouponInfo.toDto(couponService.issueCoupon(user, coupon));
+        return couponService.issueCoupon(user, issueInfo.getId(), issueInfo.getCouponType());
     }
 
     //쿠폰 생성
