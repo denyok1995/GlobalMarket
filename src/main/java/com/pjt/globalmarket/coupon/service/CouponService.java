@@ -87,21 +87,42 @@ public class CouponService {
         }
     }
 
-    public Coupon saveCoupon(CouponDto dto) {
-        Coupon coupon = Coupon.builder()
-                .name(dto.getName())
-                .minPrice(dto.getMinPrice())
-                .discountPrice(dto.getDiscountPrice())
-                .maxCouponCount(dto.getMaxCouponCount())
-                .build();
-
-        Optional<Coupon> savedCoupon = couponRepository.findCouponByName(dto.getName());
-        if(savedCoupon.isPresent()) {
-            return savedCoupon.get();
-        } else {
-            couponRepository.save(coupon);
-            return coupon;
+    public IntegratedCoupon saveCoupon(CreateCouponRequestInfo couponRequestInfo) {
+        if(couponRequestInfo.getCouponType() == CouponType.PRICE) {
+            return savePriceCoupon(couponRequestInfo);
+        } else if(couponRequestInfo.getCouponType() == CouponType.PERCENT) {
+            return savePercentCoupon(couponRequestInfo);
+        } else if(couponRequestInfo.getCouponType() == CouponType.PRODUCT) {
+            return saveProductCoupon(couponRequestInfo);
+        } else if(couponRequestInfo.getCouponType() == CouponType.CART) {
+            return saveCartCoupon(couponRequestInfo);
         }
+        return new IntegratedCoupon();
+    }
+
+    private IntegratedCoupon savePriceCoupon(CreateCouponRequestInfo couponInfo) {
+        PriceCoupon priceCoupon = PriceCoupon.toEntity(couponInfo);
+        priceCouponRepository.save(priceCoupon);
+        return IntegratedCoupon.toDto(priceCoupon);
+    }
+
+    private IntegratedCoupon savePercentCoupon(CreateCouponRequestInfo couponInfo) {
+        PercentCoupon percentCoupon = PercentCoupon.toEntity(couponInfo);
+        percentCouponRepository.save(percentCoupon);
+        return IntegratedCoupon.toDto(percentCoupon);
+    }
+
+    private IntegratedCoupon saveProductCoupon(CreateCouponRequestInfo couponInfo) {
+        List<Product> products = productService.findProductsByIds(couponInfo.getProductIds());
+        ProductCoupon productCoupon = ProductCoupon.toEntity(couponInfo, products);
+        productCouponRepository.save(productCoupon);
+        return IntegratedCoupon.toDto(productCoupon);
+    }
+
+    private IntegratedCoupon saveCartCoupon(CreateCouponRequestInfo couponInfo) {
+        CartCoupon cartCoupon = CartCoupon.toEntity(couponInfo);
+        cartCouponRepository.save(cartCoupon);
+        return IntegratedCoupon.toDto(cartCoupon);
     }
 
     public List<UserCoupon> getUserCoupon(User user) {

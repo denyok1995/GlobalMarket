@@ -104,7 +104,7 @@ public class CouponController {
             @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
     })
     public CouponDto saveCoupon(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
-                           @RequestBody CouponDto dto) {
-        return CouponDto.toDto(couponService.saveCoupon(dto));
+                           @RequestBody CreateCouponRequestInfo createCouponInfo) {
+        return CouponDto.toDto(couponService.saveCoupon(createCouponInfo));
     }
 }
