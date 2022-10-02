@@ -42,8 +42,17 @@ public class CouponService {
         return userCouponRepository.findById(userCouponId);
     }
 
-    public List<Coupon> getAllCoupons() {
-        return couponRepository.findAll();
+    public IntegratedCoupon getCoupon(CouponType couponType, long id) {
+        if(couponType == CouponType.PRICE) {
+            return IntegratedCoupon.toDto(priceCouponRepository.findById(id).orElse(new PriceCoupon()));
+        } else if(couponType == CouponType.PERCENT) {
+            return IntegratedCoupon.toDto(percentCouponRepository.findById(id).orElse(new PercentCoupon()));
+        } else if(couponType == CouponType.PRODUCT) {
+            return IntegratedCoupon.toDto(productCouponRepository.findById(id).orElse(new ProductCoupon()));
+        } else if(couponType == CouponType.CART) {
+            return IntegratedCoupon.toDto(cartCouponRepository.findById(id).orElse(new CartCoupon()));
+        }
+        return new IntegratedCoupon();
     }
 
     public List<IntegratedCoupon> getAllCoupons() {
@@ -134,15 +143,18 @@ public class CouponService {
         return IntegratedCoupon.toDto(cartCoupon);
     }
 
-    public List<UserCoupon> getUserCoupon(User user) {
-        return userCouponRepository.findUserCouponsByUser(user).stream().filter(this::isActiveCoupon).collect(Collectors.toList());
+    public List<UserCouponInfo> getUserCoupon(User user) {
+        return userCouponRepository.findUserCouponsByUser(user).stream().filter(this::isActiveCoupon).map(userCoupon -> {
+            IntegratedCoupon coupon = getCoupon(userCoupon.getCouponType(), userCoupon.getCouponId());
+            return UserCouponInfo.toDto(userCoupon, coupon);
+        }).collect(Collectors.toList());
     }
 
     public Boolean isActiveCoupon(UserCoupon userCoupon) {
         if(userCoupon.getIssuedCount() <= userCoupon.getUseCount()) {
             return false;
         }
-        if(userCoupon.getExpirationTime() == null || userCoupon.getExpirationTime().isBefore(ZonedDateTime.now())) {
+        if(userCoupon.getExpiredDate() == null || userCoupon.getExpiredDate().isBefore(ZonedDateTime.now())) {
             return false;
         }
         return true;

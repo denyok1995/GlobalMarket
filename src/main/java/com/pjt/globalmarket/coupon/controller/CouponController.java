@@ -55,16 +55,7 @@ public class CouponController {
     })
     public List<UserCouponInfo> getUserCoupons(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
-        return couponService.getUserCoupon(user).stream().map(userCoupon -> {
-            return UserCouponInfo.builder().id(userCoupon.getId())
-                    .name(userCoupon.getCoupon().getName())
-                    .discountPrice(userCoupon.getCoupon().getDiscountPrice())
-                    .discountPercent(userCoupon.getCoupon().getDiscountPercent())
-                    .maxDiscountPrice(userCoupon.getCoupon().getMaxDiscountPrice())
-                    .minPrice(userCoupon.getCoupon().getMinPrice())
-                    .count(userCoupon.getIssuedCount() - userCoupon.getUseCount())
-                    .build();
-        }).collect(Collectors.toList());
+        return couponService.getUserCoupon(user);
     }
 
     @NeedLogin
