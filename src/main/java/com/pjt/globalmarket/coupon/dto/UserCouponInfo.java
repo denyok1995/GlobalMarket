@@ -22,6 +22,9 @@ public class UserCouponInfo {
     @ApiModelProperty(name = "쿠폰 타입", example = "PRICE")
     private CouponType couponType;
 
+    @ApiModelProperty(name = "쿠폰의 고유 번호", example = "2")
+    private long couponId;
+
     // NOTE : coupon id로 전부 해결하는거 생각 - 할인 금액까지
     @ApiModelProperty(name = "쿠폰 이름", example = "3월 봄맞이 할인 쿠폰")
     private String name;
@@ -50,6 +53,7 @@ public class UserCouponInfo {
         return UserCouponInfo.builder()
                 .id(userCoupon.getId())
                 .couponType(userCoupon.getCouponType())
+                .couponId(userCoupon.getCouponId())
                 .name(coupon.getName())
                 .minPrice(coupon.getMinPrice())
                 .discountPrice(coupon.getDiscountPrice())

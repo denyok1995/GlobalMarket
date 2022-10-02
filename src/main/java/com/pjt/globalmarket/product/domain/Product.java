@@ -20,6 +20,7 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
+    @Setter
     @Column(nullable = false)
     private double price;
 

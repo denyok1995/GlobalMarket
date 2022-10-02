@@ -39,6 +39,9 @@ public class PriceCoupon implements Coupon<PriceCoupon> {
 
     @Override
     public double getDiscountPrice(double price) {
+        if(price < minPrice) {
+            return 0;
+        }
         return Math.min(discountPrice, price);
     }
 

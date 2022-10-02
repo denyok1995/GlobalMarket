@@ -35,11 +35,11 @@ public class ProductService {
         this.discount.put(UserGrade.DIAMOND.getGrade(), 0.9 ); //10% 할인율
     }
 
-    public Double getDiscountedPriceByUserGrade(UserGrade userGrade, Double price) {
+    public double getDiscountedPriceByUserGrade(UserGrade userGrade, Double price) {
         return price * discount.get((userGrade == null) ? IS_NOT_USER : userGrade.getGrade());
     }
 
-    public Double getDiscountPercentByUserGrade(UserGrade userGrade) {
+    public double getDiscountPercentByUserGrade(UserGrade userGrade) {
         return discount.get((userGrade == null) ? IS_NOT_USER : userGrade.getGrade());
     }
 
@@ -75,7 +75,21 @@ public class ProductService {
         return productRepository.findById(productId);
     }
 
+    public Product getProductByIdWithUserGrade(UserGrade userGrade, long productId) {
+        Product product = productRepository.findById(productId).orElseThrow();
+        product.setPrice(getDiscountedPriceByUserGrade(userGrade, product.getPrice()));
+        return product;
+    }
+
     public List<Product> findProductsByIds(List<Long> productIds) {
         return productRepository.findAllByIdIn(productIds);
+    }
+
+    public List<Product> findProductsByIdsWithUserGrade(UserGrade userGrade, List<Long> productIds) {
+        List<Product> products = productRepository.findAllByIdIn(productIds);
+        for(Product product : products) {
+            product.setPrice(getDiscountedPriceByUserGrade(userGrade, product.getPrice()));
+        }
+        return products;
     }
 }

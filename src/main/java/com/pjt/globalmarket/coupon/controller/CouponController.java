@@ -1,14 +1,11 @@
 package com.pjt.globalmarket.coupon.controller;
 
 import com.nimbusds.oauth2.sdk.ErrorResponse;
-import com.pjt.globalmarket.config.auth.UserAuthDetails;
-import com.pjt.globalmarket.coupon.domain.Coupon;
-import com.pjt.globalmarket.coupon.dto.ActivateCouponInfo;
-import com.pjt.globalmarket.coupon.dto.CouponDto;
-import com.pjt.globalmarket.coupon.dto.UserCouponInfo;
-import com.pjt.globalmarket.coupon.service.CouponService;
 import com.pjt.globalmarket.common.annotation.NeedLogin;
 import com.pjt.globalmarket.common.annotation.OnlyManager;
+import com.pjt.globalmarket.config.auth.UserAuthDetails;
+import com.pjt.globalmarket.coupon.dto.*;
+import com.pjt.globalmarket.coupon.service.CouponService;
 import com.pjt.globalmarket.product.dto.SimpleProductInfo;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.service.UserService;

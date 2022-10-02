@@ -96,6 +96,7 @@ public class IntegratedCoupon {
                 .maxDiscountPrice(cartCoupon.getMaxDiscountPrice())
                 .overlap(cartCoupon.isOverlap())
                 .maxCouponCount(cartCoupon.getMaxCouponCount())
+                .expiredDate(cartCoupon.getExpiredDate())
                 .build();
     }
 }
