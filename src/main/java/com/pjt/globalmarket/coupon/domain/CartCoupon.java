@@ -41,6 +41,9 @@ public class CartCoupon implements Coupon<CartCoupon> {
 
     @Override
     public double getDiscountPrice(double price) {
+        if(price < minPrice) {
+            return 0;
+        }
         return Math.min(maxDiscountPrice, calculateDiscountPrice(price));
     }
 
