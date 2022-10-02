@@ -4,6 +4,8 @@ import com.pjt.globalmarket.address.dao.AddressRepository;
 import com.pjt.globalmarket.address.domain.Address;
 import com.pjt.globalmarket.cart.service.CartService;
 import com.pjt.globalmarket.coupon.domain.UserCoupon;
+import com.pjt.globalmarket.coupon.dto.IntegratedCoupon;
+import com.pjt.globalmarket.coupon.dto.UserCouponInfo;
 import com.pjt.globalmarket.coupon.service.CouponService;
 import com.pjt.globalmarket.order.dao.OrderProductRepository;
 import com.pjt.globalmarket.order.dao.OrderRepository;
@@ -16,6 +18,7 @@ import com.pjt.globalmarket.payment.domain.Payment;
 import com.pjt.globalmarket.payment.dto.PaymentInfo;
 import com.pjt.globalmarket.payment.service.PaymentService;
 import com.pjt.globalmarket.product.domain.Product;
+import com.pjt.globalmarket.product.dto.ProductWithNumInfo;
 import com.pjt.globalmarket.product.dto.SimpleProductInfo;
 import com.pjt.globalmarket.product.service.ProductService;
 import com.pjt.globalmarket.user.domain.User;
@@ -90,15 +93,16 @@ public class OrderService {
                 findProductsByIds(orderRequestInfo.getOrderProducts().stream().map(info -> info.getProductId()).collect(Collectors.toList()));
         List<OrderProduct> orderProducts = new ArrayList<>();
 
-        Double originalPrice = 0.0;
-        Double totalPrice = 0.0;
-        Double totalDeliveryFee = 0.0;
+        double originalPrice = 0.0;
+        double totalPrice = 0.0;
+        double totalDeliveryFee = 0.0;
+        double discountPrice = 0;
         for(Product product : products) {
             if(productMap.get(product.getId()) > product.getStock()) {
                 throw new IllegalArgumentException("재고가 없습니다.");
             } else {
                 // 금액 책정
-                Double discountedPrice = productService.getDiscountedPriceByUserGrade(user.getGrade(), product.getPrice());
+                double discountedPrice = productService.getDiscountedPriceByUserGrade(user.getGrade(), product.getPrice());
                 Long count = productMap.get(product.getId());
                 originalPrice += product.getPrice() * count;
                 totalPrice += discountedPrice * count;
@@ -115,17 +119,18 @@ public class OrderService {
             }
         }
 
-        // 쿠폰 있으면 사용
-        if(userCoupon != null && originalPrice >= userCoupon.getCoupon().getMinPrice()) {
-            totalPrice -= userCoupon.getCoupon().getDiscountPrice();
+        if(userCoupon != null) {
+            IntegratedCoupon coupon = couponService.getCoupon(userCoupon.getCouponType(), userCoupon.getId());
+            UserCouponInfo userCouponInfo = UserCouponInfo.toDto(userCoupon, coupon);
+            discountPrice = couponService.getDiscountPrice(user, userCouponInfo, totalPrice, toProductWithNumInfo(orderProducts));
+            totalPrice -= discountPrice;
             couponService.useCoupon(userCoupon);
         }
-        Double discountPrice = originalPrice - totalPrice;
 
         // payment service 호출해서 저장
         Payment payment = paymentService.savePayment(PaymentInfo.builder()
                 .type(orderRequestInfo.getPaymentType())
-                .discountPrice(discountPrice)
+                .discountPrice(originalPrice - totalPrice)
                 .deliveryFee(totalDeliveryFee)
                 .totalPrice(totalPrice + totalDeliveryFee)
                 .build());
@@ -145,5 +150,17 @@ public class OrderService {
         cartService.buyProductsInCart(user, productMap);
 
         return order;
+    }
+
+    private List<ProductWithNumInfo> toProductWithNumInfo(List<OrderProduct> orderProducts) {
+        List<ProductWithNumInfo> products = new ArrayList<>();
+        orderProducts.forEach(orderProduct -> {
+            ProductWithNumInfo product = ProductWithNumInfo.builder()
+                    .product(orderProduct.getProduct())
+                    .num(orderProduct.getProductNum())
+                    .build();
+            products.add(product);
+        });
+        return products;
     }
 }
