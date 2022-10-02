@@ -192,11 +192,11 @@ public class CouponService {
     }
 
     private ActivateCouponInfo getActivateCouponInfo(User user, UserCouponInfo userCoupon, double price, List<ProductWithNumInfo> products) {
-        double discountedPrice = getDiscountedPrice(user, userCoupon, price, products);
-        if(discountedPrice > 0) {
+        double discountPrice = getDiscountPrice(user, userCoupon, price, products);
+        if(discountPrice > 0) {
             return ActivateCouponInfo.builder()
                     .id(userCoupon.getId())
-                    .discountPrice(discountedPrice)
+                    .discountPrice(discountPrice)
                     .name(userCoupon.getName())
                     .build();
         } else {
@@ -204,31 +204,31 @@ public class CouponService {
         }
     }
 
-    private double getDiscountedPrice(User user, UserCouponInfo userCoupon, double price, List<ProductWithNumInfo> products) {
+    public double getDiscountPrice(User user, UserCouponInfo userCoupon, double price, List<ProductWithNumInfo> products) {
         switch (userCoupon.getCouponType()) {
             case PRICE:
-                return getDiscountedPriceWithPriceCoupon(userCoupon, price);
+                return getDiscountPriceWithPriceCoupon(userCoupon, price);
             case PERCENT:
-                return getDiscountedPriceWithPercentCoupon(userCoupon, price);
+                return getDiscountPriceWithPercentCoupon(userCoupon, price);
             case PRODUCT:
-                return getDiscountedPriceWithProductCoupon(userCoupon, products);
+                return getDiscountPriceWithProductCoupon(userCoupon, products);
             case CART:
-                return getDiscountedPriceWithCartCoupon(user, userCoupon, products);
+                return getDiscountPriceWithCartCoupon(user, userCoupon, products);
         }
         return 0;
     }
 
-    private double getDiscountedPriceWithPriceCoupon(UserCouponInfo userCoupon, double price) {
+    private double getDiscountPriceWithPriceCoupon(UserCouponInfo userCoupon, double price) {
         PriceCoupon coupon = priceCouponRepository.findById(userCoupon.getCouponId()).orElseThrow();
         return coupon.getDiscountPrice(price);
     }
 
-    private double getDiscountedPriceWithPercentCoupon(UserCouponInfo userCoupon, double price) {
+    private double getDiscountPriceWithPercentCoupon(UserCouponInfo userCoupon, double price) {
         PercentCoupon coupon = percentCouponRepository.findById(userCoupon.getCouponId()).orElseThrow();
         return coupon.getDiscountPrice(price);
     }
 
-    private double getDiscountedPriceWithProductCoupon(UserCouponInfo userCoupon, List<ProductWithNumInfo> products) {
+    private double getDiscountPriceWithProductCoupon(UserCouponInfo userCoupon, List<ProductWithNumInfo> products) {
         ProductCoupon coupon = productCouponRepository.findById(userCoupon.getCouponId()).orElseThrow();
         List<ProductWithNumInfo> sameProducts = getSameProductWithNumInfo(products, coupon.getProducts());
         long count = 0;
@@ -241,7 +241,7 @@ public class CouponService {
         return coupon.getDiscountPrice(getProductsTotalPrice(sameProducts));
     }
 
-    private double getDiscountedPriceWithCartCoupon(User user, UserCouponInfo userCoupon, List<ProductWithNumInfo> products) {
+    private double getDiscountPriceWithCartCoupon(User user, UserCouponInfo userCoupon, List<ProductWithNumInfo> products) {
         CartCoupon coupon = cartCouponRepository.findById(userCoupon.getCouponId()).orElseThrow();
         List<Cart> carts = cartRepository.findCartsByUser(user);
         List<ProductWithNumInfo> sameProducts = getSameProductWithNumInfo(products, carts.stream().map(cart -> {
