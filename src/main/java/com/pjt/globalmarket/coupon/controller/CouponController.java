@@ -42,15 +42,7 @@ public class CouponController {
             @ApiResponse(code = 403, message = "로그인 하지 않은 요청", response = ErrorResponse.class)
     })
     public List<CouponDto> getAvailableCoupons(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser) {
-        return couponService.getAllCoupons().stream().map(coupon -> {
-            return CouponDto.builder().id(coupon.getId())
-                    .name(coupon.getName())
-                    .minPrice(coupon.getMinPrice())
-                    .discountPrice(coupon.getDiscountPrice())
-                    //.productId(coupon.getProductId())
-                    .maxCouponCount(coupon.getMaxCouponCount())
-                    .build();
-        }).collect(Collectors.toList());
+        return couponService.getAllCoupons().stream().map(CouponDto::toDto).collect(Collectors.toList());
     }
 
     @NeedLogin

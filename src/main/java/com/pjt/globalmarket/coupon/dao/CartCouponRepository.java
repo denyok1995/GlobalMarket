@@ -11,5 +11,5 @@ public interface CartCouponRepository extends JpaRepository<CartCoupon, Long> {
 
     Optional<CartCoupon> findCouponByCouponId(String couponId);
 
-    List<CartCoupon> findAllByExpiredDateBefore(ZonedDateTime now);
+    List<CartCoupon> findAllByExpiredDateAfter(ZonedDateTime now);
 }

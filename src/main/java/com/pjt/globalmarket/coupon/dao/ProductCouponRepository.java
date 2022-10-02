@@ -11,5 +11,5 @@ public interface ProductCouponRepository extends JpaRepository<ProductCoupon, Lo
 
     Optional<ProductCoupon> findCouponByCouponId(String couponId);
 
-    List<ProductCoupon> findAllByExpiredDateBefore(ZonedDateTime now);
+    List<ProductCoupon> findAllByExpiredDateAfter(ZonedDateTime now);
 }

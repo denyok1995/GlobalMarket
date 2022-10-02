@@ -11,5 +11,5 @@ public interface PercentCouponRepository extends JpaRepository<PercentCoupon, Lo
 
     Optional<PercentCoupon> findCouponByCouponId(String couponId);
 
-    List<PercentCoupon> findAllByExpiredDateBefore(ZonedDateTime now);
+    List<PercentCoupon> findAllByExpiredDateAfter(ZonedDateTime now);
 }

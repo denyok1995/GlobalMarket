@@ -26,7 +26,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CouponService {
 
-    private final CouponRepository couponRepository;
+    private final PriceCouponRepository priceCouponRepository;
+    private final PercentCouponRepository percentCouponRepository;
+    private final ProductCouponRepository productCouponRepository;
+    private final CartCouponRepository cartCouponRepository;
     private final UserCouponRepository userCouponRepository;
     private final ProductService productService;
 
@@ -41,6 +44,19 @@ public class CouponService {
 
     public List<Coupon> getAllCoupons() {
         return couponRepository.findAll();
+    }
+
+    public List<IntegratedCoupon> getAllCoupons() {
+        List<IntegratedCoupon> coupons = new ArrayList<>();
+        priceCouponRepository.findAllByExpiredDateAfter(ZonedDateTime.now())
+                .forEach(priceCoupon -> coupons.add(IntegratedCoupon.toDto(priceCoupon)));
+        percentCouponRepository.findAllByExpiredDateAfter(ZonedDateTime.now())
+                .forEach(percentCoupon -> coupons.add(IntegratedCoupon.toDto(percentCoupon)));
+        productCouponRepository.findAllByExpiredDateAfter(ZonedDateTime.now())
+                .forEach(productCoupon -> coupons.add(IntegratedCoupon.toDto(productCoupon)));
+        cartCouponRepository.findAllByExpiredDateAfter(ZonedDateTime.now())
+                .forEach(cartCoupon -> coupons.add(IntegratedCoupon.toDto(cartCoupon)));
+        return coupons;
     }
 
     @Transactional
