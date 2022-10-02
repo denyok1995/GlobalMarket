@@ -92,7 +92,7 @@ public class CouponController {
     public UserCouponInfo issueCoupon(@AuthenticationPrincipal @ApiIgnore UserAuthDetails loginUser,
                                       @RequestBody IssueCouponInfo issueInfo) {
         User user = userService.getActiveUserByEmailAndProvider(loginUser.getUsername(), loginUser.getProvider()).orElseThrow();
-        return couponService.issueCoupon(user, issueInfo.getId(), issueInfo.getCouponType());
+        return couponService.issueCoupon(user, issueInfo.getId(), issueInfo.getCouponType(), issueInfo.getExpiredDate());
     }
 
     //쿠폰 생성

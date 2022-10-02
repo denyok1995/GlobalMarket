@@ -60,7 +60,7 @@ public class CouponService {
     }
 
     @Transactional
-    public UserCouponInfo issueCoupon(User user, long id, CouponType couponType) {
+    public UserCouponInfo issueCoupon(User user, long id, CouponType couponType, ZonedDateTime expiredDate) {
         Optional<UserCoupon> savedUserCoupon =
                 userCouponRepository.findUserCouponByUserAndCouponTypeAndCouponId(user, couponType, id);
         IntegratedCoupon coupon = getCoupon(couponType, id);
@@ -72,13 +72,22 @@ public class CouponService {
                     .user(user)
                     .couponType(couponType)
                     .couponId(id)
+                    .expiredDate(setExpiredDate(expiredDate, coupon.getExpiredDate()))
                     .build();
             userCouponRepository.save(userCoupon);
             return UserCouponInfo.toDto(userCoupon, coupon);
         }
     }
 
-    public Boolean isOverIssue(UserCoupon userCoupon, Coupon coupon) {
+    private ZonedDateTime setExpiredDate(ZonedDateTime writeDate, ZonedDateTime savedDate) {
+        if(writeDate == null ||writeDate.isAfter(savedDate)) {
+            return savedDate;
+        } else {
+            return writeDate;
+        }
+    }
+
+    public boolean isOverIssue(UserCoupon userCoupon, IntegratedCoupon coupon) {
         if(coupon.getMaxCouponCount() == -1) return false;
         if(userCoupon.getIssuedCount() >= coupon.getMaxCouponCount()) {
             throw new IllegalArgumentException("최대 발급 횟수를 초과하였습니다.");
