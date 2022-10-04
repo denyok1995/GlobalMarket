@@ -1,5 +1,6 @@
 package com.pjt.globalmarket.user.service;
 
+import com.pjt.globalmarket.marketing.service.MarketingService;
 import com.pjt.globalmarket.user.dao.UserRepository;
 import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.domain.UserRole;
@@ -19,6 +20,7 @@ import static com.pjt.globalmarket.user.domain.UserConstant.DEFAULT_PROVIDER;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final MarketingService marketingService;
     private final BCryptPasswordEncoder encoder;
 
     @PostConstruct
@@ -45,6 +47,7 @@ public class UserService {
                 .phone(phone)
                 .build();
         userRepository.save(user);
+        marketingService.issueWelcomeCoupon(user);
         return user;
     }
 
