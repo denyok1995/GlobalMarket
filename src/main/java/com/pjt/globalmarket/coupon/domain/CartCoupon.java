@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PRIVATE)
-public class CartCoupon implements Coupon<CartCoupon> {
+public class CartCoupon {
 
     @Id
     @GeneratedValue
@@ -39,7 +39,6 @@ public class CartCoupon implements Coupon<CartCoupon> {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private ZonedDateTime expiredDate;
 
-    @Override
     public double getDiscountPrice(double price) {
         if(price < minPrice) {
             return 0;

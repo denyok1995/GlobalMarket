@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-public class PercentCoupon implements Coupon<PercentCoupon> {
+public class PercentCoupon {
 
     @Id
     @GeneratedValue
@@ -35,7 +35,7 @@ public class PercentCoupon implements Coupon<PercentCoupon> {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private ZonedDateTime expiredDate;
 
-    @Override
+
     public double getDiscountPrice(double price) {
         return Math.min(maxDiscountPrice, calculateDiscountPrice(price));
     }

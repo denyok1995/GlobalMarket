@@ -2,7 +2,6 @@ package com.pjt.globalmarket.order.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pjt.globalmarket.common.AutoInsert;
-import com.pjt.globalmarket.coupon.dao.CouponRepository;
 import com.pjt.globalmarket.order.dto.OrderRequestInfo;
 import com.pjt.globalmarket.payment.domain.PaymentType;
 import com.pjt.globalmarket.product.dao.ProductRepository;
@@ -37,8 +36,6 @@ class OrderControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private CouponRepository couponRepository;
     @Autowired
     private AutoInsert autoInsert;
     @Autowired

@@ -13,6 +13,7 @@ import com.pjt.globalmarket.user.domain.User;
 import com.pjt.globalmarket.user.domain.UserGrade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,7 @@ public class CouponService {
     private final PercentCouponRepository percentCouponRepository;
     private final ProductCouponRepository productCouponRepository;
     private final CartCouponRepository cartCouponRepository;
+    private final ApplicationContext context;
     private final UserCouponRepository userCouponRepository;
     private final ProductService productService;
     private final CartRepository cartRepository;

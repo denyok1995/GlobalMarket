@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-public class ProductCoupon implements Coupon<ProductCoupon> {
+public class ProductCoupon {
 
     @Id
     @GeneratedValue
@@ -43,7 +43,7 @@ public class ProductCoupon implements Coupon<ProductCoupon> {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private ZonedDateTime expiredDate;
 
-    @Override
+
     public double getDiscountPrice(double price) {
         return Math.min(maxDiscountPrice, calculateDiscountPrice(price));
     }

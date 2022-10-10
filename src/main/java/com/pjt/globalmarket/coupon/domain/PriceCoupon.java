@@ -17,7 +17,7 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-public class PriceCoupon implements Coupon<PriceCoupon> {
+public class PriceCoupon {
 
     @Id
     @GeneratedValue
@@ -37,7 +37,6 @@ public class PriceCoupon implements Coupon<PriceCoupon> {
     private ZonedDateTime expiredDate;
 
 
-    @Override
     public double getDiscountPrice(double price) {
         if(price < minPrice) {
             return 0;
