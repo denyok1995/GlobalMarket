@@ -5,6 +5,8 @@ import com.pjt.globalmarket.chatting.domain.Chatting;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ChattingService {
@@ -13,5 +15,11 @@ public class ChattingService {
 
     public long saveChat(Chatting chat) {
         return chattingRepository.save(chat).getId();
+    }
+
+    public List<Chatting> getChat(String fromUser, String toUser) {
+        List<Chatting> chat = chattingRepository.findAllByFromUserAndToUser(fromUser, toUser);
+        chat.addAll(chattingRepository.findAllByFromUserAndToUser(toUser, fromUser));
+        return chat;
     }
 }
