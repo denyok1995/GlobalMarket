@@ -1,6 +1,10 @@
 package com.pjt.globalmarket.chatting.handler;
 
+import com.pjt.globalmarket.chatting.domain.Chatting;
+import com.pjt.globalmarket.chatting.service.ChattingService;
 import io.netty.util.internal.StringUtil;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -11,10 +15,14 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.net.URI;
 import java.util.*;
 
-@Component
 @Slf4j
+@Component
+@RequiredArgsConstructor
 // 1:N (서버:클라이언트)를 Handle 하기 위한 Chatting Handler
 public class ChattingHandler extends TextWebSocketHandler { // Text 기반의 Handler 사용
+
+    private final ChattingService chattingService;
+
     private Map<String, WebSocketSession> userMap = new HashMap<>();
 
 
@@ -27,6 +35,13 @@ public class ChattingHandler extends TextWebSocketHandler { // Text 기반의 Ha
         String to = findTo(Objects.requireNonNull(session.getUri()));
         WebSocketSession sessionOfTo = userMap.get(to);
         sessionOfTo.sendMessage(message);
+
+        Chatting chat = Chatting.builder()
+                .fromUser(findFrom(Objects.requireNonNull(session.getUri())))
+                .toUser(to)
+                .payload(message.getPayload())
+                .build();
+        chattingService.saveChat(chat);
     }
 
     @Override
@@ -55,3 +70,4 @@ public class ChattingHandler extends TextWebSocketHandler { // Text 기반의 Ha
         return parsedUri[parsedUri.length-2];
     }
 }
+
