@@ -4,6 +4,7 @@ import com.pjt.globalmarket.chatting.handler.ChattingHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
@@ -12,6 +13,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSocket // websocket 활성화
+@EnableAsync
 public class WebSocketConfig implements WebSocketConfigurer {
 
     private final ChattingHandler chattingHandler;

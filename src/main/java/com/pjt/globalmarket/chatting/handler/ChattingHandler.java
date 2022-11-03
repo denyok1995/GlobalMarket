@@ -33,25 +33,23 @@ public class ChattingHandler extends TextWebSocketHandler { // Text 기반의 Ha
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         //super.handleTextMessage(session, message);
         log.info("Websocket Session : {}, Message : {}", session, message.getPayload()); // payload = 전송되는 데이터 여기서는 message 전문이 될 것이다.
-        log.info("Start : {}", System.currentTimeMillis());
+        long start = System.currentTimeMillis();
+        log.info("Start : {}", start);
         String to = findTo(Objects.requireNonNull(session.getUri()));
         WebSocketSession sessionOfTo = userMap.get(to);
         sessionOfTo.sendMessage(message);
 
         //DB 접근이 없는 경우 5ms 이내에 동작이 끝이난다.
-        /*Chatting chat = Chatting.builder()
-                .fromUser(findFrom(Objects.requireNonNull(session.getUri())))
-                .toUser(to)
-                .payload(message.getPayload())
-                .build();
-        chattingService.saveChat(chat);*/
         ChattingEvent event = ChattingEvent.builder()
                 .fromUser(findFrom(Objects.requireNonNull(session.getUri())))
                 .toUser(to)
                 .payload(message.getPayload())
                 .build();
+        log.info("Event Thread : {}", Thread.currentThread());
         eventPublisher.publishEvent(event);
-        log.info("End : {}", System.currentTimeMillis());
+        long end = System.currentTimeMillis();
+        log.info("End : {}", end);
+        log.info("걸린 시간 : {}", end-start);
     }
 
     @Override
