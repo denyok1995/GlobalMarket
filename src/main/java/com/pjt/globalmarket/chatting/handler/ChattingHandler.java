@@ -6,6 +6,7 @@ import io.netty.util.internal.StringUtil;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -22,6 +23,7 @@ import java.util.*;
 public class ChattingHandler extends TextWebSocketHandler { // Text 기반의 Handler 사용
 
     private final ChattingService chattingService;
+    private final ApplicationEventPublisher eventPublisher;
 
     private Map<String, WebSocketSession> userMap = new HashMap<>();
 
@@ -31,17 +33,25 @@ public class ChattingHandler extends TextWebSocketHandler { // Text 기반의 Ha
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         //super.handleTextMessage(session, message);
         log.info("Websocket Session : {}, Message : {}", session, message.getPayload()); // payload = 전송되는 데이터 여기서는 message 전문이 될 것이다.
-
+        log.info("Start : {}", System.currentTimeMillis());
         String to = findTo(Objects.requireNonNull(session.getUri()));
         WebSocketSession sessionOfTo = userMap.get(to);
         sessionOfTo.sendMessage(message);
 
-        Chatting chat = Chatting.builder()
+        //DB 접근이 없는 경우 5ms 이내에 동작이 끝이난다.
+        /*Chatting chat = Chatting.builder()
                 .fromUser(findFrom(Objects.requireNonNull(session.getUri())))
                 .toUser(to)
                 .payload(message.getPayload())
                 .build();
-        chattingService.saveChat(chat);
+        chattingService.saveChat(chat);*/
+        ChattingEvent event = ChattingEvent.builder()
+                .fromUser(findFrom(Objects.requireNonNull(session.getUri())))
+                .toUser(to)
+                .payload(message.getPayload())
+                .build();
+        eventPublisher.publishEvent(event);
+        log.info("End : {}", System.currentTimeMillis());
     }
 
     @Override

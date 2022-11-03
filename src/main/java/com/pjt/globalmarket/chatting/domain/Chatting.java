@@ -1,5 +1,6 @@
 package com.pjt.globalmarket.chatting.domain;
 
+import com.pjt.globalmarket.chatting.handler.ChattingEvent;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -26,4 +27,12 @@ public class Chatting {
 
     @Builder.Default
     private ZonedDateTime chatTime = ZonedDateTime.now();
+
+    public static Chatting toEntity(ChattingEvent event) {
+        return Chatting.builder()
+                .fromUser(event.getFromUser())
+                .toUser(event.getToUser())
+                .payload(event.getPayload())
+                .build();
+    }
 }
