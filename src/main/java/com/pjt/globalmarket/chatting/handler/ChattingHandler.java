@@ -1,9 +1,7 @@
 package com.pjt.globalmarket.chatting.handler;
 
-import com.pjt.globalmarket.chatting.domain.Chatting;
-import com.pjt.globalmarket.chatting.service.ChattingService;
-import io.netty.util.internal.StringUtil;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pjt.globalmarket.chatting.dto.ChattingSubscriber;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -13,8 +11,9 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.net.URI;
-import java.util.*;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -22,10 +21,13 @@ import java.util.*;
 // 1:N (서버:클라이언트)를 Handle 하기 위한 Chatting Handler
 public class ChattingHandler extends TextWebSocketHandler { // Text 기반의 Handler 사용
 
-    private final ChattingService chattingService;
     private final ApplicationEventPublisher eventPublisher;
 
-    private Map<String, WebSocketSession> userMap = new HashMap<>();
+    private Map<String, WebSocketSession> sessionMap = new HashMap<>();
+
+    private ObjectMapper mapper = new ObjectMapper();
+
+    //protected Class<T> subscriberClass;
 
 
     // Message를 받았을 때 동작(호출)
@@ -55,27 +57,15 @@ public class ChattingHandler extends TextWebSocketHandler { // Text 기반의 Ha
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         super.afterConnectionEstablished(session);
-        String username = findFrom(Objects.requireNonNull(session.getUri()));
-        log.info("{} Client 접속 성공 : {}", username, session);
-        userMap.put(username, session);
+        log.info("Client 접속 성공 : {}", session);
+        sessionMap.put(session.getId(), session);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         super.afterConnectionClosed(session, status);
-        String from = findFrom(Objects.requireNonNull(session.getUri()));
-        log.info("{} Client 접속 해제 : {}",from, session);
-        userMap.remove(from);
-    }
-
-    private String findTo(URI uri) {
-        String[] parsedUri = uri.getPath().split("/");
-        return parsedUri[parsedUri.length-1];
-    }
-
-    private String findFrom(URI uri) {
-        String[] parsedUri = uri.getPath().split("/");
-        return parsedUri[parsedUri.length-2];
+        log.info("Client 접속 해제 : {}", session);
+        sessionMap.remove(session.getId());
     }
 }
 
