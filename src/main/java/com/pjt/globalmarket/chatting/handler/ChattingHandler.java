@@ -34,24 +34,34 @@ public class ChattingHandler extends TextWebSocketHandler { // Text 기반의 Ha
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         //super.handleTextMessage(session, message);
+        ChattingSubscriber subscriber = mapper.readValue(message.getPayload(), ChattingSubscriber.class);
         log.info("Websocket Session : {}, Message : {}", session, message.getPayload()); // payload = 전송되는 데이터 여기서는 message 전문이 될 것이다.
         long start = System.currentTimeMillis();
         log.info("Start : {}", start);
-        String to = findTo(Objects.requireNonNull(session.getUri()));
-        WebSocketSession sessionOfTo = userMap.get(to);
-        sessionOfTo.sendMessage(message);
 
-        //DB 접근이 없는 경우 5ms 이내에 동작이 끝이난다.
-        ChattingEvent event = ChattingEvent.builder()
-                .fromUser(findFrom(Objects.requireNonNull(session.getUri())))
-                .toUser(to)
-                .payload(message.getPayload())
-                .build();
-        log.info("Event Thread : {}", Thread.currentThread());
-        eventPublisher.publishEvent(event);
+        pushMessage(sessionMap.get(subscriber.getSessionId()), subscriber.getContent());
+        saveChattingInfo(subscriber);
+
         long end = System.currentTimeMillis();
         log.info("End : {}", end);
         log.info("걸린 시간 : {}", end-start);
+    }
+
+    private void pushMessage(WebSocketSession toUserSession, String message) throws IOException {
+        if(toUserSession != null) {
+            toUserSession.sendMessage(new TextMessage(message));
+        }
+    }
+
+    private void saveChattingInfo(ChattingSubscriber subscriber) {
+        //DB 접근이 없는 경우 5ms 이내에 동작이 끝이난다.
+        ChattingEvent event = ChattingEvent.builder()
+                .fromUser(subscriber.getFromUser())
+                .toUser(subscriber.getToUser())
+                .payload(subscriber.getContent())
+                .build();
+        log.info("Event Thread : {}", Thread.currentThread());
+        eventPublisher.publishEvent(event); // 대화 내용 저장
     }
 
     @Override
