@@ -41,8 +41,11 @@ dependencies {
     implementation 'org.springframework.session:spring-session-data-redis'
     implementation 'mysql:mysql-connector-java'
 
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    testImplementation 'io.projectreactor:reactor-test'
 
     implementation group: 'org.apache.shiro', name: 'shiro-crypto-cipher', version: '1.8.0'
     implementation group: 'org.apache.shiro', name: 'shiro-crypto-hash', version: '1.8.0'
