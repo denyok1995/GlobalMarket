@@ -51,6 +51,10 @@ public class UserService {
         return user;
     }
 
+    public User getUserById(long userId) {
+        return userRepository.findById(userId).orElseThrow();
+    }
+
     public Optional<User> getActiveUserByEmailAndProvider(String email, String provider) {
         return userRepository.findUserByEmailAndProviderAndDeletedAt(email, provider, null);
     }
