@@ -11,4 +11,7 @@ public interface ChatRepository extends ReactiveMongoRepository<Chat, String>, C
     @Tailable
     Flux<Chat> findChatsBySenderAndReceiver(String sender, String receiver);
 
+    @Tailable
+    Flux<Chat> findChatsByChannelIdAndIsChannel(long channelId, boolean isChannel);
+
 }

@@ -4,11 +4,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.GeneratedValue;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -24,5 +24,12 @@ public class Chat {
     private String receiver;
 
     private String content;
+
+    private Boolean isChannel;
+
+    private long channelId;
+
+    @CreatedDate
+    private LocalDateTime zonedDateTime;
 
 }
